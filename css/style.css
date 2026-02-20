@@ -3268,22 +3268,18 @@ canvas {
    TOOLTIP OVERRIDE - SIMPLIFIED APPROACH
    ======================================== */
 
-/* Hide tooltips by default */
+/* Hide tooltips by default - usando position fixed con JS positioning */
 .tooltip-content {
     display: none !important;
-    position: absolute !important;
-    bottom: calc(100% + 10px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+    position: fixed !important;
     background: rgba(15, 23, 42, 0.98) !important;
     border: 1px solid rgba(99, 102, 241, 0.5) !important;
     border-radius: 8px !important;
     padding: 12px 16px !important;
     width: 260px !important;
-    z-index: 999999 !important;
+    z-index: 2147483647 !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    pointer-events: none !important;
 }
 
 /* Show on hover */
@@ -3292,7 +3288,16 @@ canvas {
     display: block !important;
 }
 
-/* Make sure parent has position */
+/* Make sure parent has position and higher z-index on hover */
 .kpi-card {
     position: relative !important;
+    z-index: 1;
+}
+
+.kpi-grid-executive {
+    isolation: isolate;
+}
+
+.kpi-card:hover {
+    z-index: 100 !important;
 }

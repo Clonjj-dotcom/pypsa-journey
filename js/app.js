@@ -2069,6 +2069,29 @@ function initBaseResults() {
     
     if (layer2) layer2.classList.add('collapsed');
     if (layer3) layer3.classList.add('collapsed');
+    
+    // Initialize simple tooltips
+    initSimpleTooltips();
+}
+
+function initSimpleTooltips() {
+    const triggers = document.querySelectorAll('.kpi-card');
+    triggers.forEach(card => {
+        const tooltip = card.querySelector('.tooltip-content');
+        if (!tooltip) return;
+        
+        card.addEventListener('mouseenter', () => {
+            const rect = card.getBoundingClientRect();
+            const tooltipHeight = tooltip.offsetHeight || 150;
+            tooltip.style.display = 'block';
+            tooltip.style.left = (rect.left + rect.width / 2 - 130) + 'px';
+            tooltip.style.top = (rect.top - tooltipHeight - 10) + 'px';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+        });
+    });
 }
 
 function switchBaseYear(year) {
