@@ -3263,3 +3263,36 @@ canvas {
     background: rgba(239, 68, 68, 0.2);
     color: #ef4444;
 }
+
+/* ========================================
+   TOOLTIP OVERRIDE - SIMPLIFIED APPROACH
+   ======================================== */
+
+/* Hide tooltips by default */
+.tooltip-content {
+    display: none !important;
+    position: absolute !important;
+    bottom: calc(100% + 10px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+    border: 1px solid rgba(99, 102, 241, 0.5) !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    width: 260px !important;
+    z-index: 999999 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Show on hover */
+.kpi-card:hover .tooltip-content,
+.tooltip-trigger:hover .tooltip-content {
+    display: block !important;
+}
+
+/* Make sure parent has position */
+.kpi-card {
+    position: relative !important;
+}
