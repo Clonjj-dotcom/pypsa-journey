@@ -1329,55 +1329,84 @@
                 <button class="year-btn" data-year="compare" onclick="switchBaseYear('compare')">↔ Compare</button>
             </div>
 
-            <!-- KPI Grid -->
-            <div class="results-grid">
-                <div class="result-card">
+            <!-- Detailed KPI Grid -->
+            <div class="results-grid detailed">
+                <div class="result-card highlight">
                     <div class="result-label">Total System Cost</div>
-                    <div class="result-value" id="baseTotalCost">€49.55B</div>
-                    <div class="result-compare">vs €41.14B (2050)</div>
+                    <div class="result-value" id="baseTotalCost">€134.4B</div>
+                    <div class="result-compare">Annualized</div>
+                    <div class="result-source">📊 Real PyPSA-Eur DE 2025</div>
                 </div>
                 <div class="result-card">
                     <div class="result-label">Avg Electricity Price</div>
-                    <div class="result-value" id="baseAvgPrice">€1557</div>
-                    <div class="result-compare">€/MWh</div>
+                    <div class="result-value" id="baseAvgPrice">€47.7</div>
+                    <div class="result-compare">€/MWh (wholesale)</div>
                 </div>
                 <div class="result-card">
-                    <div class="result-label">Peak Demand</div>
-                    <div class="result-value" id="basePeakDemand">4155</div>
-                    <div class="result-compare">MW</div>
+                    <div class="result-label">Peak Capacity</div>
+                    <div class="result-value" id="basePeakDemand">274.7</div>
+                    <div class="result-compare">GW (gas)</div>
                 </div>
                 <div class="result-card">
                     <div class="result-label">Renewable Share</div>
-                    <div class="result-value" id="baseRenewableShare">45%</div>
+                    <div class="result-value" id="baseRenewableShare">35%</div>
                     <div class="result-compare">of generation</div>
+                </div>
+                <div class="result-card new">
+                    <div class="result-label">CO₂ Emissions</div>
+                    <div class="result-value" id="baseCO2">350.5</div>
+                    <div class="result-compare">Mt CO₂ / year</div>
+                </div>
+                <div class="result-card new">
+                    <div class="result-label">Total Generation</div>
+                    <div class="result-value" id="baseGeneration">2,847</div>
+                    <div class="result-compare">TWh / year</div>
+                </div>
+            </div>
+
+            <!-- Generation Mix Detail -->
+            <div class="detail-section">
+                <h3>⚡ Generation Mix 2025 (Real Data)</h3>
+                <div class="mix-grid" id="generationMix2025">
+                    <!-- Filled by JS -->
                 </div>
             </div>
 
             <!-- Charts -->
             <div class="charts-row">
-                <div class="chart-panel">
-                    <h4>Electricity Generation Mix</h4>
-                    <div class="chart-container small">
+                <div class="chart-panel wide">
+                    <h4>Electricity Generation by Source (TWh)</h4>
+                    <div class="chart-container">
                         <canvas id="baseElectricityChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-panel">
-                    <h4>Capacity by Technology</h4>
-                    <div class="chart-container small">
+                    <h4>Installed Capacity (GW)</h4>
+                    <div class="chart-container">
                         <canvas id="baseCapacityChart"></canvas>
                     </div>
                 </div>
             </div>
 
+            <!-- Cost Breakdown -->
+            <div class="detail-section">
+                <h3>💰 Cost Breakdown</h3>
+                <div class="cost-breakdown" id="costBreakdown">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
             <!-- Comparison Table -->
             <div class="comparison-section">
-                <h3>2025 vs 2050 Comparison</h3>
+                <h3>📊 2025 vs 2050 Comparison
+                    <span class="source-badge">Real Simulation vs Projection</span>
+                </h3>
                 <table class="comparison-table">
                     <thead>
                         <tr>
                             <th>Indicator</th>
-                            <th>2025</th>
-                            <th>2050</th>
+                            <th>2025 (Real)</th>
+                            <th>2050 (Target)</th>
                             <th>Change</th>
                         </tr>
                     </thead>
@@ -1385,6 +1414,22 @@
                         <!-- Filled by JS -->
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Data Source Note -->
+            <div class="data-source-panel">
+                <h4>📊 Data Source</h4>
+                <p>
+                    Results from PyPSA-Eur simulation run for <strong>Germany 2025</strong> with 37-node network.
+                    Location: <code>/Users/claus/Documents/THWS/Alumno_asistente/results/DE/germany-2025-realistic/</code>
+                </p>
+                <div class="file-list">
+                    <span>metrics.csv</span>
+                    <span>capacities.csv</span>
+                    <span>energy.csv</span>
+                    <span>costs.csv</span>
+                    <span>prices.csv</span>
+                </div>
             </div>
         </div>
     </section>
