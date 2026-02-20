@@ -28,13 +28,7 @@ let journeyState = {
     }
 };
 
-let baseData = baseDataReal || {
-    // Fallback minimal data
-    '2025': { totalCost: 134.37, avgPrice: 47.68, co2Emissions: 350.5, renewableShare: 35.2 ,
-              generation: { solar: 232, onwind: 132, offwind: 46, gas: 1029, coal: 102 },
-              capacity: { solar: 243, onwind: 64, offwind: 10, gas: 275, coal: 12 } },
-    '2050': { totalCost: 89.25, avgPrice: 38.50, co2Emissions: 45.0, renewableShare: 85.0 }
-};
+let baseData = {};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -2062,6 +2056,12 @@ function toggleLayer(layerId) {
 }
 
 function initBaseResults() {
+    console.log('Initializing Base Results with real data...');
+    if (typeof baseDataReal !== 'undefined') {
+        console.log('Using baseDataReal with', Object.keys(baseDataReal).length, 'scenarios');
+        // Copy data from baseDataReal
+        Object.assign(baseData, baseDataReal);
+    }
     switchBaseYear('2025');
     
     // Initialize Layer 2 collapsed by default
@@ -2134,13 +2134,19 @@ function showYearData(year) {
 
 function updateGenerationMixMini(generation) {
     const container = document.getElementById('generationMixMini');
-    if (!container || !generation) return;
+    if (!container || !generation) {
+        console.log('No container or generation data');
+        return;
+    }
     
     const total = Object.values(generation).reduce((a, b) => a + b, 0);
+    console.log('Total generation:', total, 'TWh');
+    console.log('Generation data:', generation);
     
+    // Show ALL technologies with > 1% share (not just top 6)
     const sorted = Object.entries(generation)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 6);
+        .filter(([tech, value]) => (value / total) > 0.01); // > 1%
     
     const colors = {
         'solar': '#fbbf24',
@@ -2153,16 +2159,21 @@ function updateGenerationMixMini(generation) {
         'biomass': '#22c55e'
     };
     
+    console.log('Filtered technologies:', sorted.map(([t, v]) => `${t}: ${v} TWh`));
+    
     container.innerHTML = sorted.map(([tech, value]) => {
         const pct = ((value / total) * 100).toFixed(1);
         const color = colors[tech] || '#94a3b8';
         return `
             <div class="mix-mini-item">
-                <div class="mix-mini-bar" style="width: ${pct}%; background: ${color}"></div>
-                <span class="mix-mini-label">${tech} ${pct}%</span>
+                <div class="mix-mini-bar" style="width: ${Math.max(pct, 5)}%; background: ${color}"></div>
+                <span class="mix-mini-label">${tech} <strong>${pct}%</strong> (${value.toFixed(0)} TWh)</span>
             </div>
         `;
     }).join('');
+    
+    // Log what's being displayed
+    console.log('Displaying', sorted.length, 'technologies');
 }
 
 function updateTechnicalTables(data) {
