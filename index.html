@@ -897,9 +897,23 @@
                     </div>
                     
                     <!-- Technology Generation Mix Visualization -->
+                    <!-- Technology Capacity Sliders -->
+                    <div class="tech-capacity-sliders" id="techCapacitySliders">
+                        <h4 class="sliders-title">🎚️ Technology Capacity Allocation</h4>
+                        <p class="sliders-subtitle">Adjust relative capacity for each selected technology</p>
+                        <div class="sliders-container" id="slidersContainer">
+                            <!-- Sliders inserted dynamically by JS -->
+                        </div>                        
+                        <div class="sliders-summary">
+                            <span class="total-label">Total Allocation:</span>
+                            <span class="total-value" id="totalAllocation">0%</span>
+                            <button class="btn btn-small" onclick="normalizeCapacities()">Normalize to 100%</button>
+                        </div>
+                    </div>
+
                     <div class="tech-mix-panel">
                         <h4 class="mix-title">⚡ Estimated Generation Mix</h4>
-                        <p class="mix-subtitle">Based on capacity × capacity factor (PyPSA-Eur average)</p>
+                        <p class="mix-subtitle">Based on capacity % × capacity factor (PyPSA-Eur average)</p>
                         
                         <div class="tech-mix-chart" id="techMixChart">
                             <div class="mix-bar-container">

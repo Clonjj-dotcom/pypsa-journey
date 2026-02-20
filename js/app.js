@@ -17,6 +17,7 @@ let journeyState = {
     co2CapLevel: 75,  // 0-100% reduction
     co2Price: 100,
     selectedTechs: ['solar', 'onwind'],
+    techCapacities: {}, // Map: techId -> percentage (0-100)
     storage: {
         battery: 4,
         hydrogen: 168
@@ -753,27 +754,39 @@ function updateTechSummary() {
 function updateGenerationMix(selected) {
     // Capacity Factors from PyPSA-Eur (annual averages)
     const capacityFactors = {
-        solar: 0.15, onwind: 0.30, offwind: 0.45, hydro: 0.40,
-        ccgt: 0.60, ocgt: 0.10, coal: 0.50, nuclear: 0.85
+        // Solar
+        solar: 0.15, 'solar-rooftop': 0.13, 'solar-hsat': 0.18,
+        // Wind
+        onwind: 0.30, offwind: 0.45, 'offwind-ac': 0.45, 'offwind-dc': 0.48, 'offwind-float': 0.50,
+        // Hydro
+        hydro: 0.40, 'hydro-reservoir': 0.35,
+        // Other renewables
+        biomass: 0.60, geothermal: 0.80, wave: 0.25, tidal: 0.22,
+        // Fossil
+        ccgt: 0.60, ocgt: 0.10, coal: 0.50, lignite: 0.55, oil: 0.05, nuclear: 0.85, waste: 0.70
     };
     
-    // Calculate generation contribution (capacity × CF)
+    // Calculate generation contribution (capacity % × CF)
     const generation = {};
     let totalGen = 0;
     let cfSum = 0;
     let cfCount = 0;
+    let capacitySum = 0;
     let renewableGen = 0;
     let dispatchableGen = 0;
-    const renewableTechs = ['solar', 'onwind', 'offwind', 'hydro'];
-    const dispatchableTechs = ['ccgt', 'ocgt', 'coal', 'nuclear'];
+    const renewableTechs = ['solar', 'solar-rooftop', 'solar-hsat', 'onwind', 'offwind', 'offwind-ac', 'offwind-dc', 'offwind-float', 'hydro', 'hydro-reservoir', 'biomass', 'geothermal', 'wave', 'tidal'];
+    const dispatchableTechs = ['ccgt', 'ocgt', 'coal', 'lignite', 'oil', 'nuclear', 'waste'];
     
     selected.forEach(tech => {
         const cf = capacityFactors[tech];
-        if (cf) {
-            // Assume normalized capacity = 1 for each selected tech
-            const gen = cf;
+        const capacity = journeyState.techCapacities[tech] || 0;
+        
+        if (cf && capacity > 0) {
+            // Generation = capacity percentage × capacity factor
+            const gen = capacity * cf;
             generation[tech] = gen;
             totalGen += gen;
+            capacitySum += capacity;
             cfSum += cf;
             cfCount++;
             
@@ -782,7 +795,7 @@ function updateGenerationMix(selected) {
         }
     });
     
-    // Calculate percentages
+    // Calculate percentages based on generation share
     const mix = {};
     Object.entries(generation).forEach(([tech, gen]) => {
         mix[tech] = totalGen > 0 ? Math.round((gen / totalGen) * 100) : 0;
@@ -794,7 +807,7 @@ function updateGenerationMix(selected) {
     // Calculate stats
     const renewableShare = Math.round((renewableGen / totalGen) * 100) || 0;
     const dispatchableShare = Math.round((dispatchableGen / totalGen) * 100) || 0;
-    const avgCF = cfCount > 0 ? Math.round((cfSum / cfCount) * 100) : 0;
+    const avgCF = capacitySum > 0 ? Math.round((cfSum / cfCount) * 100) : 0;
     
     // Update UI stats
     const renewableShareEl = document.getElementById('renewableShare');
@@ -886,12 +899,161 @@ function toggleTech(techId) {
     
     if (index === -1) {
         journeyState.selectedTechs.push(techId);
+        // Initialize capacity to equal share if not set
+        if (!journeyState.techCapacities[techId]) {
+            const equalShare = journeyState.selectedTechs.length > 0 ? 
+                Math.floor(100 / journeyState.selectedTechs.length) : 0;
+            // Redistribute equally
+            const newShare = Math.floor(100 / journeyState.selectedTechs.length);
+            journeyState.selectedTechs.forEach(t => {
+                journeyState.techCapacities[t] = newShare;
+            });
+        }
         if (card) card.classList.add('selected');
     } else {
         journeyState.selectedTechs.splice(index, 1);
+        delete journeyState.techCapacities[techId];
+        // Redistribute remaining
+        if (journeyState.selectedTechs.length > 0) {
+            const newShare = Math.floor(100 / journeyState.selectedTechs.length);
+            journeyState.selectedTechs.forEach(t => {
+                journeyState.techCapacities[t] = newShare;
+            });
+        }
         if (card) card.classList.remove('selected');
     }
     
+    renderCapacitySliders();
+    updateTechSummary();
+}
+
+function renderCapacitySliders() {
+    const container = document.getElementById('slidersContainer');
+    if (!container) return;
+    
+    const selected = journeyState.selectedTechs;
+    
+    if (selected.length === 0) {
+        container.innerHTML = '<div class="sliders-empty">Select technologies above to configure capacity allocation</div>';
+        updateAllocationDisplay();
+        return;
+    }
+    
+    // Create/update sliders for each selected tech
+    let html = '';
+    selected.forEach(tech => {
+        const spec = techSpecs[tech];
+        if (!spec || spec.category === 'storage') return; // Skip storage (no CF)
+        
+        const currentValue = journeyState.techCapacities[tech] || Math.floor(100 / selected.length);
+        const techName = getTechDisplayName(tech);
+        const techIcon = getTechIcon(tech);
+        
+        html += `
+            <div class="tech-slider-item" data-tech="${tech}">
+                <div class="tech-slider-header">
+                    <span class="tech-slider-icon">${techIcon}</span>
+                    <span class="tech-slider-name">${techName}</span>
+                    <span class="tech-slider-value" id="sliderValue-${tech}">${currentValue}%</span>
+                </div>
+                <input type="range" 
+                       class="tech-slider-input" 
+                       id="slider-${tech}"
+                       min="0" 
+                       max="100" 
+                       value="${currentValue}"
+                       oninput="updateTechCapacity('${tech}', this.value)">
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+    updateAllocationDisplay();
+}
+
+function getTechDisplayName(tech) {
+    const names = {
+        solar: 'Solar PV', 'solar-rooftop': 'Solar Rooftop', 'solar-hsat': 'Solar Tracking',
+        onwind: 'Onshore Wind', 'offwind': 'Offshore AC', 'offwind-ac': 'Offshore AC', 
+        'offwind-dc': 'Offshore HVDC', 'offwind-float': 'Offshore Floating',
+        hydro: 'Run-of-River', 'hydro-reservoir': 'Reservoir Hydro',
+        biomass: 'Biomass', geothermal: 'Geothermal', wave: 'Wave', tidal: 'Tidal',
+        ccgt: 'CCGT Gas', ocgt: 'OCGT Gas', coal: 'Coal', lignite: 'Lignite',
+        oil: 'Oil', nuclear: 'Nuclear', waste: 'Waste'
+    };
+    return names[tech] || tech;
+}
+
+function getTechIcon(tech) {
+    const icons = {
+        solar: '☀️', 'solar-rooftop': '🏠', 'solar-hsat': '🌞',
+        onwind: '🌬️', offwind: '⚡', 'offwind-ac': '⚡', 'offwind-dc': '🔌', 'offwind-float': '🌊',
+        hydro: '💧', 'hydro-reservoir': '🏞️',
+        biomass: '🌱', geothermal: '🌋', wave: '🌊', tidal: '🌙',
+        ccgt: '🔥', ocgt: '🔧', coal: '🪨', lignite: '🟤',
+        oil: '⛽', nuclear: '⚛️', waste: '♻️'
+    };
+    return icons[tech] || '⚡';
+}
+
+function updateTechCapacity(tech, value) {
+    value = parseInt(value);
+    journeyState.techCapacities[tech] = value;
+    
+    // Update display
+    const valueEl = document.getElementById(`sliderValue-${tech}`);
+    if (valueEl) valueEl.textContent = `${value}%`;
+    
+    updateAllocationDisplay();
+    updateTechSummary();
+}
+
+function updateAllocationDisplay() {
+    const totalEl = document.getElementById('totalAllocation');
+    if (!totalEl) return;
+    
+    // Calculate total allocation (only for generation techs, not storage)
+    let total = 0;
+    journeyState.selectedTechs.forEach(tech => {
+        const spec = techSpecs[tech];
+        if (spec && spec.category !== 'storage') {
+            total += journeyState.techCapacities[tech] || 0;
+        }
+    });
+    
+    totalEl.textContent = `${total}%`;
+    
+    // Color code
+    totalEl.className = 'total-value';
+    if (total > 100) totalEl.classList.add('warning');
+    else if (total === 100) totalEl.classList.add('success');
+}
+
+function normalizeCapacities() {
+    const genTechs = journeyState.selectedTechs.filter(tech => {
+        const spec = techSpecs[tech];
+        return spec && spec.category !== 'storage';
+    });
+    
+    if (genTechs.length === 0) return;
+    
+    // Normalize to 100%
+    const equalShare = Math.floor(100 / genTechs.length);
+    let remainder = 100 - (equalShare * genTechs.length);
+    
+    genTechs.forEach((tech, index) => {
+        // First techs get the extra 1% to make 100
+        const share = index < remainder ? equalShare + 1 : equalShare;
+        journeyState.techCapacities[tech] = share;
+        
+        // Update slider
+        const slider = document.getElementById(`slider-${tech}`);
+        const valueEl = document.getElementById(`sliderValue-${tech}`);
+        if (slider) slider.value = share;
+        if (valueEl) valueEl.textContent = `${share}%`;
+    });
+    
+    updateAllocationDisplay();
     updateTechSummary();
 }
 
