@@ -1652,51 +1652,80 @@ function generateYAML() {
 function buildYAML() {
     const { countries, timePeriod, snapshot, horizon, nodes, co2Mechanism, co2CapLevel, co2Price, selectedTechs, storage, speed } = journeyState;
     
-    // Map de ID de UI a nombres PyPSA
+    // ========================================
+    // PYPSA-EUR OFFICIAL TECHNOLOGY MAPPING
+    // Based on v0.12.0 config.default.yaml
+    // ========================================
+    
+    // Generators (extendable_carriers.Generator)
+    // These are EXACT names from PyPSA-Eur documentation
+    const validGenerators = [
+        'solar', 'solar-hsat',
+        'onwind', 
+        'offwind-ac', 'offwind-dc', 'offwind-float',
+        'hydro',
+        'OCGT', 'CCGT',  // Gas turbines - UPPERCASE
+        'nuclear',
+        'coal', 'lignite',
+        'oil',
+        'biomass', 'geothermal'
+    ];
+    
+    // UI to PyPSA Generator mapping
     const generatorMapping = {
-        // Solar variants
         'solar': 'solar',
-        'solar-rooftop': 'solar',
-        'solar-hsat': 'solar',
-        // Wind
+        'solar-hsat': 'solar-hsat',
         'onwind': 'onwind',
-        'offwind': 'offwind',  // legacy
-        'offwind-ac': 'offwind',
-        'offwind-dc': 'offwind',
-        'offwind-float': 'offwind',
-        // Hydro
+        'offwind': 'offwind-ac',  // legacy fallback
+        'offwind-ac': 'offwind-ac',
+        'offwind-dc': 'offwind-dc', 
+        'offwind-float': 'offwind-float',
         'hydro': 'hydro',
         'hydro-reservoir': 'hydro',
-        // Biomasa y otros
-        'biomass': 'biomass',
-        'geothermal': 'geothermal',
-        'wave': 'wave',
-        'tidal': 'tidal',
-        // Térmicos
-        'ccgt': 'ccgt',
-        'ocgt': 'ocgt',
+        'ccgt': 'CCGT',
+        'ocgt': 'OCGT',
         'coal': 'coal',
-        'lignite': 'coal',
+        'lignite': 'lignite',
         'oil': 'oil',
         'nuclear': 'nuclear',
+        'biomass': 'biomass',
+        'geothermal': 'geothermal',
         'waste': 'waste'
     };
     
+    // Storage: Store (battery, H2)
     const storeMapping = {
         'battery': 'battery',
-        'hydrogen': 'hydrogen',
-        'pumped': 'pumped'
+        'hydrogen': 'H2'  // PyPSA-Eur uses H2, not 'hydrogen'
     };
     
-    // Agrupar generadores seleccionados y mapear a nombres PyPSA
-    const generators = [...new Set(
-        selectedTechs
-            .filter(t => generatorMapping[t])
-            .map(t => generatorMapping[t])
-    )];
+    // Storage: StorageUnit (PHS = Pumped Hydro Storage)
+    const storageUnitMapping = {
+        'pumped': 'PHS'  // PyPSA-Eur uses PHS
+    };
     
-    // Agrupar storage
-    const stores = selectedTechs.filter(t => storeMapping[t]);
+    // Process selected techs
+    const generators = [];
+    const stores = [];
+    const storageUnits = [];
+    
+    selectedTechs.forEach(tech => {
+        if (generatorMapping[tech]) {
+            generators.push(generatorMapping[tech]);
+        }
+        if (storeMapping[tech]) {
+            stores.push(storeMapping[tech]);
+        }
+        if (storageUnitMapping[tech]) {
+            storageUnits.push(storageUnitMapping[tech]);
+        }
+    });
+    
+    // Debug: log selected techs
+    console.log('Selected techs:', selectedTechs);
+    console.log('Mapped generators:', generators);
+    console.log('Mapped stores:', stores);
+    console.log('Mapped storageUnits:', storageUnits);
     
     const timeConfig = timePeriodConfig[timePeriod] || timePeriodConfig.quarter;
     const safeTimePeriod = timePeriod || 'quarter';
@@ -1754,43 +1783,77 @@ function buildYAML() {
     console.log('Selected techs:', selectedTechs);
     console.log('Mapped generators:', generators);
     console.log('Mapped stores:', stores);
+    console.log('Mapped storageUnits:', storageUnits);
     
     yaml += `  extendable_carriers:\n`;
     
-    // Generators - show ALL selected (including variants)
+    // Generators
     const generatorList = generators.length > 0 ? generators.join(', ') : 'solar, onwind';
     yaml += `    Generator: [${generatorList}]\n`;
     
-    // Storage Units (pumped hydro)
-    const storageUnits = stores.filter(s => s === 'pumped');
+    // Storage Units (PHS = Pumped Hydro)
+    const storageUnitList = storageUnits.length > 0 ? storageUnits.join(', ') : '';
     if (storageUnits.length > 0) {
-        yaml += `    StorageUnit: [${storageUnits.join(', ')}]\n`;
+        yaml += `    StorageUnit: [${storageUnitList}]\n`;
     }
     
-    // Stores (battery, hydrogen) - mapped from UI selections
-    const storeList = stores.filter(s => ['battery', 'hydrogen'].includes(s));
-    if (storeList.length > 0) {
-        yaml += `    Store: [${storeList.join(', ')}]\n`;
+    // Stores (battery, H2)
+    const storeList = stores.length > 0 ? stores.join(', ') : '';
+    if (stores.length > 0) {
+        yaml += `    Store: [${storeList}]\n`;
     }
     
-    // Add section showing all selected technologies
-    yaml += `\n# Technologies Selected (${selectedTechs.length} total)\n`;
-    yaml += `# - Generators: ${generators.join(', ') || 'none'}\n`;
-    yaml += `# - Storage: ${storeList.join(', ') || 'none'}\n`;
-    yaml += `# - Pumped Hydro: ${storageUnits.length > 0 ? 'yes' : 'no'}\n`;
+    // Links (empty for now, could add H2 pipeline)
+    yaml += `    Link: []\n`;
     
     yaml += `\n`;
     
-    if (stores.length > 0) {
+    // Classify carriers (for PyPSA-Eur optimization)
+    const conventionalCarriers = generators.filter(g => 
+        ['OCGT', 'CCGT', 'nuclear', 'coal', 'lignite', 'oil', 'biomass', 'geothermal'].includes(g)
+    );
+    const renewableCarriers = generators.filter(g =>
+        ['solar', 'solar-hsat', 'onwind', 'offwind-ac', 'offwind-dc', 'offwind-float', 'hydro'].includes(g)
+    );
+    
+    yaml += `  conventional_carriers: [${conventionalCarriers.join(', ') || 'OCGT, CCGT, coal'}]\n`;
+    yaml += `  renewable_carriers: [${renewableCarriers.join(', ') || 'solar, onwind, hydro'}]\n`;
+    
+    // Carbon budget reference
+    const co2Budget = co2CapLevel / 100;
+    yaml += `  co2base: ${(1.487e9 * (1 - co2Budget)).toExponential(3)}\n`;
+    yaml += `  gaslimit: false\n`;
+    yaml += `  gaslimit_enable: false\n`;
+    
+    // Add section showing all selected technologies
+    yaml += `\n# Technologies Selected (${selectedTechs.length} UI items)\n`;
+    yaml += `# - Generators (${generators.length}): ${generators.join(', ') || 'none'}\n`;
+    yaml += `# - StorageUnit (${storageUnits.length}): ${storageUnitList || 'none'}\n`;
+    yaml += `# - Store (${stores.length}): ${storeList || 'none'}\n`;
+    
+    yaml += `\n`;
+    
+    // max_hours configuration
+    if (stores.length > 0 || storageUnits.length > 0) {
         yaml += `  max_hours:\n`;
-        if (selectedTechs.includes('battery')) {
+        
+        // Battery duration
+        if (stores.includes('battery')) {
             const batteryDuration = storage.battery?.duration || 4;
             yaml += `    battery: ${batteryDuration}\n`;
         }
-        if (selectedTechs.includes('hydrogen')) {
+        
+        // H2 duration (hydrogen in UI)
+        if (stores.includes('H2')) {
             const hydrogenDuration = storage.hydrogen?.duration || 168;
             yaml += `    H2: ${hydrogenDuration}\n`;
         }
+        
+        // PHS duration (pumped in UI)
+        if (storageUnits.includes('PHS')) {
+            yaml += `    PHS: 6  # Default 6 hours for pumped hydro\n`;
+        }
+        
         yaml += `\n`;
     }
     
@@ -1900,7 +1963,8 @@ function updateEnvironmentalAssessment() {
     
     // Renewable technologies (0-30 points)
     maxScore += 30;
-    const renewableTechs = ['solar', 'onwind', 'offwind', 'hydro', 'biomass', 'geothermal'];
+    // Include all variants: solar-hsat, offwind-ac/dc/float, hydro-reservoir
+    const renewableTechs = ['solar', 'solar-hsat', 'onwind', 'offwind', 'offwind-ac', 'offwind-dc', 'offwind-float', 'hydro', 'hydro-reservoir', 'biomass', 'geothermal'];
     const selectedRenewables = journeyState.selectedTechs.filter(t => renewableTechs.includes(t));
     const renewableCount = selectedRenewables.length;
     
