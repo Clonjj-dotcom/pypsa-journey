@@ -1,0 +1,129 @@
+<!-- IMPROVED EUROPE MAP - Better shapes -->
+<svg id="europeMap" viewBox="0 0 800 600" class="europe-map">
+    <defs>
+        <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#475569;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    
+    <!-- Background sea -->
+    <rect width="800" height="600" fill="#1e293b" rx="8"/>
+    
+    <g id="countries">
+        <!-- NORWAY - longer with distinct fjord shape -->
+        <path id="NO" class="country" 
+            d="M340,20 L360,15 L380,25 L390,50 L400,80 L410,120 L420,160 L415,190 L400,210 L380,200 L370,170 L360,140 L350,100 L345,60 Z" 
+            data-name="Norway"/>
+        
+        <!-- SWEDEN - long distinct shape -->
+        <path id="SE" class="country" 
+            d="M400,15 L430,10 L450,30 L460,70 L465,110 L460,150 L450,180 L435,200 L420,195 L415,160 L410,120 L405,80 L400,45 Z" 
+            data-name="Sweden"/>
+        
+        <!-- FINLAND - distinct east shape -->
+        <path id="FI" class="country" 
+            d="M465,25 L500,20 L520,45 L530,80 L528,110 L520,135 L505,145 L490,130 L480,100 L475,70 L470,45 Z" 
+            data-name="Finland"/>
+        
+        <!-- DENMARK - peninsula + islands -->
+        <path id="DK" class="country" 
+            d="M420,200 L445,195 L455,210 L450,225 L440,235 L425,232 L418,220 Z M400,225 L410,222 L412,232 L402,235 Z" 
+            data-name="Denmark"/>
+        
+        <!-- UNITED KINGDOM - island distinct shape -->
+        <path id="GB" class="country" 
+            d="M260,170 L290,165 L310,180 L315,200 L305,220 L290,235 L270,240 L255,230 L245,210 L240,190 L250,175 Z M230,200 L245,195 L248,210 L235,215 Z M250,240 L265,238 L268,248 L255,252 Z" 
+            data-name="United Kingdom"/>
+        
+        <!-- IRELAND - island west -->
+        <path id="IE" class="country" 
+            d="M200,210 L225,205 L240,220 L238,240 L225,255 L205,258 L195,245 L192,225 Z" 
+            data-name="Ireland"/>
+        
+        
+        <!-- FRANCE - hexagon distinct -->
+        <path id="FR" class="country" 
+            d="M280,260 L320,250 L345,270 L350,300 L345,335 L330,365 L300,380 L275,375 L265,350 L260,320 L265,290 L275,270 Z" 
+            data-name="France"/>
+        
+        <!-- SPAIN - distinct iberian -->
+        <path id="ES" class="country" 
+            d="M220,350 L260,340 L285,360 L295,390 L290,420 L280,450 L260,470 L230,475 L210,465 L200,440 L195,410 L200,380 L210,360 Z" 
+            data-name="Spain"/>
+        
+        <!-- PORTUGAL - western strip -->
+        <path id="PT" class="country" 
+            d="M180,400 L205,395 L215,415 L210,440 L195,460 L175,455 L170,430 Z" 
+            data-name="Portugal"/>
+        
+        
+        <!-- ITALY - boot distinct with Sicily -->
+        <path id="IT" class="country" 
+            d="M400,340 L430,330 L450,350 L460,380 L465,410 L460,440 L450,470 L435,490 L420,505 L400,510 L390,500 L395,470 L400,440 L395,410 L390,380 L395,360 Z M435,505 L450,500 L455,520 L440,525 Z M380,315 L400,310 L405,325 L390,332 Z" 
+            data-name="Italy"/>
+        
+        
+        <!-- GERMANY - central block -->
+        <path id="DE" class="country" 
+            d="M390,220 L440,210 L470,230 L480,260 L475,295 L460,320 L430,330 L400,325 L385,300 L380,270 L385,245 Z" 
+            data-name="Germany"/>
+        
+        
+        <!-- NETHERLANDS - low countries north -->
+        <path id="NL" class="country" 
+            d="M375,200 L405,195 L415,210 L410,225 L395,230 L380,225 L372,215 Z" 
+            data-name="Netherlands"/>
+        
+        
+        <!-- BELGIUM - between NL and FR -->
+        <path id="BE" class="country" 
+            d="M365,235 L390,230 L400,245 L395,260 L380,265 L370,255 L363,245 Z" 
+            data-name="Belgium"/>
+        
+        
+        <!-- SWITZERLAND - alpine block -->
+        <path id="CH" class="country" 
+            d="M415,295 L445,290 L455,310 L450,330 L430,335 L415,325 L410,310 Z" 
+            data-name="Switzerland"/>
+        
+        
+        <!-- AUSTRIA - alpine east -->
+        <path id="AT" class="country" 
+            d="M460,295 L500,290 L515,310 L510,335 L490,345 L470,340 L460,325 L455,310 Z" 
+            data-name="Austria"/>
+        
+        
+        <!-- CZECH REPUBLIC - central -->
+        <path id="CZ" class="country" 
+            d="M470,250 L510,245 L525,265 L520,285 L500,295 L480,290 L470,275 Z" 
+            data-name="Czech Republic"/>
+        
+        
+        <!-- POLAND - east block -->
+        <path id="PL" class="country" 
+            d="M480,190 L550,180 L570,210 L575,250 L565,285 L540,300 L510,295 L490,280 L485,250 L480,220 Z" 
+            data-name="Poland"/>
+    </g>
+    
+    <!-- Country labels -->
+    <g id="labels" style="font-size: 10px; fill: #94a3b8; pointer-events: none; font-weight: 600;">
+        <text x="435" y="220" text-anchor="middle">DE</text>
+        <text x="305" y="315" text-anchor="middle">FR</text>
+        <text x="245" y="420" text-anchor="middle">ES</text>
+        <text x="430" y="430" text-anchor="middle">IT</text>
+        <text x="280" y="210" text-anchor="middle">GB</text>
+        <text x="525" y="260" text-anchor="middle">PL</text>
+        <text x="430" y="100" text-anchor="middle">SE</text>
+        <text x="380" y="80" text-anchor="middle">NO</text>
+        <text x="495" y="90" text-anchor="middle">FI</text>
+        <text x="390" y="215" text-anchor="middle">NL</text>
+        <text x="385" y="250" text-anchor="middle">BE</text>
+        <text x="430" y="315" text-anchor="middle">CH</text>
+        <text x="485" y="320" text-anchor="middle">AT</text>
+        <text x="495" y="270" text-anchor="middle">CZ</text>
+        <text x="435" y="225" text-anchor="middle">DK</text>
+        <text x="215" y="235" text-anchor="middle">IE</text>
+        <text x="190" y="430" text-anchor="middle">PT</text>
+    </g>
+</svg>

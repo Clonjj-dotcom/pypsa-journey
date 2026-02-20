@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+</head>
+<body>
+    <div id="debug"></div>
+    <script>
+        const countryCodes = {
+            "Norway": "NO", "Sweden": "SE", "Finland": "FI", "Denmark": "DK", "Iceland": "IS",
+            "United Kingdom": "GB", "Ireland": "IE", "France": "FR", 
+            "Netherlands": "NL", "Belgium": "BE", "Luxembourg": "LU",
+            "Germany": "DE", "Switzerland": "CH", "Austria": "AT",
+            "Czech Republic": "CZ", "Czechia": "CZ", "Poland": "PL", "Slovakia": "SK",
+            "Hungary": "HU", "Slovenia": "SI",
+            "Spain": "ES", "Portugal": "PT", "Italy": "IT", "Malta": "MT", "Cyprus": "CY",
+            "Greece": "GR", "Croatia": "HR",
+            "Serbia": "RS", "Bosnia and Herzegovina": "BA", "Montenegro": "ME",
+            "Macedonia": "MK", "North Macedonia": "MK", "Albania": "AL", "Kosovo": "XK",
+            "Estonia": "EE", "Latvia": "LV", "Lithuania": "LT",
+            "Romania": "RO", "Bulgaria": "BG", "Moldova": "MD",
+            "Ukraine": "UA", "Belarus": "BY", "Russia": "RU",
+            "Turkey": "TR", "Georgia": "GE"
+        };
+        
+        const group35 = ['AL','AT','BA','BE','BG','CH','CZ','DE','DK','EE','ES','FI','FR','GB','GR','HR','HU','IE','IS','IT','LT','LU','LV','ME','MK','NL','NO','PL','PT','RO','RS','SE','SI','SK','XK'];
+        
+        d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json").then(function(world) {
+            const countries = topojson.feature(world, world.objects.countries).features;
+            const found = countries.filter(d => countryCodes[d.properties.name]);
+            const foundCodes = found.map(c => countryCodes[c.properties.name]);
+            
+            const missing = group35.filter(code => !foundCodes.includes(code));
+            const present = group35.filter(code => foundCodes.includes(code));
+            
+            document.getElementById('debug').innerHTML = `
+                <h3>DEBUG: 35 Countries Check</h3>
+                <p><b>Requested:</b> ${group35.length}</p>
+                <p><b>Found in world-atlas:</b> ${present.length}</p>
+                <p><b>Missing:</b> ${missing.length} → ${missing.join(', ')}</p>
+                <hr>
+                <p><b>All found names:</b></p>
+                <ul>${found.map(c => `<li>${c.properties.name} → ${countryCodes[c.properties.name]}</li>`).join('')}</ul>
+            `;
+        });
+    </script>
+</body>
+</html>

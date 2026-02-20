@@ -278,22 +278,28 @@ body {
 .country {
     fill: #475569;
     stroke: #64748b;
-    stroke-width: 1.5;
+    stroke-width: 0.5;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .country:hover {
-    fill: var(--primary);
-    stroke: var(--primary-light);
-    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
+    fill: #6366f1;
+    stroke: #818cf8;
 }
 
 .country.selected {
-    fill: var(--primary);
+    fill: #6366f1;
     stroke: #a5b4fc;
-    stroke-width: 2.5;
-    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4));
+    stroke-width: 1.5;
+}
+
+.map-label {
+    font-size: 11px;
+    fill: #94a3b8;
+    font-weight: 600;
+    pointer-events: none;
+    text-anchor: middle;
 }
 
 /* ========================================
@@ -321,6 +327,18 @@ body {
 .preset-btn:hover {
     background: var(--primary);
     border-color: var(--primary);
+}
+
+.preset-btn.danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+
+.preset-btn.danger:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: white;
 }
 
 .selected-countries {
@@ -479,11 +497,977 @@ body {
 }
 
 /* ========================================
-   TECH CATALOG
+   CO2 POLITICAL - TARGET CARDS
+   ======================================== */
+
+.co2-targets-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.target-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.target-card.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.target-year {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.target-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.target-card.active .target-value {
+    color: var(--primary-light);
+}
+
+.target-label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ========================================
+   CO2 MECHANISM CARDS
+   ======================================== */
+
+.co2-mechanism-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.mechanism-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.mechanism-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.mechanism-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.mechanism-card {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mechanism-card:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.mechanism-card.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.mechanism-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.mechanism-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.mechanism-card.active .mechanism-name {
+    color: var(--primary-light);
+}
+
+.mechanism-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* ========================================
+   MECHANISM TOOLTIPS
+   ======================================== */
+
+.mechanism-card {
+    position: relative;
+}
+
+.mechanism-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.mechanism-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.mechanism-card:hover .mechanism-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-light);
+    margin-bottom: 8px;
+}
+
+.mechanism-tooltip p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+}
+
+.tooltip-data {
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.data-row:last-child {
+    border-bottom: none;
+}
+
+.data-row span:first-child {
+    color: var(--text-muted);
+}
+
+.data-row span:last-child {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.tooltip-impact {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.impact-high {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.impact-medium {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.impact-low {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.tooltip-source {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 8px;
+}
+
+/* ========================================
+   TARGET CARDS TOOLTIPS
+   ======================================== */
+
+.target-card-small {
+    position: relative;
+}
+
+.target-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.target-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.target-card-small:hover .target-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========================================
+   PRICE PRESET TOOLTIPS
+   ======================================== */
+
+.price-preset {
+    position: relative;
+}
+
+.price-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-weight: normal;
+    white-space: normal;
+}
+
+.price-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.price-preset:hover .price-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========================================
+   CAP CONFIG (similar to Price)
+   ======================================== */
+
+.cap-config {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.cap-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.cap-preset {
+    position: relative;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cap-preset:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.cap-preset.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.cap-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-weight: normal;
+    white-space: normal;
+}
+
+.cap-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.cap-preset:hover .cap-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cap-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.cap-slider-row .slider {
+    flex: 1;
+}
+
+.cap-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-light);
+    min-width: 70px;
+    text-align: right;
+}
+
+.cap-impact {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 16px;
+}
+
+.cap-context {
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.context-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.context-row:last-child {
+    border-bottom: none;
+}
+
+.context-label {
+    color: var(--text-muted);
+}
+
+.context-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.price-config {
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+/* ========================================
+   TEMPORAL SELECTION
+   ======================================== */
+
+.temporal-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.temporal-section:last-of-type {
+    border-bottom: none;
+}
+
+.temporal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.temporal-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+/* Year Cards */
+.year-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.year-card {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.year-card:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.year-card.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.year-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.year-card.active .year-number {
+    color: var(--primary-light);
+}
+
+.year-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Horizon Input */
+.horizon-input {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.year-input {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    width: 120px;
+}
+
+.year-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.horizon-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.preset-chip {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.preset-chip:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.preset-chip.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Temporal Summary */
+.temporal-summary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 24px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row.delta {
+    background: rgba(99, 102, 241, 0.1);
+    margin: 0 -20px;
+    padding: 12px 20px;
+    border-bottom: none;
+}
+
+.summary-label {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.summary-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.summary-row.delta .summary-value {
+    color: var(--primary-light);
+}
+
+/* ========================================
+   TIME PERIOD CARDS
+   ======================================== */
+
+.time-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.time-card {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.time-card:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.time-card.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.time-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.time-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.time-card.active .time-name {
+    color: var(--primary-light);
+}
+
+.time-detail {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ========================================
+   NODES CONFIG
+   ======================================== */
+
+.nodes-config {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nodes-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nodes-slider-row .slider {
+    flex: 1;
+}
+
+.nodes-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-light);
+    min-width: 50px;
+    text-align: right;
+}
+
+.nodes-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.nodes-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+}
+
+/* ========================================
+   CO2 AMBIENT BACKGROUND
+   ======================================== */
+
+.gen-screen[data-screen="2"] {
+    position: relative;
+}
+
+.ambient-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition: all 1s ease;
+    opacity: 0.3;
+}
+
+.ambient-none {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 50%, #111827 100%);
+}
+
+.ambient-cap {
+    background: linear-gradient(135deg, #1e3a5f 0%, #065f46 50%, #047857 100%);
+}
+
+.ambient-price {
+    background: linear-gradient(135deg, #1e3a5f 0%, #059669 50%, #10b981 100%);
+}
+
+/* Optional: Use generated image as background */
+.ambient-bg.image-bg {
+    background: url('../images/001-abstract-gradient-background-left-side-i.png') center/cover;
+    opacity: 0.4;
+}
+
+.co2-panel {
+    position: relative;
+    z-index: 1;
+    background: rgba(15, 23, 42, 0.95);
+}
+
+/* ========================================
+   MECHANISM OPTIONS
+   ======================================== */
+
+.mechanism-options {
+    margin-top: 24px;
+}
+
+.option-group {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.option-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.option-message.neutral {
+    background: rgba(107, 114, 128, 0.15);
+    border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+.option-message.warning {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.option-message.info {
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.option-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.option-message p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Cap Targets */
+
+.target-cards-small {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.target-card-small {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.target-card-small:hover {
+    border-color: var(--primary);
+}
+
+.target-card-small.active {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.target-value-small {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.target-card-small.active .target-value-small {
+    color: var(--primary-light);
+}
+
+.target-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Price Config */
+
+.price-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.price-preset {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.price-preset:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.price-preset.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.price-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.price-slider-row .slider {
+    flex: 1;
+}
+
+.price-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-light);
+    min-width: 80px;
+    text-align: right;
+}
+
+.price-impact {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* CO2 Summary */
+
+.co2-summary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 24px;
+}
+
+/* ========================================
+   TECH CATALOG - ENHANCED
    ======================================== */
 
 .tech-categories {
     margin-bottom: 24px;
+}
+
+.tech-section {
+    margin-bottom: 32px;
+}
+
+.category-title {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 24px 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-icon {
+    font-size: 18px;
+}
+
+.category-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: auto;
+}
+
+.category-badge.green {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.category-badge.orange {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.category-badge.blue {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
 }
 
 .category-title {
@@ -502,50 +1486,180 @@ body {
 }
 
 .tech-card {
+    position: relative;
     background: var(--bg-tertiary);
     border: 2px solid var(--border);
     border-radius: 8px;
-    padding: 16px;
+    padding: 16px 12px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
+    overflow: visible;
 }
 
 .tech-card:hover {
     border-color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .tech-card.selected {
     border-color: var(--primary);
     background: rgba(99, 102, 241, 0.15);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 .tech-icon {
-    font-size: 32px;
-    margin-bottom: 8px;
+    font-size: 28px;
+    margin-bottom: 6px;
 }
 
 .tech-name {
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 4px;
+    color: var(--text-primary);
 }
 
 .tech-cost {
     font-size: 11px;
     color: var(--text-muted);
+    margin-bottom: 4px;
 }
 
-.selection-summary {
-    background: var(--bg-tertiary);
+.tech-capacity {
+    font-size: 10px;
+    color: var(--primary-light);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.tech-emissions {
+    font-size: 10px;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.tech-emissions.high {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.tech-emissions.low {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+/* Tech Tooltip */
+.tech-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid var(--primary);
     border-radius: 8px;
-    padding: 16px;
+    padding: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
+
+.tech-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--primary);
+}
+
+.tech-card:hover .tech-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip-specs {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.tooltip-specs .spec {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 3px 0;
+}
+
+.tooltip-specs .spec span:first-child {
+    color: var(--text-muted);
+}
+
+.tooltip-specs .spec span:last-child {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Tech Summary Panel */
+.tech-summary-panel {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
     margin-top: 24px;
 }
 
-.selection-summary h3 {
-    font-size: 14px;
+.tech-totals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.total-item {
+    text-align: center;
+}
+
+.total-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.total-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-light);
+}
+
+.total-unit {
+    font-size: 12px;
     color: var(--text-secondary);
+}
+
+.tech-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.tech-actions .btn {
+    padding: 8px 16px;
+    font-size: 13px;
 }
 
 /* ========================================

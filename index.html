@@ -46,11 +46,12 @@
             </div>
             <div class="progress-steps">
                 <span class="step active" data-step="0">Countries</span>
-                <span class="step" data-step="1">Ambition</span>
-                <span class="step" data-step="2">Technologies</span>
-                <span class="step" data-step="3">Storage</span>
-                <span class="step" data-step="4">Speed</span>
-                <span class="step" data-step="5">Generate</span>
+                <span class="step" data-step="1">Temporal</span>
+                <span class="step" data-step="2">CO₂ Political</span>
+                <span class="step" data-step="3">Technologies</span>
+                <span class="step" data-step="4">Storage</span>
+                <span class="step" data-step="5">Speed</span>
+                <span class="step" data-step="6">Generate</span>
             </div>
         </div>
 
@@ -64,34 +65,125 @@
                     <p class="screen-desc">Choose European countries for your energy model</p>
                     
                     <div class="map-container">
-                        <svg id="europeMap" viewBox="0 0 1000 800" class="europe-map">
-                            <g id="countries">
-                                <path id="NO" class="country" d="M320,80 L340,60 L360,80 L380,120 L400,180 L420,200 L400,220 L380,240 L360,200 L340,160 L320,120 Z" data-name="Norway"/>
-                                <path id="SE" class="country" d="M420,60 L460,50 L480,80 L500,120 L520,180 L500,220 L480,240 L460,200 L440,160 L420,120 Z" data-name="Sweden"/>
-                                <path id="FI" class="country" d="M520,50 L560,40 L580,80 L600,120 L580,160 L560,180 L540,160 L520,120 Z" data-name="Finland"/>
-                                <path id="DK" class="country" d="M460,240 L480,230 L500,250 L490,270 L470,260 Z" data-name="Denmark"/>
-                                <path id="GB" class="country" d="M280,200 L320,180 L340,220 L320,260 L300,300 L280,320 L260,300 L250,260 L260,220 Z" data-name="United Kingdom"/>
-                                <path id="IE" class="country" d="M220,260 L240,250 L250,280 L230,300 L210,280 Z" data-name="Ireland"/>
-                                <path id="FR" class="country" d="M280,300 L320,290 L340,320 L360,360 L380,380 L360,420 L340,440 L300,450 L280,430 L260,400 L250,360 L260,320 Z" data-name="France"/>
-                                <path id="ES" class="country" d="M180,400 L220,390 L260,400 L280,430 L300,480 L280,520 L240,540 L200,520 L170,480 L160,440 Z" data-name="Spain"/>
-                                <path id="PT" class="country" d="M140,450 L170,440 L180,480 L160,520 L130,500 Z" data-name="Portugal"/>
-                                <path id="IT" class="country" d="M420,420 L440,400 L450,380 L480,400 L500,450 L520,500 L500,550 L480,580 L460,560 L440,520 L420,480 L400,440 Z" data-name="Italy"/>
-                                <path id="DE" class="country" d="M420,280 L460,270 L480,290 L500,320 L490,360 L460,380 L420,370 L400,340 L390,310 L400,290 Z" data-name="Germany"/>
-                                <path id="NL" class="country" d="M400,260 L430,250 L440,280 L420,300 L390,290 Z" data-name="Netherlands"/>
-                                <path id="BE" class="country" d="M390,300 L410,290 L430,310 L420,330 L390,320 Z" data-name="Belgium"/>
-                                <path id="CH" class="country" d="M440,380 L460,370 L470,400 L450,410 L430,400 Z" data-name="Switzerland"/>
-                                <path id="AT" class="country" d="M480,340 L510,330 L520,360 L500,380 L470,370 Z" data-name="Austria"/>
-                                <path id="CZ" class="country" d="M500,300 L530,290 L550,320 L530,340 L500,330 Z" data-name="Czech Republic"/>
-                                <path id="PL" class="country" d="M520,250 L580,240 L600,280 L590,320 L560,340 L520,330 L500,300 Z" data-name="Poland"/>
-                            </g>
-                        </svg>
+                        <!-- D3.js REAL EUROPE MAP -->
+                        <div id="d3Map" style="width: 100%; height: 550px; background: #1e293b; border-radius: 8px;"></div>
+
+                        <script src="https://d3js.org/d3.v7.min.js"></script>
+                        <script src="https://unpkg.com/topojson@3"></script>
+                        <script>
+                        (function() {
+                            const width = 900, height = 550;
+                            const svg = d3.select("#d3Map")
+                                .append("svg")
+                                .attr("viewBox", `0 0 ${width} ${height}`)
+                                .attr("width", "100%")
+                                .attr("height", "100%");
+                            
+                            // Europe-focused projection
+                            const projection = d3.geoMercator()
+                                .center([18, 50])
+                                .scale(520)
+                                .translate([width / 2, height / 2]);
+                            
+                            const path = d3.geoPath().projection(projection);
+                            
+                            // Country name to code mapping (35 countries)
+                            const countryCodes = {
+                                // Nordic
+                                "Norway": "NO", "Sweden": "SE", "Finland": "FI", "Denmark": "DK", "Iceland": "IS",
+                                // Western Europe
+                                "United Kingdom": "GB", "Ireland": "IE", "France": "FR", 
+                                "Netherlands": "NL", "Belgium": "BE", "Luxembourg": "LU",
+                                // Central Europe
+                                "Germany": "DE", "Switzerland": "CH", "Austria": "AT",
+                                "Czech Republic": "CZ", "Czechia": "CZ", "Poland": "PL", "Slovakia": "SK",
+                                "Hungary": "HU", "Slovenia": "SI",
+                                // Southern Europe
+                                "Spain": "ES", "Portugal": "PT", "Italy": "IT", "Greece": "GR", "Croatia": "HR",
+                                // Balkans
+                                "Serbia": "RS", "Bosnia and Herzegovina": "BA", "Bosnia and Herz.": "BA", 
+                                "Montenegro": "ME", "Macedonia": "MK", "North Macedonia": "MK", 
+                                "Albania": "AL", "Kosovo": "XK",
+                                // Baltic
+                                "Estonia": "EE", "Latvia": "LV", "Lithuania": "LT",
+                                // Eastern
+                                "Romania": "RO", "Bulgaria": "BG"
+                            };
+                            
+                            // Load world atlas
+                            d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json").then(function(world) {
+                                const countries = topojson.feature(world, world.objects.countries).features;
+                                const euCountries = countries.filter(d => countryCodes[d.properties.name]);
+                                
+                                svg.selectAll("path.country")
+                                    .data(euCountries)
+                                    .join("path")
+                                    .attr("class", "country")
+                                    .attr("d", path)
+                                    .attr("id", d => countryCodes[d.properties.name])
+                                    .attr("data-name", d => d.properties.name)
+                                    .on("click", function(event, d) {
+                                        const code = countryCodes[d.properties.name];
+                                        if (code && typeof toggleCountry === 'function') {
+                                            toggleCountry(code);
+                                        }
+                                    });
+                                
+                                // Add labels for main countries
+                                const labelData = [
+                                    {code: "DE", name: "Germany"}, {code: "FR", name: "France"},
+                                    {code: "ES", name: "Spain"}, {code: "IT", name: "Italy"},
+                                    {code: "GB", name: "United Kingdom"}, {code: "PL", name: "Poland"},
+                                    {code: "SE", name: "Sweden"}, {code: "NO", name: "Norway"},
+                                    {code: "NL", name: "Netherlands"}, {code: "BE", name: "Belgium"},
+                                    {code: "FI", name: "Finland"}, {code: "DK", name: "Denmark"},
+                                    {code: "AT", name: "Austria"}, {code: "CZ", name: "Czech Republic"},
+                                    {code: "CH", name: "Switzerland"}, {code: "PT", name: "Portugal"},
+                                    {code: "IE", name: "Ireland"}, {code: "GR", name: "Greece"},
+                                    {code: "HU", name: "Hungary"}, {code: "RO", name: "Romania"},
+                                    {code: "BG", name: "Bulgaria"}, {code: "RS", name: "Serbia"},
+                                    {code: "HR", name: "Croatia"}
+                                ];
+                                
+                                labelData.forEach(l => {
+                                    const country = euCountries.find(c => c.properties.name === l.name);
+                                    if (country) {
+                                        const centroid = path.centroid(country);
+                                        l.x = centroid[0];
+                                        l.y = centroid[1];
+                                    }
+                                });
+                                
+                                const validLabels = labelData.filter(l => l.x && l.y);
+                                
+                                svg.selectAll("text.map-label")
+                                    .data(validLabels)
+                                    .join("text")
+                                    .attr("class", "map-label")
+                                    .attr("x", d => d.x)
+                                    .attr("y", d => d.y)
+                                    .text(d => d.code)
+                                    .style("font-size", "10px")
+                                    .style("fill", "#94a3b8")
+                                    .style("font-weight", "600")
+                                    .style("pointer-events", "none")
+                                    .style("text-anchor", "middle")
+                                    .style("text-shadow", "0 1px 2px rgba(0,0,0,0.8)");
+                                    
+                            }).catch(err => {
+                                console.error("Map load error:", err);
+                                d3.select("#d3Map").html('<div style="padding: 40px; text-align: center; color: #94a3b8;">Unable to load map. Check internet connection and refresh.</div>');
+                            });
+                        })();
+                        </script>
                     </div>
 
                     <div class="quick-select">
-                        <button class="preset-btn" onclick="selectPreset('eu-core')">🇪🇺 EU Core</button>
-                        <button class="preset-btn" onclick="selectPreset('renewables-leaders')">☀️ Renewables Leaders</button>
-                        <button class="preset-btn" onclick="selectPreset('all')">🌍 All Europe</button>
-                        <button class="preset-btn" onclick="clearAll()">❌ Clear</button>
+                        <button class="preset-btn" onclick="selectPreset('group1')">🇩🇪 Alemania sola</button>
+                        <button class="preset-btn" onclick="selectPreset('group2')">🇩🇪+ Alemania + Vecinos</button>
+                        <button class="preset-btn" onclick="selectPreset('group3')">🇩🇪++ + Nórdicos</button>
+                        <button class="preset-btn" onclick="selectPreset('group4')">🇪🇺 Europa Completa</button>
+                        <button class="preset-btn danger" onclick="clearAll()">❌ Limpiar</button>
                     </div>
 
                     <div class="selected-countries">
@@ -106,32 +198,283 @@
             </div>
 
             <!-- Screen 2: Ambition -->
+            <!-- Screen 1: Temporal Selection -->
             <div class="gen-screen" data-screen="1">
                 <div class="content-panel">
-                    <h2 class="screen-title">🎯 Climate Ambition</h2>
+                    <h2 class="screen-title">📅 Temporal Setup</h2>
+                    <p class="screen-desc">Configure time period, weather data, and network resolution</p>
                     
-                    <div class="slider-section">
-                        <label class="slider-label">
-                            CO₂ Reduction Target by 2050
-                            <span class="slider-value" id="ambitionValue">80%</span>
-                        </label>
-                        <input type="range" id="ambitionSlider" min="0" max="100" value="80" class="slider">
-                        <div class="slider-labels">
-                            <span>Business as Usual</span>
-                            <span>Net Zero</span>
+                    <!-- Time to Simulate -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">⏱️ Time to Simulate</h3>
+                        <p class="temporal-desc">Duration of the optimization period</p>
+                        <div class="time-cards">
+                            <div class="time-card" data-time="week" onclick="selectTimePeriod('week')">
+                                <div class="time-icon">📅</div>
+                                <div class="time-name">Week</div>
+                                <div class="time-detail">7 days</div>
+                            </div>
+                            <div class="time-card" data-time="month" onclick="selectTimePeriod('month')">
+                                <div class="time-icon">📆</div>
+                                <div class="time-name">Month</div>
+                                <div class="time-detail">30 days</div>
+                            </div>
+                            <div class="time-card active" data-time="quarter" onclick="selectTimePeriod('quarter')">
+                                <div class="time-icon">🗓️</div>
+                                <div class="time-name">Quarter</div>
+                                <div class="time-detail">90 days</div>
+                            </div>
+                            <div class="time-card" data-time="semester" onclick="selectTimePeriod('semester')">
+                                <div class="time-icon">📊</div>
+                                <div class="time-name">Semester</div>
+                                <div class="time-detail">180 days</div>
+                            </div>
+                            <div class="time-card" data-time="year" onclick="selectTimePeriod('year')">
+                                <div class="time-icon">🌍</div>
+                                <div class="time-name">Year</div>
+                                <div class="time-detail">365 days</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="impact-cards">
-                        <div class="impact-card">
-                            <div class="impact-icon">🌡️</div>
-                            <div class="impact-value" id="tempImpact">+1.5°C</div>
-                            <div class="impact-label">Temperature Rise</div>
+                    <!-- Año meteorológico ERA5 -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🌤️ Año meteorológico ERA5 (Historical)</h3>
+                        <p class="temporal-desc">Available weather and demand data years on server</p>
+                        <div class="year-cards">
+                            <div class="year-card" data-year="2013" onclick="selectSnapshot(2013)">
+                                <div class="year-number">2013</div>
+                                <div class="year-label">Historical</div>
+                            </div>
+                            <div class="year-card active" data-year="2024" onclick="selectSnapshot(2024)">
+                                <div class="year-number">2024</div>
+                                <div class="year-label">Recent</div>
+                            </div>
+                            <div class="year-card" data-year="2025" onclick="selectSnapshot(2025)">
+                                <div class="year-number">2025</div>
+                                <div class="year-label">Latest</div>
+                            </div>
                         </div>
-                        <div class="impact-card">
-                            <div class="impact-icon">🏭</div>
-                            <div class="impact-value" id="co2Impact">-80%</div>
-                            <div class="impact-label">CO₂ Reduction</div>
+                    </div>
+
+                    <!-- Number of Nodes -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🕸️ Number of Nodes</h3>
+                        <p class="temporal-desc">Spatial resolution of the network model</p>
+                        <div class="nodes-config">
+                            <div class="nodes-slider-row">
+                                <input type="range" id="nodesSlider" min="10" max="200" value="40" class="slider" oninput="updateNodes(this.value)">
+                                <span class="nodes-value" id="nodesValue">40</span>
+                            </div>
+                            <div class="nodes-presets">
+                                <button class="preset-chip" onclick="setNodes(10)">10</button>
+                                <button class="preset-chip" onclick="setNodes(20)">20</button>
+                                <button class="preset-chip active" onclick="setNodes(40)">40</button>
+                                <button class="preset-chip" onclick="setNodes(100)">100</button>
+                                <button class="preset-chip" onclick="setNodes(200)">200</button>
+                            </div>
+                            <div class="nodes-desc">
+                                <span id="nodesDesc">Medium resolution - good balance</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Planning Horizon -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🔭 Planning Horizon</h3>
+                        <p class="temporal-desc">Target year for energy system optimization</p>
+                        <div class="horizon-input">
+                            <input type="number" id="horizonYear" min="2025" max="2100" value="2050" class="year-input" onchange="updateHorizon(this.value)">
+                            <div class="horizon-presets">
+                                <button class="preset-chip" onclick="setHorizon(2030)">2030</button>
+                                <button class="preset-chip" onclick="setHorizon(2040)">2040</button>
+                                <button class="preset-chip active" onclick="setHorizon(2050)">2050</button>
+                                <button class="preset-chip" onclick="setHorizon(2060)">2060</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="temporal-summary">
+                        <div class="summary-row">
+                            <span class="summary-label">Simulation time:</span>
+                            <span class="summary-value" id="timeDisplay">Quarter (90 days)</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Weather data:</span>
+                            <span class="summary-value" id="snapshotDisplay">2024</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Network nodes:</span>
+                            <span class="summary-value" id="nodesDisplay">40</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Planning for:</span>
+                            <span class="summary-value" id="horizonDisplay">2050</span>
+                        </div>
+                        <div class="summary-row delta">
+                            <span class="summary-label">Time span:</span>
+                            <span class="summary-value" id="spanDisplay">26 years</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
+                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
+                </div>
+            </div>
+
+            <!-- Screen 2: CO2 Political -->
+            <div class="gen-screen" data-screen="2">
+                <!-- Ambient Background Image -->
+                <div class="ambient-bg" id="ambientBg"></div>
+                
+                <div class="content-panel co2-panel">
+                    <h2 class="screen-title">🏛️ CO₂ Political</h2>
+                    <p class="screen-desc">Select how emissions are controlled in the model</p>
+                    
+                    <!-- CO2 Control Mechanism -->
+                    <div class="co2-mechanism-section">
+                        <div class="mechanism-cards">
+                            <div class="mechanism-card active" data-mechanism="none" onclick="selectMechanism('none')">
+                                <div class="mechanism-icon">🚫</div>
+                                <div class="mechanism-name">None</div>
+                                <div class="mechanism-detail">No CO₂ policy</div>
+                                <div class="mechanism-tooltip">
+                                    <div class="tooltip-title">🚫 Sin Política CO₂</div>
+                                    <p>El modelo optimiza únicamente por costos, sin restricciones de emisiones.</p>
+                                    <div class="tooltip-impact">Impacto: <span class="impact-high">Altas emisiones</span></div>
+                                    <div class="tooltip-source">Fuente: Escenario Business-as-Usual</div>
+                                </div>
+                            </div>
+                            <div class="mechanism-card" data-mechanism="cap" onclick="selectMechanism('cap')">
+                                <div class="mechanism-icon">⛔</div>
+                                <div class="mechanism-name">Cap</div>
+                                <div class="mechanism-detail">Hard ceiling (mandatory)</div>
+                                <div class="mechanism-tooltip">
+                                    <div class="tooltip-title">⛔ Límite Obligatorio (Cap)</div>
+                                    <p>Tope rígido de emisiones. El modelo <strong>debe</strong> cumplir el límite.</p>
+                                    <div class="tooltip-data">
+                                        <div class="data-row"><span>2025:</span> <span>-62% vs 2005 (EU ETS)</span></div>
+                                        <div class="data-row"><span>2030:</span> <span>-55% vs 1990 (Green Deal)</span></div>
+                                        <div class="data-row"><span>2040:</span> <span>-90% objetivo acordado</span></div>
+                                    </div>
+                                    <div class="tooltip-source">Fuente: European Commission, 2025</div>
+                                </div>
+                            </div>
+                            <div class="mechanism-card" data-mechanism="price" onclick="selectMechanism('price')">
+                                <div class="mechanism-icon">💶</div>
+                                <div class="mechanism-name">Price</div>
+                                <div class="mechanism-detail">€/tonne tax</div>
+                                <div class="mechanism-tooltip">
+                                    <div class="tooltip-title">💶 Precio del Carbono</div>
+                                    <p>Impuesto por tonelada de CO₂ emitida. Incentiva mercado a reducir.</p>
+                                    <div class="tooltip-data">
+                                        <div class="data-row"><span>Actual 2025:</span> <span>€60-80/t (fluctuante)</span></div>
+                                        <div class="data-row"><span>ETS2 Mayo 2025:</span> <span>~€75/t</span></div>
+                                        <div class="data-row"><span>Histórico:</span> <span>€100/t (feb 2023)</span></div>
+                                    </div>
+                                    <div class="tooltip-source">Fuente: EC Economic Forecast 2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Options Section -->
+                    <div class="mechanism-options" id="mechanismOptions">
+                        
+                        <!-- None Options -->
+                        <div class="option-group" data-for="none" style="display: block;">
+                            <div class="option-message neutral">
+                                <div class="option-icon">⚠️</div>
+                                <p>No carbon constraints applied. The model will optimize purely based on costs, potentially resulting in high emissions.</p>
+                            </div>
+                        </div>
+
+                        <!-- Cap Options -->
+                        <div class="option-group" data-for="cap" style="display: none;">
+                            <div class="option-message warning">
+                                <div class="option-icon">📋</div>
+                                <p>Set a mandatory emissions ceiling. The model must stay below this limit.</p>
+                            </div>
+                            
+                            <div class="cap-config">
+                                <div class="cap-presets">
+                                    <button class="cap-preset" data-cap="50" onclick="selectCapLevel('50')">
+                                        -50%
+                                        <span class="cap-tooltip">Relaxed - 50% reduction</span>
+                                    </button>
+                                    <button class="cap-preset" data-cap="75" onclick="selectCapLevel('75')">
+                                        -75%
+                                        <span class="cap-tooltip">Moderate - 75% reduction (Fit for 55)</span>
+                                    </button>
+                                    <button class="cap-preset active" data-cap="100" onclick="selectCapLevel('100')">
+                                        -100%
+                                        <span class="cap-tooltip">Net Zero - 100% reduction (EU 2050)</span>
+                                    </button>
+                                </div>
+                                <div class="cap-slider-row">
+                                    <input type="range" id="co2CapSlider" min="0" max="100" value="100" class="slider" oninput="selectCapSlider(this.value)">
+                                    <span class="cap-value" id="co2CapValue">-100%</span>
+                                </div>
+                                <div class="cap-impact" id="capImpact">Net Zero - Full decarbonization required</div>
+                            </div>
+                            
+                            <div class="cap-context">
+                                <div class="context-row">
+                                    <span class="context-label">Emissions allowed:</span>
+                                    <span class="context-value" id="capEmissions">0% of baseline</span>
+                                </div>
+                                <div class="context-row">
+                                    <span class="context-label">EU reference:</span>
+                                    <span class="context-value" id="capReference">2050 Net Zero target</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Options -->
+                        <div class="option-group" data-for="price" style="display: none;">
+                            <div class="option-message info">
+                                <div class="option-icon">💰</div>
+                                <p>Apply a carbon tax per tonne of CO₂ emitted. Higher prices = stronger incentive to reduce.</p>
+                            </div>
+                            
+                            <div class="price-config">
+                                <div class="price-presets"
+                                    <button class="price-preset" data-price="50" onclick="selectPrice(50)">
+                                        €50/t
+                                        <span class="price-tooltip">Por debajo del precio actual EU 2025 (€60-80/t)</span>
+                                    </button>
+                                    <button class="price-preset" data-price="100" onclick="selectPrice(100)">
+                                        €100/t
+                                        <span class="price-tooltip">Precio histórico récord alcanzado febrero 2023</span>
+                                    </button>
+                                    <button class="price-preset active" data-price="200" onclick="selectPrice(200)">
+                                        €200/t
+                                        <span class="price-tooltip">Incentivo fuerte para transición rápida</span>
+                                    </button>
+                                    <button class="price-preset" data-price="300" onclick="selectPrice(300)">
+                                        €300/t
+                                        <span class="price-tooltip">Alto incentivo - des carbonización agresiva</span>
+                                    </button>
+                                </div>
+                                <div class="price-slider-row">
+                                    <input type="range" id="co2PriceSlider" min="0" max="500" value="200" class="slider" oninput="selectPrice(this.value)">
+                                    <span class="price-value" id="co2PriceValue">€200/t</span>
+                                </div>
+                                <div class="price-impact" id="priceImpact">Strong incentive for renewables</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="co2-summary">
+                        <div class="summary-row">
+                            <span class="summary-label">Mechanism:</span>
+                            <span class="summary-value" id="mechanismSummary">None</span>
+                        </div>
+                        <div class="summary-row" id="targetSummaryRow" style="display: none;">
+                            <span class="summary-label">Target:</span>
+                            <span class="summary-value" id="targetSummary">-</span>
                         </div>
                     </div>
                 </div>
@@ -143,47 +486,236 @@
             </div>
 
             <!-- Screen 3: Technologies -->
-            <div class="gen-screen" data-screen="2">
+            <div class="gen-screen" data-screen="3">
                 <div class="content-panel">
                     <h2 class="screen-title">⚡ Select Technologies</h2>
+                    <p class="screen-desc">Choose generation and storage technologies for your energy model</p>
                     
                     <div class="tech-categories">
-                        <h3 class="category-title">☀️ Renewable Generation</h3>
-                        <div class="tech-grid" id="renewableTechs">
-                            <div class="tech-card" data-tech="solar" onclick="toggleTech('solar')">
-                                <div class="tech-icon">☀️</div>
-                                <div class="tech-name">Solar PV</div>
-                                <div class="tech-cost">€30-50/MWh</div>
-                            </div>
-                            <div class="tech-card" data-tech="onwind" onclick="toggleTech('onwind')">
-                                <div class="tech-icon">🌬️</div>
-                                <div class="tech-name">Onshore Wind</div>
-                                <div class="tech-cost">€35-55/MWh</div>
-                            </div>
-                            <div class="tech-card" data-tech="offwind" onclick="toggleTech('offwind')">
-                                <div class="tech-icon">⚡</div>
-                                <div class="tech-name">Offshore Wind</div>
-                                <div class="tech-cost">€45-75/MWh</div>
+                        <!-- Renewable Generation -->
+                        <div class="tech-section">
+                            <h3 class="category-title">
+                                <span class="category-icon">☀️</span>
+                                Renewable Generation
+                                <span class="category-badge green">Zero emissions</span>
+                            </h3>
+                            <div class="tech-grid" id="renewableTechs">
+                                <div class="tech-card" data-tech="solar" onclick="toggleTech('solar')">
+                                    <div class="tech-icon">☀️</div>
+                                    <div class="tech-name">Solar PV</div>
+                                    <div class="tech-cost">€30-50/MWh</div>
+                                    <div class="tech-capacity">~15% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">☀️ Solar Fotovoltaica</div>
+                                        <p>Generación solar con paneles fotovoltaicos. Costos han caído ~90% desde 2010.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>10-20%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>25-30 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="onwind" onclick="toggleTech('onwind')">
+                                    <div class="tech-icon">🌬️</div>
+                                    <div class="tech-name">Onshore Wind</div>
+                                    <div class="tech-cost">€35-55/MWh</div>
+                                    <div class="tech-capacity">~30% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌬️ Eólica Terrestre</div>
+                                        <p>Turbinas eólicas en tierra. Tecnología madura con rápido despliegue.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>25-40%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>20-25 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="offwind" onclick="toggleTech('offwind')">
+                                    <div class="tech-icon">⚡</div>
+                                    <div class="tech-name">Offshore Wind</div>
+                                    <div class="tech-cost">€45-75/MWh</div>
+                                    <div class="tech-capacity">~45% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">⚡ Eólica Marina</div>
+                                        <p>Turbinas en alta mar. Mayor factor de capacidad pero costos de instalación elevados.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>40-50%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>25 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="hydro" onclick="toggleTech('hydro')">
+                                    <div class="tech-icon">💧</div>
+                                    <div class="tech-name">Hydro</div>
+                                    <div class="tech-cost">€20-40/MWh</div>
+                                    <div class="tech-capacity">~40% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">💧 Hidroeléctrica</div>
+                                        <p>Generación hidroeléctrica existente. Limitada por recursos geográficos.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>35-50%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>50-100 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~24 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h3 class="category-title">🔋 Storage</h3>
-                        <div class="tech-grid">
-                            <div class="tech-card" data-tech="battery" onclick="toggleTech('battery')">
-                                <div class="tech-icon">🔋</div>
-                                <div class="tech-name">Battery</div>
-                                <div class="tech-cost">€80-120/MWh</div>
+                        <!-- Dispatchable/Fossil -->
+                        <div class="tech-section">
+                            <h3 class="category-title">
+                                <span class="category-icon">🏭</span>
+                                Dispatchable Generation
+                                <span class="category-badge orange">Emissions</span>
+                            </h3>
+                            <div class="tech-grid">
+                                <div class="tech-card" data-tech="ccgt" onclick="toggleTech('ccgt')">
+                                    <div class="tech-icon">🔥</div>
+                                    <div class="tech-name">Gas CCGT</div>
+                                    <div class="tech-cost">€60-90/MWh</div>
+                                    <div class="tech-capacity">~60% CF</div>
+                                    <div class="tech-emissions">~350 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🔥 Ciclo Combinado Gas Natural</div>
+                                        <p>Flexibilidad alta para balance. Eficiente pero emisiones significativas.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Efficiency:</span> <span>55-60%</span></div>
+                                            <div class="spec"><span>Flexibility:</span> <span>High</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~350 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="ocgt" onclick="toggleTech('ocgt')">
+                                    <div class="tech-icon">🔧</div>
+                                    <div class="tech-name">Gas OCGT</div>
+                                    <div class="tech-cost">€100-150/MWh</div>
+                                    <div class="tech-capacity">~10% CF</div>
+                                    <div class="tech-emissions">~450 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🔧 Ciclo Abierto Gas</div>
+                                        <p>Peaking plants para demanda máxima. Rápida respuesta, baja eficiencia.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Efficiency:</span> <span>35-40%</span></div>
+                                            <div class="spec"><span>Startup:</span> <span>~10 min</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~450 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="coal" onclick="toggleTech('coal')">
+                                    <div class="tech-icon">🪨</div>
+                                    <div class="tech-name">Coal</div>
+                                    <div class="tech-cost">€80-120/MWh</div>
+                                    <div class="tech-capacity">~50% CF</div>
+                                    <div class="tech-emissions high">~850 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🪨 Carbón</div>
+                                        <p>Estable base-load pero altas emisiones. En fase-out en Europa.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Efficiency:</span> <span>35-45%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>40 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~850 gCO₂/kWh ⚠️</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="nuclear" onclick="toggleTech('nuclear')">
+                                    <div class="tech-icon">⚛️</div>
+                                    <div class="tech-name">Nuclear</div>
+                                    <div class="tech-cost">€70-100/MWh</div>
+                                    <div class="tech-capacity">~85% CF</div>
+                                    <div class="tech-emissions low">~12 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">⚛️ Nuclear</div>
+                                        <p>Base-load estable con bajas emisiones. Alto CAPEX, larga vida útil.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>85-95%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>40-60 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~12 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="tech-card" data-tech="hydrogen" onclick="toggleTech('hydrogen')">
-                                <div class="tech-icon">💧</div>
-                                <div class="tech-name">Hydrogen</div>
-                                <div class="tech-cost">€60-150/MWh</div>
+                        </div>
+                        
+                        <!-- Storage -->
+                        <div class="tech-section">
+                            <h3 class="category-title">
+                                <span class="category-icon">🔋</span>
+                                Storage & Flexibility
+                                <span class="category-badge blue">Balancing</span>
+                            </h3>
+                            <div class="tech-grid">
+                                <div class="tech-card" data-tech="battery" onclick="toggleTech('battery')">
+                                    <div class="tech-icon">🔋</div>
+                                    <div class="tech-name">Battery</div>
+                                    <div class="tech-cost">€80-120/MWh</div>
+                                    <div class="tech-capacity">4h duration</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🔋 Baterías (Li-ion)</div>
+                                        <p>Respuesta instantánea para balanceo corto plazo. Costos caído 90% desde 2010.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Duration:</span> <span>1-6 hours</span></div>
+                                            <div class="spec"><span>Efficiency:</span> <span>85-95%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>10-15 años</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="hydrogen" onclick="toggleTech('hydrogen')">
+                                    <div class="tech-icon">💧</div>
+                                    <div class="tech-name">Hydrogen Storage</div>
+                                    <div class="tech-cost">€60-150/MWh</div>
+                                    <div class="tech-capacity">168h duration</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">💧 Hidrógeno (Power-to-Gas)</div>
+                                        <p>Almacenamiento largo plazo vía electrólisis. Ideal para estacionalidad.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Duration:</span> <span>Days-weeks</span></div>
+                                            <div class="spec"><span>Efficiency:</span> <span>35-45% (round-trip)</span></div>
+                                            <div class="spec"><span>Use:</span> <span>Seasonal storage</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="pumped" onclick="toggleTech('pumped')">
+                                    <div class="tech-icon">🌊</div>
+                                    <div class="tech-name">Pumped Hydro</div>
+                                    <div class="tech-cost">€40-80/MWh</div>
+                                    <div class="tech-capacity">8-24h duration</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌊 Bombeo Hidroeléctrico</div>
+                                        <p>Almacenamiento mecánico maduro. Mayor eficiencia, limitado por geografía.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Duration:</span> <span>4-16 hours</span></div>
+                                            <div class="spec"><span>Efficiency:</span> <span>75-85%</span></div>
+                                            <div class="spec"><span>Lifetime:</span> <span>50+ años</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="selection-summary">
-                        <h3>Selected: <span id="techCount">0</span> technologies</h3>
+                    <div class="tech-summary-panel">
+                        <div class="tech-totals">
+                            <div class="total-item">
+                                <span class="total-label">Selected:</span>
+                                <span class="total-value" id="techCount">0</span>
+                                <span class="total-unit">technologies</span>
+                            </div>
+                            <div class="total-item">
+                                <span class="total-label">Est. LCOE range:</span>
+                                <span class="total-value" id="lcoeRange">-</span>
+                            </div>
+                            <div class="total-item">
+                                <span class="total-label">Avg emissions:</span>
+                                <span class="total-value" id="avgEmissions">-</span>
+                            </div>
+                        </div>
+                        <div class="tech-actions">
+                            <button class="btn btn-secondary" onclick="selectAllTechs()">Select All</button>
+                            <button class="btn btn-secondary" onclick="clearAllTechs()">Clear All</button>
+                            <button class="btn btn-secondary" onclick="selectDefaultTechs()">Default Mix</button>
+                        </div>
                     </div>
                 </div>
                 
@@ -194,7 +726,7 @@
             </div>
 
             <!-- Screen 4: Storage Config -->
-            <div class="gen-screen" data-screen="3">
+            <div class="gen-screen" data-screen="4">
                 <div class="content-panel">
                     <h2 class="screen-title">🔋 Storage Configuration</h2>
                     
@@ -226,7 +758,7 @@
             </div>
 
             <!-- Screen 5: Speed -->
-            <div class="gen-screen" data-screen="4">
+            <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
                     <h2 class="screen-title">🚀 Model Resolution</h2>
                     
@@ -254,7 +786,7 @@
             </div>
 
             <!-- Screen 6: YAML Output -->
-            <div class="gen-screen" data-screen="5">
+            <div class="gen-screen" data-screen="6">
                 <div class="content-panel">
                     <h2 class="screen-title">⚡ Your Configuration</h2>
                     
