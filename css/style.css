@@ -3253,9 +3253,9 @@ canvas {
     gap: 16px;
 }
 
-/* KPI card hover state - HIGH z-index to be above all other cards */
+/* KPI card hover state - HIGH z-index to be above all other cards and banner */
 .kpi-card:hover {
-    z-index: 9999 !important;
+    z-index: 99999 !important;
 }
 
 /* Tooltip below variant */
