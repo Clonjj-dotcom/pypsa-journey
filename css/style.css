@@ -3255,13 +3255,7 @@ canvas {
 }
 
 /* KPI card hover state - HIGH z-index to be above all other cards */
-.kpi-card {
-    position: relative;
-}
-
 .kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
     z-index: 9999 !important;
 }
 
