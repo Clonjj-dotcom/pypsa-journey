@@ -2321,3 +2321,55 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ========================================
+   STORAGE PRESETS
+   ======================================== */
+
+.section-header-with-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.section-header-with-action .section-title {
+    margin: 0;
+}
+
+.storage-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.storage-presets .preset-chip {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.storage-presets .preset-chip:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.storage-presets .preset-chip.germany {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    border-color: var(--primary);
+    color: white;
+    font-weight: 500;
+}
+
+.storage-presets .preset-chip.germany:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}

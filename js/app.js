@@ -1431,6 +1431,119 @@ function updateFlexibilitySummary() {
     if (demandFlexEl) demandFlexEl.textContent = flexSources.length > 0 ? flexSources.join(', ') : 'None';
 }
 
+// ==================== STORAGE PRESETS ====================
+
+function loadGermany2024Storage() {
+    // Germany 2024 Storage Mix based on Fraunhofer ISE / Bundesnetzagentur data
+    // Battery: ~1.3 GW / 2.6 GWh utility-scale (2h average, but trending toward 4h)
+    // Pumped Hydro: ~10 GW existing (Goldisthal, etc.)
+    // Hydrogen: Pilot projects, seasonal storage focus
+    
+    // Select storage techs
+    const germanyStorageTechs = ['battery', 'pumped', 'hydrogen'];
+    
+    // Deselect all storage first
+    ['battery', 'hydrogen', 'pumped', 'caes'].forEach(tech => {
+        if (journeyState.selectedTechs.includes(tech)) {
+            const index = journeyState.selectedTechs.indexOf(tech);
+            if (index > -1) {
+                journeyState.selectedTechs.splice(index, 1);
+                delete journeyState.techCapacities[tech];
+            }
+        }
+    });
+    
+    // Add Germany 2024 storage mix
+    germanyStorageTechs.forEach(tech => {
+        if (!journeyState.selectedTechs.includes(tech)) {
+            journeyState.selectedTechs.push(tech);
+            journeyState.techCapacities[tech] = 33; // Equal share
+        }
+    });
+    
+    // Normalize to 100%
+    const totalSelected = germanyStorageTechs.length;
+    const equalShare = Math.floor(100 / totalSelected);
+    germanyStorageTechs.forEach(tech => {
+        journeyState.techCapacities[tech] = equalShare;
+    });
+    
+    // Update UI - cards
+    document.querySelectorAll('.storage-grid .tech-card').forEach(card => {
+        const techId = card.dataset.tech;
+        card.classList.toggle('selected', germanyStorageTechs.includes(techId));
+    });
+    
+    // Enable toggles and set values
+    const enableBattery = document.getElementById('enableBattery');
+    const enablePumped = document.getElementById('enablePumped');
+    const enableHydrogen = document.getElementById('enableHydrogen');
+    
+    if (enableBattery) {
+        enableBattery.checked = true;
+        // Germany trend: moving from 2h to 4h duration
+        const batterySlider = document.getElementById('batteryDuration');
+        if (batterySlider) batterySlider.value = 4;
+    }
+    
+    if (enablePumped) {
+        enablePumped.checked = true;
+        // Existing pumped hydro ~8-16h Goldisthal
+        journeyState.storage.pumped = { enabled: true };
+    }
+    
+    if (enableHydrogen) {
+        enableHydrogen.checked = true;
+        // Germany: H2 for seasonal (weeks)
+        const hydrogenSelect = document.getElementById('hydrogenDuration');
+        if (hydrogenSelect) hydrogenSelect.value = '168'; // 1 week
+        journeyState.storage.hydrogen = { enabled: true, duration: 168 };
+    }
+    
+    // Update flexibility configs
+    updateFlexibilityConfig();
+    
+    // Update summary
+    updateFlexibilitySummary();
+    
+    // Show feedback
+    console.log('🇩🇪 Loaded Germany 2024 Storage Mix');
+}
+
+function clearAllStorage() {
+    // Remove all storage from selected techs
+    ['battery', 'hydrogen', 'pumped', 'caes'].forEach(tech => {
+        const index = journeyState.selectedTechs.indexOf(tech);
+        if (index > -1) {
+            journeyState.selectedTechs.splice(index, 1);
+            delete journeyState.techCapacities[tech];
+        }
+        
+        // Update card UI
+        const card = document.querySelector(`.storage-grid .tech-card[data-tech="${tech}"]`);
+        if (card) card.classList.remove('selected');
+    });
+    
+    // Disable all toggles
+    const enableBattery = document.getElementById('enableBattery');
+    const enablePumped = document.getElementById('enablePumped');
+    const enableHydrogen = document.getElementById('enableHydrogen');
+    const enableV2G = document.getElementById('enableV2G');
+    const enableDSM = document.getElementById('enableDSM');
+    const enablePtH = document.getElementById('enablePtH');
+    
+    if (enableBattery) enableBattery.checked = false;
+    if (enablePumped) enablePumped.checked = false;
+    if (enableHydrogen) enableHydrogen.checked = false;
+    if (enableV2G) enableV2G.checked = false;
+    if (enableDSM) enableDSM.checked = false;
+    if (enablePtH) enablePtH.checked = false;
+    
+    // Update configs
+    updateFlexibilityConfig();
+    updateFlexibilitySummary();
+}
+
 // ==================== YAML GENERATION ====================
 
 function generateYAML() {
