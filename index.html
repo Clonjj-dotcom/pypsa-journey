@@ -502,15 +502,45 @@
                             <div class="tech-grid" id="renewableTechs">
                                 <div class="tech-card" data-tech="solar" onclick="toggleTech('solar')">
                                     <div class="tech-icon">☀️</div>
-                                    <div class="tech-name">Solar PV</div>
+                                    <div class="tech-name">Solar PV Utility</div>
                                     <div class="tech-cost">€30-50/MWh</div>
                                     <div class="tech-capacity">~15% CF</div>
                                     <div class="tech-tooltip">
-                                        <div class="tooltip-title">☀️ Solar Fotovoltaica</div>
-                                        <p>Generación solar con paneles fotovoltaicos. Costos han caído ~90% desde 2010.</p>
+                                        <div class="tooltip-title">☀️ Solar Fotovoltaica Utility-Scale</div>
+                                        <p>Grandes plantas solares en suelo. Costos han caído ~90% desde 2010.</p>
                                         <div class="tooltip-specs">
                                             <div class="spec"><span>Capacity Factor:</span> <span>10-20%</span></div>
                                             <div class="spec"><span>Lifetime:</span> <span>25-30 años</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="solar-rooftop" onclick="toggleTech('solar-rooftop')">
+                                    <div class="tech-icon">🏠</div>
+                                    <div class="tech-name">Solar Rooftop</div>
+                                    <div class="tech-cost">€40-70/MWh</div>
+                                    <div class="tech-capacity">~13% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🏠 Solar Tejado (Distribuido)</div>
+                                        <p>Paneles en edificios residenciales/comerciales. Más caro pero evita pérdidas de transmisión.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>12-15%</span></div>
+                                            <div class="spec"><span>Pros:</span> <span>Behind-the-meter</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="solar-hsat" onclick="toggleTech('solar-hsat')">
+                                    <div class="tech-icon">🌞</div>
+                                    <div class="tech-name">Solar Tracking</div>
+                                    <div class="tech-cost">€25-45/MWh</div>
+                                    <div class="tech-capacity">~18% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌞 Solar con Seguimiento (HSAT)</div>
+                                        <p>Sigue el sol durante el día. +20% generación vs fijos, pero más costo de mantenimiento.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>16-20%</span></div>
+                                            <div class="spec"><span>Tracking:</span> <span>1-axis horizontal</span></div>
                                             <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
                                         </div>
                                     </div>
@@ -530,18 +560,33 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tech-card" data-tech="offwind" onclick="toggleTech('offwind')">
+                                <div class="tech-card" data-tech="offwind-ac" onclick="toggleTech('offwind-ac')">
                                     <div class="tech-icon">⚡</div>
-                                    <div class="tech-name">Offshore Wind</div>
+                                    <div class="tech-name">Offshore Wind AC</div>
                                     <div class="tech-cost">€45-75/MWh</div>
                                     <div class="tech-capacity">~45% CF</div>
                                     <div class="tech-tooltip">
-                                        <div class="tooltip-title">⚡ Eólica Marina</div>
-                                        <p>Turbinas en alta mar. Mayor factor de capacidad pero costos de instalación elevados.</p>
+                                        <div class="tooltip-title">⚡ Eólica Marina AC</div>
+                                        <p>Conectada en AC a la red. Más cercana a costa (<50km).</p>
                                         <div class="tooltip-specs">
                                             <div class="spec"><span>Capacity Factor:</span> <span>40-50%</span></div>
-                                            <div class="spec"><span>Lifetime:</span> <span>25 años</span></div>
+                                            <div class="spec"><span>Distance:</span> <span><50km from shore</span></div>
                                             <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="offwind-dc" onclick="toggleTech('offwind-dc')">
+                                    <div class="tech-icon">🔌</div>
+                                    <div class="tech-name">Offshore Wind HVDC</div>
+                                    <div class="tech-cost">€50-80/MWh</div>
+                                    <div class="tech-capacity">~48% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🔌 Eólica Marina HVDC</div>
+                                        <p>Alta tensión DC para largas distancias. Más eficiente >100km offshore.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>45-55%</span></div>
+                                            <div class="spec"><span>Distance:</span> <span>>100km offshore</span></div>
+                                            <div class="spec"><span>Converter:</span> <span>AC/DC/AC</span></div>
                                         </div>
                                     </div>
                                 </div>

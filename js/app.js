@@ -667,16 +667,18 @@ function updateCO2PoliticalDisplay() {
 // ==================== TECH CARDS ====================
 
 const techSpecs = {
-    // Solar
+    // Solar variants
     solar: { minCost: 30, maxCost: 50, cf: 0.15, emissions: 0, category: 'renewable' },
+    'solar-rooftop': { minCost: 40, maxCost: 70, cf: 0.13, emissions: 0, category: 'renewable' },
     'solar-hsat': { minCost: 25, maxCost: 45, cf: 0.18, emissions: 0, category: 'renewable' },
     
-    // Wind
+    // Wind variants (offshore AC/DC/floating)
     onwind: { minCost: 35, maxCost: 55, cf: 0.30, emissions: 0, category: 'renewable' },
-    offwind: { minCost: 45, maxCost: 75, cf: 0.45, emissions: 0, category: 'renewable' },
-    'offwind-float': { minCost: 55, maxCost: 85, cf: 0.48, emissions: 0, category: 'renewable' },
+    'offwind-ac': { minCost: 45, maxCost: 75, cf: 0.45, emissions: 0, category: 'renewable' },
+    'offwind-dc': { minCost: 50, maxCost: 80, cf: 0.48, emissions: 0, category: 'renewable' },
+    'offwind-float': { minCost: 55, maxCost: 85, cf: 0.50, emissions: 0, category: 'renewable' },
     
-    // Hydro
+    // Hydro variants
     hydro: { minCost: 20, maxCost: 40, cf: 0.40, emissions: 24, category: 'renewable' },
     'hydro-reservoir': { minCost: 15, maxCost: 30, cf: 0.35, emissions: 24, category: 'renewable' },
     
@@ -686,7 +688,7 @@ const techSpecs = {
     wave: { minCost: 150, maxCost: 300, cf: 0.25, emissions: 12, category: 'renewable' },
     tidal: { minCost: 120, maxCost: 250, cf: 0.22, emissions: 12, category: 'renewable' },
     
-    // Fossil/thermal
+    // Fossil/thermal dispatchable
     ccgt: { minCost: 60, maxCost: 90, cf: 0.60, emissions: 350, category: 'dispatchable' },
     ocgt: { minCost: 100, maxCost: 150, cf: 0.10, emissions: 450, category: 'dispatchable' },
     coal: { minCost: 80, maxCost: 120, cf: 0.50, emissions: 850, category: 'dispatchable' },
@@ -695,7 +697,7 @@ const techSpecs = {
     nuclear: { minCost: 70, maxCost: 100, cf: 0.85, emissions: 12, category: 'dispatchable' },
     waste: { minCost: 80, maxCost: 140, cf: 0.70, emissions: 450, category: 'dispatchable' },
     
-    // Storage
+    // Storage technologies
     battery: { minCost: 80, maxCost: 120, cf: null, emissions: 0, category: 'storage' },
     hydrogen: { minCost: 60, maxCost: 150, cf: null, emissions: 0, category: 'storage' },
     pumped: { minCost: 40, maxCost: 80, cf: null, emissions: 0, category: 'storage' },
@@ -816,12 +818,15 @@ function updateMixChart(sortedTechs) {
     // Tech colors matching CSS
     const techColors = {
         // Solar variants
-        solar: { color: 'linear-gradient(90deg, #fbbf24, #f59e0b)', label: 'Solar PV', icon: '☀️' },
+        solar: { color: 'linear-gradient(90deg, #fbbf24, #f59e0b)', label: 'Solar PV Utility', icon: '☀️' },
+        'solar-rooftop': { color: 'linear-gradient(90deg, #fbbf24, #d97706)', label: 'Solar Rooftop', icon: '🏠' },
         'solar-hsat': { color: 'linear-gradient(90deg, #fbbf24, #d97706)', label: 'Solar Tracking', icon: '🌞' },
         
-        // Wind variants
+        // Wind variants (AC/DC/floating)
         onwind: { color: 'linear-gradient(90deg, #34d399, #10b981)', label: 'Onshore Wind', icon: '🌬️' },
-        offwind: { color: 'linear-gradient(90deg, #3b82f6, #1d4ed8)', label: 'Offshore Wind', icon: '⚡' },
+        offwind: { color: 'linear-gradient(90deg, #3b82f6, #1d4ed8)', label: 'Offshore Wind AC', icon: '⚡' },
+        'offwind-ac': { color: 'linear-gradient(90deg, #3b82f6, #1d4ed8)', label: 'Offshore Wind AC', icon: '⚡' },
+        'offwind-dc': { color: 'linear-gradient(90deg, #0ea5e9, #0284c7)', label: 'Offshore Wind HVDC', icon: '🔌' },
         'offwind-float': { color: 'linear-gradient(90deg, #06b6d4, #0891b2)', label: 'Offshore Floating', icon: '🌊' },
         
         // Hydro variants
@@ -835,7 +840,7 @@ function updateMixChart(sortedTechs) {
         tidal: { color: 'linear-gradient(90deg, #6366f1, #4f46e5)', label: 'Tidal', icon: '🌙' },
         
         // Fossil/thermal
-        ccgt: { color: 'linear-gradient(90deg, #f97316, #ea580c)', label: 'Natural Gas', icon: '🔥' },
+        ccgt: { color: 'linear-gradient(90deg, #f97316, #ea580c)', label: 'Natural Gas CCGT', icon: '🔥' },
         ocgt: { color: 'linear-gradient(90deg, #f43f5e, #e11d48)', label: 'Gas Peaker', icon: '🔧' },
         coal: { color: 'linear-gradient(90deg, #6b7280, #374151)', label: 'Coal', icon: '🪨' },
         lignite: { color: 'linear-gradient(90deg, #92400e, #78350f)', label: 'Lignite', icon: '🟤' },

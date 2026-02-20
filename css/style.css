@@ -2003,9 +2003,12 @@ body {
 }
 
 .solar-bar { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.solar-rooftop-bar { background: linear-gradient(90deg, #fbbf24, #d97706); }
 .solar-hsat-bar { background: linear-gradient(90deg, #fbbf24, #d97706); }
 .onwind-bar { background: linear-gradient(90deg, #34d399, #10b981); }
 .offwind-bar { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.offwind-ac-bar { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.offwind-dc-bar { background: linear-gradient(90deg, #0ea5e9, #0284c7); }
 .offwind-float-bar { background: linear-gradient(90deg, #06b6d4, #0891b2); }
 .hydro-bar { background: linear-gradient(90deg, #14b8a6, #059669); }
 .hydro-reservoir-bar { background: linear-gradient(90deg, #22c55e, #16a34a); }
