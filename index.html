@@ -823,78 +823,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Storage -->
-                        <div class="tech-section">
-                            <h3 class="category-title">
-                                <span class="category-icon">🔋</span>
-                                Storage & Flexibility
-                                <span class="category-badge blue">Balancing</span>
-                            </h3>
-                            <div class="tech-grid">
-                                <div class="tech-card" data-tech="battery" onclick="toggleTech('battery')">
-                                    <div class="tech-icon">🔋</div>
-                                    <div class="tech-name">Battery</div>
-                                    <div class="tech-cost">€80-120/MWh</div>
-                                    <div class="tech-capacity">4h duration</div>
-                                    <div class="tech-tooltip">
-                                        <div class="tooltip-title">🔋 Baterías (Li-ion)</div>
-                                        <p>Respuesta instantánea para balanceo corto plazo. Costos caído 90% desde 2010.</p>
-                                        <div class="tooltip-specs">
-                                            <div class="spec"><span>Duration:</span> <span>1-6 hours</span></div>
-                                            <div class="spec"><span>Efficiency:</span> <span>85-95%</span></div>
-                                            <div class="spec"><span>Lifetime:</span> <span>10-15 años</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tech-card" data-tech="hydrogen" onclick="toggleTech('hydrogen')">
-                                    <div class="tech-icon">💧</div>
-                                    <div class="tech-name">Hydrogen Storage</div>
-                                    <div class="tech-cost">€60-150/MWh</div>
-                                    <div class="tech-capacity">168h duration</div>
-                                    <div class="tech-tooltip">
-                                        <div class="tooltip-title">💧 Hidrógeno (Power-to-Gas)</div>
-                                        <p>Almacenamiento largo plazo vía electrólisis. Ideal para estacionalidad.</p>
-                                        <div class="tooltip-specs">
-                                            <div class="spec"><span>Duration:</span> <span>Days-weeks</span></div>
-                                            <div class="spec"><span>Efficiency:</span> <span>35-45% (round-trip)</span></div>
-                                            <div class="spec"><span>Use:</span> <span>Seasonal storage</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tech-card" data-tech="pumped" onclick="toggleTech('pumped')">
-                                    <div class="tech-icon">🌊</div>
-                                    <div class="tech-name">Pumped Hydro</div>
-                                    <div class="tech-cost">€40-80/MWh</div>
-                                    <div class="tech-capacity">8-24h duration</div>
-                                    <div class="tech-tooltip">
-                                        <div class="tooltip-title">🌊 Bombeo Hidroeléctrico</div>
-                                        <p>Almacenamiento mecánico maduro. Mayor eficiencia, limitado por geografía.</p>
-                                        <div class="tooltip-specs">
-                                            <div class="spec"><span>Duration:</span> <span>4-16 hours</span></div>
-                                            <div class="spec"><span>Efficiency:</span> <span>75-85%</span></div>
-                                            <div class="spec"><span>Lifetime:</span> <span>50+ años</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="tech-card" data-tech="caes" onclick="toggleTech('caes')">
-                                    <div class="tech-icon">💨</div>
-                                    <div class="tech-name">CAES</div>
-                                    <div class="tech-cost">€100-180/MWh</div>
-                                    <div class="tech-capacity">20-40h duration</div>
-                                    <div class="tech-tooltip">
-                                        <div class="tooltip-title">💨 Aire Comprimido (CAES)</div>
-                                        <p>Almacenamiento en cavernas subterráneas. Larga duración, eficiencia moderada.</p>
-                                        <div class="tooltip-specs">
-                                            <div class="spec"><span>Duration:</span> <span>20-40 hours</span></div>
-                                            <div class="spec"><span>Efficiency:</span> <span>45-55%</span></div>
-                                            <div class="spec"><span>Geology:</span> <span>Underground cavern</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     
                     <!-- Technology Generation Mix Visualization -->
@@ -1025,8 +953,80 @@
             <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
                     <h2 class="screen-title">🔋 Storage & Flexibility</h2>
-                    <p class="screen-desc">Configure sector coupling and demand flexibility options</p>
+                    <p class="screen-desc">Configure storage technologies and demand flexibility options</p>
                     
+                    <!-- Storage Technology Selection -->
+                    <div class="storage-tech-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">🔋</span>
+                            Select Storage Technologies
+                            <span class="section-badge">Balancing</span>
+                        </h3>
+                        <div class="tech-grid storage-grid">
+                            <div class="tech-card" data-tech="battery" onclick="toggleTech('battery')">
+                                <div class="tech-icon">🔋</div>
+                                <div class="tech-name">Battery</div>
+                                <div class="tech-cost">€80-120/MWh</div>
+                                <div class="tech-capacity">4h duration</div>
+                                <div class="tech-tooltip">
+                                    <div class="tooltip-title">🔋 Baterías Li-ion</div>
+                                    <p>Respuesta instantánea para balanceo corto plazo. Costos caído 90% desde 2010.</p>
+                                    <div class="tooltip-specs">
+                                        <div class="spec"><span>Duration:</span> <span>1-6 hours</span></div>
+                                        <div class="spec"><span>Efficiency:</span> <span>85-95%</span></div>
+                                        <div class="spec"><span>Lifetime:</span> <span>10-15 años</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tech-card" data-tech="hydrogen" onclick="toggleTech('hydrogen')">
+                                <div class="tech-icon">💧</div>
+                                <div class="tech-name">Hydrogen</div>
+                                <div class="tech-cost">€60-150/MWh</div>
+                                <div class="tech-capacity">168h duration</div>
+                                <div class="tech-tooltip">
+                                    <div class="tooltip-title">💧 Hidrógeno (P2G)</div>
+                                    <p>Almacenamiento largo plazo vía electrólisis. Ideal para estacionalidad.</p>
+                                    <div class="tooltip-specs">
+                                        <div class="spec"><span>Duration:</span> <span>Days-weeks</span></div>
+                                        <div class="spec"><span>Efficiency:</span> <span>35-45%</span></div>
+                                        <div class="spec"><span>Use:</span> <span>Seasonal storage</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tech-card" data-tech="pumped" onclick="toggleTech('pumped')">
+                                <div class="tech-icon">🌊</div>
+                                <div class="tech-name">Pumped Hydro</div>
+                                <div class="tech-cost">€40-80/MWh</div>
+                                <div class="tech-capacity">8-24h duration</div>
+                                <div class="tech-tooltip">
+                                    <div class="tooltip-title">🌊 Bombeo Hidroeléctrico</div>
+                                    <p>Almacenamiento mecánico maduro. Mayor eficiencia, limitado por geografía.</p>
+                                    <div class="tooltip-specs">
+                                        <div class="spec"><span>Duration:</span> <span>4-16 hours</span></div>
+                                        <div class="spec"><span>Efficiency:</span> <span>75-85%</span></div>
+                                        <div class="spec"><span>Lifetime:</span> <span>50+ años</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tech-card" data-tech="caes" onclick="toggleTech('caes')">
+                                <div class="tech-icon">💨</div>
+                                <div class="tech-name">CAES</div>
+                                <div class="tech-cost">€100-180/MWh</div>
+                                <div class="tech-capacity">20-40h duration</div>
+                                <div class="tech-tooltip">
+                                    <div class="tooltip-title">💨 Aire Comprimido</div>
+                                    <p>Almacenamiento en cavernas subterráneas. Larga duración.</p>
+                                    <div class="tooltip-specs">
+                                        <div class="spec"><span>Duration:</span> <span>20-40 hours</span></div>
+                                        <div class="spec"><span>Efficiency:</span> <span>45-55%</span></div>
+                                        <div class="spec"><span>Geology:</span> <span>Underground cavern</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Storage Configuration -->
                     <div class="flexibility-grid">
                         <!-- Battery Configuration -->
                         <div class="flexibility-card">

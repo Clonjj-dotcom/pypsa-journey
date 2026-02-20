@@ -217,3 +217,53 @@
         margin-left: auto;
     }
 }
+
+/* ========================================
+   STORAGE TECHNOLOGY SELECTION
+   ======================================== */
+
+.storage-tech-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.storage-tech-section .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 16px;
+}
+
+.storage-tech-section .section-icon {
+    font-size: 20px;
+}
+
+.storage-tech-section .section-badge {
+    margin-left: auto;
+    font-size: 11px;
+    padding: 4px 10px;
+    background: rgba(99, 102, 241, 0.2);
+    color: #60a5fa;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.storage-tech-section .storage-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1024px) {
+    .storage-tech-section .storage-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .storage-tech-section .storage-grid {
+        grid-template-columns: 1fr;
+    }
+}
