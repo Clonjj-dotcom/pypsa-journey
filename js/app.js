@@ -1544,6 +1544,85 @@ function clearAllStorage() {
     updateFlexibilitySummary();
 }
 
+// ==================== FLEXIBILITY PRESETS ====================
+
+function loadGermany2024Flexibility() {
+    // Germany 2024 Flexibility Mix
+    // Based on: Bundesnetzagentur, Fraunhofer ISE, AG Energiebilanzen 2024
+    
+    // V2G: ~1.4M EVs in DE (2024), V2G still pilot
+    const enableV2G = document.getElementById('enableV2G');
+    const v2gFleet = document.getElementById('v2gFleet');
+    const v2gParticipation = document.getElementById('v2gParticipation');
+    
+    if (enableV2G) {
+        enableV2G.checked = true;
+        // 14M EVs conservative (actual ~1.4M, growing fast)
+        if (v2gFleet) v2gFleet.value = '10';
+        // Low participation as V2G still nascent
+        if (v2gParticipation) v2gParticipation.value = '15';
+    }
+    
+    // DSM: Industrial well established, other sectors emerging
+    const enableDSM = document.getElementById('enableDSM');
+    const dsmIndustry = document.getElementById('dsmIndustry');
+    const dsmCommercial = document.getElementById('dsmCommercial');
+    const dsmResidential = document.getElementById('dsmResidential');
+    
+    if (enableDSM) {
+        enableDSM.checked = true;
+        // Industrial DSM is mature in DE (steel, chemicals, aluminum)
+        if (dsmIndustry) dsmIndustry.checked = true;
+        // Commercial emerging (large HVAC)
+        if (dsmCommercial) dsmCommercial.checked = true;
+        // Residential still pilot
+        if (dsmResidential) dsmResidential.checked = false;
+    }
+    
+    // PtH: District heating ~15% of DE heating, heat pumps growing
+    const enablePtH = document.getElementById('enablePtH');
+    const pthTech = document.getElementById('pthTech');
+    const dhShare = document.getElementById('dhShare');
+    
+    if (enablePtH) {
+        enablePtH.checked = true;
+        // Mixed: heat pumps dominant + resistance backup
+        if (pthTech) pthTech.value = 'both';
+        // ~14% district heating share in Germany (2024)
+        if (dhShare) dhShare.value = '14';
+    }
+    
+    // Update state and UI
+    updateFlexibilityConfig();
+    updateFlexibilitySummary();
+    
+    console.log('🇩🇪 Loaded Germany 2024 Flexibility Mix');
+}
+
+function clearAllFlexibility() {
+    // Disable all flexibility options
+    const enableV2G = document.getElementById('enableV2G');
+    const enableDSM = document.getElementById('enableDSM');
+    const enablePtH = document.getElementById('enablePtH');
+    
+    if (enableV2G) enableV2G.checked = false;
+    if (enableDSM) enableDSM.checked = false;
+    if (enablePtH) enablePtH.checked = false;
+    
+    // Reset DSM sectors
+    const dsmIndustry = document.getElementById('dsmIndustry');
+    const dsmCommercial = document.getElementById('dsmCommercial');
+    const dsmResidential = document.getElementById('dsmResidential');
+    
+    if (dsmIndustry) dsmIndustry.checked = false;
+    if (dsmCommercial) dsmCommercial.checked = false;
+    if (dsmResidential) dsmResidential.checked = false;
+    
+    // Update state
+    updateFlexibilityConfig();
+    updateFlexibilitySummary();
+}
+
 // ==================== YAML GENERATION ====================
 
 function generateYAML() {

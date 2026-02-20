@@ -2373,3 +2373,74 @@ body {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
+
+/* ========================================
+   FLEXIBILITY PRESETS
+   ======================================== */
+
+.flexibility-presets {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.flexibility-presets .presets-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-right: 4px;
+}
+
+.flexibility-presets .preset-chip {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.flexibility-presets .preset-chip:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.flexibility-presets .preset-chip.germany {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    border-color: var(--primary);
+    color: white;
+    font-weight: 500;
+}
+
+.flexibility-presets .preset-chip.germany:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+/* Flex status indicators */
+.flex-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: auto;
+}
+
+.flex-status.active {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+.flex-status.pilot {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
