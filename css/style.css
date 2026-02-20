@@ -2003,15 +2003,26 @@ body {
 }
 
 .solar-bar { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.solar-hsat-bar { background: linear-gradient(90deg, #fbbf24, #d97706); }
 .onwind-bar { background: linear-gradient(90deg, #34d399, #10b981); }
 .offwind-bar { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.offwind-float-bar { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+.hydro-bar { background: linear-gradient(90deg, #14b8a6, #059669); }
+.hydro-reservoir-bar { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.biomass-bar { background: linear-gradient(90deg, #84cc16, #65a30d); }
+.geothermal-bar { background: linear-gradient(90deg, #dc2626, #b91c1c); }
+.wave-bar { background: linear-gradient(90deg, #0ea5e9, #0284c7); }
+.tidal-bar { background: linear-gradient(90deg, #6366f1, #4f46e5); }
 .ccgt-bar { background: linear-gradient(90deg, #f97316, #ea580c); }
-.coal-bar { background: linear-gradient(90deg, #6b7280, #374151); }
-.nuclear-bar { background: linear-gradient(90deg, #a855f7, #7c3aed); }
 .ocgt-bar { background: linear-gradient(90deg, #f43f5e, #e11d48); }
-.hydro-bar { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+.coal-bar { background: linear-gradient(90deg, #6b7280, #374151); }
+.lignite-bar { background: linear-gradient(90deg, #92400e, #78350f); }
+.oil-bar { background: linear-gradient(90deg, #18181b, #09090b); }
+.nuclear-bar { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+.waste-bar { background: linear-gradient(90deg, #10b981, #059669); }
 .battery-bar { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
 .hydrogen-bar { background: linear-gradient(90deg, #ec4899, #be185d); }
+.caes-bar { background: linear-gradient(90deg, #64748b, #475569); }
 .other-bar { background: linear-gradient(90deg, #64748b, #475569); }
 
 .mix-legend {

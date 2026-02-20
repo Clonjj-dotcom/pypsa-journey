@@ -545,18 +545,110 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tech-card" data-tech="offwind-float" onclick="toggleTech('offwind-float')">
+                                    <div class="tech-icon">🌊</div>
+                                    <div class="tech-name">Offshore Floating</div>
+                                    <div class="tech-cost">€55-85/MWh</div>
+                                    <div class="tech-capacity">~48% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌊 Eólica Marina Flotante</div>
+                                        <p>Para aguas profundas (>60m). Mayor recurso eólico, tecnología emergente.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>45-55%</span></div>
+                                            <div class="spec"><span>Depth:</span> <span>>60 meters</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>0 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="tech-card" data-tech="hydro" onclick="toggleTech('hydro')">
                                     <div class="tech-icon">💧</div>
-                                    <div class="tech-name">Hydro</div>
+                                    <div class="tech-name">Hydro Run-of-River</div>
                                     <div class="tech-cost">€20-40/MWh</div>
                                     <div class="tech-capacity">~40% CF</div>
                                     <div class="tech-tooltip">
-                                        <div class="tooltip-title">💧 Hidroeléctrica</div>
+                                        <div class="tooltip-title">💧 Hidroeléctrica Fluyente</div>
                                         <p>Generación hidroeléctrica existente. Limitada por recursos geográficos.</p>
                                         <div class="tooltip-specs">
                                             <div class="spec"><span>Capacity Factor:</span> <span>35-50%</span></div>
                                             <div class="spec"><span>Lifetime:</span> <span>50-100 años</span></div>
                                             <div class="spec"><span>Emissions:</span> <span>~24 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="hydro-reservoir" onclick="toggleTech('hydro-reservoir')">
+                                    <div class="tech-icon">🏞️</div>
+                                    <div class="tech-name">Hydro Reservoir</div>
+                                    <div class="tech-cost">€15-30/MWh</div>
+                                    <div class="tech-capacity">~35% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🏞️ Hidroeléctrica Embalse</div>
+                                        <p>Almacenamiento natural. Flexible, controlable, depende de precipitación.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>30-40%</span></div>
+                                            <div class="spec"><span>Storage:</span> <span>Seasonal</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~24 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="biomass" onclick="toggleTech('biomass')">
+                                    <div class="tech-icon">🌱</div>
+                                    <div class="tech-name">Biomass</div>
+                                    <div class="tech-cost">€60-100/MWh</div>
+                                    <div class="tech-capacity">~60% CF</div>
+                                    <div class="tech-emissions low">~18 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌱 Biomasa</div>
+                                        <p>Residuos agrícolas/forestales. Carbono-neutral si gestión sostenible.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Source:</span> <span>Waste/residues</span></div>
+                                            <div class="spec"><span>Dispatcheable:</span> <span>Yes</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~18 gCO₂/kWh*</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="geothermal" onclick="toggleTech('geothermal')">
+                                    <div class="tech-icon">🌋</div>
+                                    <div class="tech-name">Geothermal</div>
+                                    <div class="tech-cost">€50-80/MWh</div>
+                                    <div class="tech-capacity">~80% CF</div>
+                                    <div class="tech-emissions low">~15 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌋 Geotérmica</div>
+                                        <p>Calor terrestre. Base-load confiable, limitado a zonas geotérmicas (Italia, Islandia).</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>70-90%</span></div>
+                                            <div class="spec"><span>Locations:</span> <span>IT, IS, limited</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~15 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="wave" onclick="toggleTech('wave')">
+                                    <div class="tech-icon">🌊</div>
+                                    <div class="tech-name">Wave Energy</div>
+                                    <div class="tech-cost">€150-300/MWh</div>
+                                    <div class="tech-capacity">~25% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌊 Energía de Olas</div>
+                                        <p>Tecnología emergente. Alto potencial costero, aún caro y experimental.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>20-30%</span></div>
+                                            <div class="spec"><span>Status:</span> <span>Emerging/demo</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~12 gCO₂/kWh</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="tidal" onclick="toggleTech('tidal')">
+                                    <div class="tech-icon">🌙</div>
+                                    <div class="tech-name">Tidal Energy</div>
+                                    <div class="tech-cost">€120-250/MWh</div>
+                                    <div class="tech-capacity">~22% CF</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🌙 Energía Mareomotriz</div>
+                                        <p>Predictible lunar. Costos altos, sitios específicos (Estrecho de Gibraltar, UK).</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Capacity Factor:</span> <span>18-26%</span></div>
+                                            <div class="spec"><span>Predictability:</span> <span>High (tidal)</span></div>
+                                            <div class="spec"><span>Emissions:</span> <span>~12 gCO₂/kWh</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -635,6 +727,54 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tech-card" data-tech="lignite" onclick="toggleTech('lignite')">
+                                    <div class="tech-icon">🟤</div>
+                                    <div class="tech-name">Lignite</div>
+                                    <div class="tech-cost">€60-100/MWh</div>
+                                    <div class="tech-capacity">~55% CF</div>
+                                    <div class="tech-emissions high">~950 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">🟤 Lignito (Brown Coal)</div>
+                                        <p>Carbón marrón en Alemania/Polonia. Alto contenido de humedad, mayores emisiones que carbón negro.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Emissions:</span> <span>~950 gCO₂/kWh ⚠️</span></div>
+                                            <div class="spec"><span>Regions:</span> <span>DE, PL dominant</span></div>
+                                            <div class="spec"><span>Phase-out:</span> <span>2038 (DE)</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="oil" onclick="toggleTech('oil')">
+                                    <div class="tech-icon">⛽</div>
+                                    <div class="tech-name">Oil/Diesel</div>
+                                    <div class="tech-cost">€150-250/MWh</div>
+                                    <div class="tech-capacity">~5% CF</div>
+                                    <div class="tech-emissions high">~700 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">⛽ Petróleo/Diesel</div>
+                                        <p>Reserva de último recurso. Muy caro, usado para peaking y respaldo remoto.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Emissions:</span> <span>~700 gCO₂/kWh</span></div>
+                                            <div class="spec"><span>Flexibility:</span> <span>Very High</span></div>
+                                            <div class="spec"><span>Use:</span> <span>Emergency/peaking</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-card" data-tech="waste" onclick="toggleTech('waste')">
+                                    <div class="tech-icon">♻️</div>
+                                    <div class="tech-name">Waste-to-Energy</div>
+                                    <div class="tech-cost">€80-140/MWh</div>
+                                    <div class="tech-capacity">~70% CF</div>
+                                    <div class="tech-emissions medium">~450 gCO₂/kWh</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">♻️ Residuos a Energía</div>
+                                        <p>Incineración con recuperación energética. Variedad de residuos, emisiones variables según composición.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Type:</span> <span>Mixed waste/MSW</span></div>
+                                            <div class="spec"><span>Baseload:</span> <span>Yes (constant supply)</span></div>
+                                            <div class="spec"><span>Circular:</span> <span>Waste reduction</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -688,6 +828,22 @@
                                             <div class="spec"><span>Duration:</span> <span>4-16 hours</span></div>
                                             <div class="spec"><span>Efficiency:</span> <span>75-85%</span></div>
                                             <div class="spec"><span>Lifetime:</span> <span>50+ años</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tech-card" data-tech="caes" onclick="toggleTech('caes')">
+                                    <div class="tech-icon">💨</div>
+                                    <div class="tech-name">CAES</div>
+                                    <div class="tech-cost">€100-180/MWh</div>
+                                    <div class="tech-capacity">20-40h duration</div>
+                                    <div class="tech-tooltip">
+                                        <div class="tooltip-title">💨 Aire Comprimido (CAES)</div>
+                                        <p>Almacenamiento en cavernas subterráneas. Larga duración, eficiencia moderada.</p>
+                                        <div class="tooltip-specs">
+                                            <div class="spec"><span>Duration:</span> <span>20-40 hours</span></div>
+                                            <div class="spec"><span>Efficiency:</span> <span>45-55%</span></div>
+                                            <div class="spec"><span>Geology:</span> <span>Underground cavern</span></div>
                                         </div>
                                     </div>
                                 </div>
