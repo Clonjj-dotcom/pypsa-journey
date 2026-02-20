@@ -6,6 +6,7 @@
     <title>PyPSA Energy Journey</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/tech-styles.css">
+    <link rel="stylesheet" href="css/flexibility-styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -1020,8 +1021,218 @@
                 </div>
             </div>
 
-            <!-- Screen 5: Speed -->
+            <!-- Screen 5: Storage & Flexibility -->
             <div class="gen-screen" data-screen="5">
+                <div class="content-panel">
+                    <h2 class="screen-title">🔋 Storage & Flexibility</h2>
+                    <p class="screen-desc">Configure sector coupling and demand flexibility options</p>
+                    
+                    <div class="flexibility-grid">
+                        <!-- Battery Configuration -->
+                        <div class="flexibility-card">
+                            <div class="flex-header">
+                                <span class="flex-icon">⚡</span>
+                                <div class="flex-title">
+                                    <h4>Battery Storage</h4>
+                                    <span class="flex-subtitle">Li-ion grid-scale</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enableBattery" checked onchange="updateFlexibilityConfig()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex-config" id="batteryConfig">
+                                <div class="config-row">
+                                    <span>Duration</span>
+                                    <input type="range" id="batteryDuration" min="1" max="12" value="4" 
+                                           oninput="updateFlexibilityConfig()">
+                                    <span class="config-value" id="batteryDurationValue">4h</span>
+                                </div>
+                                <div class="config-row">
+                                    <span>Round-trip efficiency</span>
+                                    <span class="config-value">85%</span>
+                                </div>
+                                <div class="config-info">Optimized for intraday arbitrage</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hydrogen Storage -->
+                        <div class="flexibility-card">
+                            <div class="flex-header">
+                                <span class="flex-icon">💧</span>
+                                <div class="flex-title">
+                                    <h4>Hydrogen Power-to-Gas</h4>
+                                    <span class="flex-subtitle">Long-term seasonal storage</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enableHydrogen" checked onchange="updateFlexibilityConfig()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex-config" id="hydrogenConfig">
+                                <div class="config-row">
+                                    <span>Storage duration</span>
+                                    <select id="hydrogenDuration" onchange="updateFlexibilityConfig()">
+                                        <option value="72">3 days</option>
+                                        <option value="168" selected>1 week</option>
+                                        <option value="336">2 weeks</option>
+                                        <option value="720">1 month</option>
+                                    </select>
+                                </div>
+                                <div class="config-row">
+                                    <span>Round-trip efficiency</span>
+                                    <span class="config-value">40%</span>
+                                </div>
+                                <div class="config-info">Seasonal balancing & industrial feedstock</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pumped Hydro -->
+                        <div class="flexibility-card">
+                            <div class="flex-header">
+                                <span class="flex-icon">🌊</span>
+                                <div class="flex-title">
+                                    <h4>Pumped Hydro</h4>
+                                    <span class="flex-subtitle">Mature bulk storage</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enablePumped" checked onchange="updateFlexibilityConfig()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex-config" id="pumpedConfig">
+                                <div class="config-row">
+                                    <span>Efficiency</span>
+                                    <span class="config-value">80%</span>
+                                </div>
+                                <div class="config-row">
+                                    <span>Duration</span>
+                                    <span class="config-value">6-24 hours</span>
+                                </div>
+                                <div class="config-info">Geographically constrained</div>
+                            </div>
+                        </div>
+                        
+                        <!-- EV Vehicle-to-Grid -->
+                        <div class="flexibility-card">
+                            <div class="flex-header">
+                                <span class="flex-icon">🚗</span>
+                                <div class="flex-title">
+                                    <h4>EV Vehicle-to-Grid (V2G)</h4>
+                                    <span class="flex-subtitle">Distributed EV batteries</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enableV2G" onchange="updateFlexibilityConfig()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex-config" id="v2gConfig" style="display: none;">
+                                <div class="config-row">
+                                    <span>EV fleet size</span>
+                                    <select id="v2gFleet" onchange="updateFlexibilityConfig()">
+                                        <option value="10">10M EVs (conservative)</option>
+                                        <option value="25" selected>25M EVs (2030 target)</option>
+                                        <option value="50">50M EVs (2050 scenario)</option>
+                                    </select>
+                                </div>
+                                <div class="config-row">
+                                    <span>V2G participation</span>
+                                    <input type="range" id="v2gParticipation" min="10" max="100" value="30"
+                                           oninput="updateFlexibilityConfig()">
+                                    <span class="config-value" id="v2gPartValue">30%</span>
+                                </div>
+                                <div class="config-info">Assumes smart charging & bidirectional capability</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Demand-Side Management (DSM) -->
+                        <div class="flexibility-card">
+                            <div class="flex-header">
+                                <span class="flex-icon">🏭</span>
+                                <div class="flex-title">
+                                    <h4>Demand-Side Management</h4>
+                                    <span class="flex-subtitle">Industrial & commercial flexibility</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enableDSM" onchange="updateFlexibilityConfig()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex-config" id="dsmConfig" style="display: none;">
+                                <div class="dsm-sectors">
+                                    <div class="dsm-sector">
+                                        <input type="checkbox" id="dsmIndustry" onchange="updateFlexibilityConfig()">
+                                        <label>🏭 Industrial shifts</label>
+                                    </div>
+                                    <div class="dsm-sector">
+                                        <input type="checkbox" id="dsmCommercial" onchange="updateFlexibilityConfig()">
+                                        <label>🏢 Commercial cooling/heating</label>
+                                    </div>
+                                    <div class="dsm-sector">
+                                        <input type="checkbox" id="dsmResidential" onchange="updateFlexibilityConfig()">
+                                        <label>🏠 Heat pumps & appliances</label>
+                                    </div>
+                                </div>
+                                <div class="config-info">Shifts demand to low-price periods</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Power-to-Heat -->
+                        <div class="flexibility-card">
+                            <div class="flex-header">
+                                <span class="flex-icon">🔥</span>
+                                <div class="flex-title">
+                                    <h4>Power-to-Heat (PtH)</h4>
+                                    <span class="flex-subtitle">District heating & heat pumps</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enablePtH" onchange="updateFlexibilityConfig()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="flex-config" id="pthConfig" style="display: none;">
+                                <div class="config-row">
+                                    <span>Technology</span>
+                                    <select id="pthTech" onchange="updateFlexibilityConfig()">
+                                        <option value="hp">Heat Pumps (COP 3.0)</option>
+                                        <option value="eres">Electric Resistance (95%)</option>
+                                        <option value="both">Mixed (heat pumps + backup)</option>
+                                    </select>
+                                </div>
+                                <div class="config-row">
+                                    <span>District heating share</span>
+                                    <input type="range" id="dhShare" min="0" max="100" value="25"
+                                           oninput="updateFlexibilityConfig()">
+                                    <span class="config-value" id="dhShareValue">25%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flexibility-summary" id="flexSummary">
+                        <h4>📊 Storage & Flexibility Summary</h4>
+                        <div class="summary-stats">
+                            <div class="summary-stat">
+                                <span class="stat-label">Total Storage Capacity:</span>
+                                <span class="stat-value" id="totalStorageCap">-</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Max Discharge Duration:</span>
+                                <span class="stat-value" id="maxDischargeDuration">-</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="stat-label">Demand Flexibility:</span>
+                                <span class="stat-value" id="demandFlexibility">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
+                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
+                </div>
+            </div>
                 <div class="content-panel">
                     <h2 class="screen-title">🚀 Model Resolution</h2>
                     

@@ -1182,6 +1182,132 @@ function loadGermany2024Mix() {
     updateTechSummary();
 }
 
+// ==================== STORAGE & FLEXIBILITY ====================
+
+function updateFlexibilityConfig() {
+    // Update display values
+    const batteryDuration = document.getElementById('batteryDuration');
+    const batteryValue = document.getElementById('batteryDurationValue');
+    if (batteryDuration && batteryValue) {
+        batteryValue.textContent = `${batteryDuration.value}h`;
+    }
+    
+    const v2gParticipation = document.getElementById('v2gParticipation');
+    const v2gValue = document.getElementById('v2gPartValue');
+    if (v2gParticipation && v2gValue) {
+        v2gValue.textContent = `${v2gParticipation.value}%`;
+    }
+    
+    const dhShare = document.getElementById('dhShare');
+    const dhValue = document.getElementById('dhShareValue');
+    if (dhShare && dhValue) {
+        dhValue.textContent = `${dhShare.value}%`;
+    }
+    
+    // Toggle visibility of config sections
+    toggleFlexibilitySection('enableBattery', 'batteryConfig');
+    toggleFlexibilitySection('enableHydrogen', 'hydrogenConfig');
+    toggleFlexibilitySection('enablePumped', 'pumpedConfig');
+    toggleFlexibilitySection('enableV2G', 'v2gConfig');
+    toggleFlexibilitySection('enableDSM', 'dsmConfig');
+    toggleFlexibilitySection('enablePtH', 'pthConfig');
+    
+    // Update journey state
+    updateFlexibilityState();
+    
+    // Update summary
+    updateFlexibilitySummary();
+}
+
+function toggleFlexibilitySection(toggleId, configId) {
+    const toggle = document.getElementById(toggleId);
+    const config = document.getElementById(configId);
+    if (toggle && config) {
+        config.style.display = toggle.checked ? 'block' : 'none';
+    }
+}
+
+function updateFlexibilityState() {
+    journeyState.storage = {
+        battery: {
+            enabled: document.getElementById('enableBattery')?.checked ?? true,
+            duration: parseInt(document.getElementById('batteryDuration')?.value || 4)
+        },
+        hydrogen: {
+            enabled: document.getElementById('enableHydrogen')?.checked ?? true,
+            duration: parseInt(document.getElementById('hydrogenDuration')?.value || 168)
+        },
+        pumped: {
+            enabled: document.getElementById('enablePumped')?.checked ?? true
+        }
+    };
+    
+    journeyState.flexibility = {
+        v2g: {
+            enabled: document.getElementById('enableV2G')?.checked ?? false,
+            fleet: parseInt(document.getElementById('v2gFleet')?.value || 25),
+            participation: parseInt(document.getElementById('v2gParticipation')?.value || 30)
+        },
+        dsm: {
+            enabled: document.getElementById('enableDSM')?.checked ?? false,
+            sectors: {
+                industry: document.getElementById('dsmIndustry')?.checked ?? false,
+                commercial: document.getElementById('dsmCommercial')?.checked ?? false,
+                residential: document.getElementById('dsmResidential')?.checked ?? false
+            }
+        },
+        pth: {
+            enabled: document.getElementById('enablePtH')?.checked ?? false,
+            technology: document.getElementById('pthTech')?.value || 'hp',
+            dhShare: parseInt(document.getElementById('dhShare')?.value || 25)
+        }
+    };
+}
+
+function updateFlexibilitySummary() {
+    const flexSummary = document.getElementById('flexSummary');
+    if (!flexSummary) return;
+    
+    const storage = journeyState.storage || {};
+    const flexibility = journeyState.flexibility || {};
+    
+    // Calculate total storage capacity estimate
+    let totalStorage = 0;
+    if (storage.battery?.enabled) totalStorage += storage.battery.duration * 10; // GW
+    if (storage.hydrogen?.enabled) totalStorage += storage.hydrogen.duration * 5; // GW
+    if (storage.pumped?.enabled) totalStorage += 20; // GW
+    
+    // Max discharge duration
+    let maxDuration = 0;
+    if (storage.hydrogen?.enabled) maxDuration = Math.max(maxDuration, storage.hydrogen.duration);
+    if (storage.battery?.enabled) maxDuration = Math.max(maxDuration, storage.battery.duration);
+    if (storage.pumped?.enabled) maxDuration = Math.max(maxDuration, 24);
+    
+    // Demand flexibility
+    let flexSources = [];
+    if (storage.battery?.enabled) flexSources.push('Battery');
+    if (storage.hydrogen?.enabled) flexSources.push('H₂');
+    if (storage.pumped?.enabled) flexSources.push('Pumped');
+    if (flexibility.v2g?.enabled) flexSources.push('V2G');
+    if (flexibility.dsm?.enabled) {
+        const sectors = [];
+        if (flexibility.dsm.sectors?.industry) sectors.push('Industry');
+        if (flexibility.dsm.sectors?.commercial) sectors.push('Commercial');
+        if (flexibility.dsm.sectors?.residential) sectors.push('Residential');
+        if (sectors.length > 0) flexSources.push(`DSM (${sectors.join(', ')})`);
+    }
+    if (flexibility.pth?.enabled) flexSources.push('PtH');
+    
+    // Update display
+    const totalCapEl = document.getElementById('totalStorageCap');
+    const maxDurEl = document.getElementById('maxDischargeDuration');
+    const demandFlexEl = document.getElementById('demandFlexibility');
+    
+    if (totalCapEl) totalCapEl.textContent = `~${totalStorage.toFixed(0)} GW`;
+    if (maxDurEl) maxDurEl.textContent = maxDuration >= 168 ? `${(maxDuration/168).toFixed(1)} weeks` : `${maxDuration}h`;
+    if (demandFlexEl) demandFlexEl.textContent = flexSources.length > 0 ? flexSources.join(', ') : 'None';
+}
+
 // ==================== YAML GENERATION ====================
 
 function generateYAML() {
