@@ -51,8 +51,7 @@
                 <span class="step" data-step="2">CO₂ Political</span>
                 <span class="step" data-step="3">Technologies</span>
                 <span class="step" data-step="4">Storage</span>
-                <span class="step" data-step="5">Speed</span>
-                <span class="step" data-step="6">Generate</span>
+                <span class="step" data-step="5">Generate</span>
             </div>
         </div>
 
@@ -295,6 +294,43 @@
                         </div>
                     </div>
 
+                    <!-- Model Resolution (Speed) -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🚀 Model Resolution</h3>
+                        <p class="temporal-desc">Configure computational resolution settings</p>
+                        
+                        <div class="resolution-config">
+                            <div class="config-item">
+                                <label class="slider-label">
+                                    Spatial Resolution (Clusters)
+                                    <span class="slider-value" id="clustersValue">40</span>
+                                </label>
+                                <input type="range" id="clustersSlider" min="10" max="100" value="40" class="slider">
+                                <div class="resolution-presets">
+                                    <button class="preset-chip" onclick="setClusters(10)">10</button>
+                                    <button class="preset-chip" onclick="setClusters(20)">20</button>
+                                    <button class="preset-chip active" onclick="setClusters(40)">40</button>
+                                    <button class="preset-chip" onclick="setClusters(60)">60</button>
+                                    <button class="preset-chip" onclick="setClusters(100)">100</button>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item">
+                                <label class="slider-label">
+                                    Temporal Resolution
+                                    <span class="slider-value" id="resolutionValue">3h</span>
+                                </label>
+                                <input type="range" id="resolutionSlider" min="1" max="4" value="2" class="slider">
+                                <div class="resolution-presets">
+                                    <button class="preset-chip" onclick="setResolution(1)">1h</button>
+                                    <button class="preset-chip active" onclick="setResolution(3)">3h</button>
+                                    <button class="preset-chip" onclick="setResolution(6)">6h</button>
+                                    <button class="preset-chip" onclick="setResolution(12)">12h</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="temporal-summary">
                         <div class="summary-row">
                             <span class="summary-label">Simulation time:</span>
@@ -311,6 +347,14 @@
                         <div class="summary-row">
                             <span class="summary-label">Planning for:</span>
                             <span class="summary-value" id="horizonDisplay">2050</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Spatial clusters:</span>
+                            <span class="summary-value" id="clustersDisplay">40</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Timestep:</span>
+                            <span class="summary-value" id="resolutionDisplay">3h</span>
                         </div>
                         <div class="summary-row delta">
                             <span class="summary-label">Time span:</span>
@@ -1202,36 +1246,8 @@
                 </div>
             </div>
 
-            <!-- Screen 5: Model Resolution (Speed) -->
+            <!-- Screen 5: YAML Output -->
             <div class="gen-screen" data-screen="5">
-                <div class="content-panel">
-                    <h2 class="screen-title">🚀 Model Resolution</h2>
-                    
-                    <div class="config-item">
-                        <label class="slider-label">
-                            Spatial Resolution (Clusters)
-                            <span class="slider-value" id="clustersValue">40</span>
-                        </label>
-                        <input type="range" id="clustersSlider" min="10" max="100" value="40" class="slider">
-                    </div>
-                    
-                    <div class="config-item">
-                        <label class="slider-label">
-                            Temporal Resolution
-                            <span class="slider-value" id="resolutionValue">3h</span>
-                        </label>
-                        <input type="range" id="resolutionSlider" min="1" max="4" value="2" class="slider">
-                    </div>
-                </div>
-                
-                <div class="navigation">
-                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
-                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
-                </div>
-            </div>
-
-            <!-- Screen 6: YAML Output -->
-            <div class="gen-screen" data-screen="6">
                 <div class="content-panel">
                     <h2 class="screen-title">⚡ Your Configuration</h2>
                     

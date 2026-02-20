@@ -4,7 +4,7 @@
 // State
 let currentTab = 'generator';
 let currentGenScreen = 0;
-const totalGenScreens = 7;  // 0:Countries, 1:Temporal, 2:CO2, 3:Tech, 4:Storage&Flex, 5:Speed/Res, 6:Generate
+const totalGenScreens = 6;  // 0:Countries, 1:Temporal+Speed, 2:CO2, 3:Tech, 4:Storage&Flex, 5:Generate
 
 let journeyState = {
     countries: [],
@@ -396,13 +396,22 @@ function initSliders() {
         });
     }
     
-    // Speed sliders
+    // Speed sliders (now in Temporal screen)
     const clustersSlider = document.getElementById('clustersSlider');
     if (clustersSlider) {
         clustersSlider.value = journeyState.speed.clusters;
         clustersSlider.addEventListener('input', (e) => {
             journeyState.speed.clusters = parseInt(e.target.value);
             document.getElementById('clustersValue').textContent = e.target.value;
+            const summary = document.getElementById('clustersDisplay');
+            if (summary) summary.textContent = e.target.value;
+            // Update preset buttons
+            document.querySelectorAll('.resolution-presets .preset-chip').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.textContent) === parseInt(e.target.value)) {
+                    btn.classList.add('active');
+                }
+            });
         });
     }
     
@@ -413,6 +422,16 @@ function initSliders() {
             const resolutions = [1, 3, 6, 12];
             journeyState.speed.resolution = resolutions[parseInt(e.target.value)];
             document.getElementById('resolutionValue').textContent = `${journeyState.speed.resolution}h`;
+            const summary = document.getElementById('resolutionDisplay');
+            if (summary) summary.textContent = `${journeyState.speed.resolution}h`;
+            // Update preset buttons
+            const currentRes = `${journeyState.speed.resolution}h`;
+            document.querySelectorAll('.resolution-presets .preset-chip').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === currentRes) {
+                    btn.classList.add('active');
+                }
+            });
         });
     }
 }
@@ -420,6 +439,38 @@ function initSliders() {
 function getResolutionIndex(res) {
     const resolutions = [1, 3, 6, 12];
     return resolutions.indexOf(res);
+}
+
+// Model Resolution helpers
+function setClusters(value) {
+    journeyState.speed.clusters = value;
+    const slider = document.getElementById('clustersSlider');
+    if (slider) slider.value = value;
+    const display = document.getElementById('clustersValue');
+    if (display) display.textContent = value;
+    const summary = document.getElementById('clustersDisplay');
+    if (summary) summary.textContent = value;
+    
+    // Update preset buttons
+    document.querySelectorAll('.resolution-presets .preset-chip').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.textContent) === value);
+    });
+}
+
+function setResolution(value) {
+    journeyState.speed.resolution = value;
+    const resIndex = getResolutionIndex(value);
+    const slider = document.getElementById('resolutionSlider');
+    if (slider) slider.value = resIndex;
+    const display = document.getElementById('resolutionValue');
+    if (display) display.textContent = `${value}h`;
+    const summary = document.getElementById('resolutionDisplay');
+    if (summary) summary.textContent = `${value}h`;
+    
+    // Update preset buttons
+    document.querySelectorAll('.resolution-presets .preset-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent === `${value}h`);
+    });
 }
 
 // ==================== CO2 MECHANISM ====================
