@@ -2095,7 +2095,13 @@ function initTooltips() {
 }
 
 function showTooltip(tooltip, trigger) {
-    // Calculate position
+    // First make it visible but transparent to get dimensions
+    tooltip.style.visibility = 'visible';
+    tooltip.style.opacity = '0';
+    tooltip.style.position = 'fixed';
+    tooltip.style.zIndex = '99999';
+    
+    // Get dimensions after making visible
     const rect = trigger.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
     
@@ -2110,15 +2116,12 @@ function showTooltip(tooltip, trigger) {
         left = window.innerWidth - tooltipRect.width - padding;
     }
     if (top < padding) {
-        top = rect.bottom + 10; // Show below if not enough space above
+        top = rect.bottom + 10;
     }
     
-    tooltip.style.position = 'fixed';
     tooltip.style.top = top + 'px';
     tooltip.style.left = left + 'px';
     tooltip.style.opacity = '1';
-    tooltip.style.visibility = 'visible';
-    tooltip.style.zIndex = '99999';
 }
 
 function hideTooltip(tooltip) {
