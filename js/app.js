@@ -1797,6 +1797,149 @@ function updateYAMLSummary() {
     if (techsEl) {
         techsEl.textContent = `${journeyState.selectedTechs.length} selected`;
     }
+    
+    // Update environmental assessment
+    updateEnvironmentalAssessment();
+}
+
+// ==================== ENVIRONMENTAL ASSESSMENT ====================
+
+function updateEnvironmentalAssessment() {
+    const assessmentEl = document.getElementById('envAssessment');
+    const iconEl = document.getElementById('envIcon');
+    const messageEl = document.getElementById('envMessage');
+    const detailsEl = document.getElementById('envDetails');
+    
+    if (!assessmentEl || !messageEl || !detailsEl) return;
+    
+    // Calculate green score
+    let greenScore = 0;
+    let maxScore = 0;
+    let factors = [];
+    
+    // CO2 mechanism (0-40 points)
+    maxScore += 40;
+    if (journeyState.co2Mechanism === 'cap') {
+        if (journeyState.co2CapLevel >= 100) {
+            greenScore += 40;
+            factors.push('✅ Net Zero CO₂ target');
+        } else if (journeyState.co2CapLevel >= 75) {
+            greenScore += 30;
+            factors.push('✅ Strong CO₂ reduction (75%+)');
+        } else if (journeyState.co2CapLevel >= 50) {
+            greenScore += 20;
+            factors.push('🟡 Moderate CO₂ reduction');
+        } else {
+            greenScore += 10;
+            factors.push('⚠️ Weak CO₂ reduction');
+        }
+    } else if (journeyState.co2Mechanism === 'price') {
+        if (journeyState.co2Price >= 200) {
+            greenScore += 35;
+            factors.push('✅ High carbon price (€200/t)');
+        } else if (journeyState.co2Price >= 100) {
+            greenScore += 25;
+            factors.push('🟡 Moderate carbon price');
+        } else {
+            greenScore += 15;
+            factors.push('⚠️ Low carbon price');
+        }
+    } else {
+        factors.push('❌ No CO₂ policy');
+    }
+    
+    // Renewable technologies (0-30 points)
+    maxScore += 30;
+    const renewableTechs = ['solar', 'onwind', 'offwind', 'hydro', 'biomass', 'geothermal'];
+    const selectedRenewables = journeyState.selectedTechs.filter(t => renewableTechs.includes(t));
+    const renewableCount = selectedRenewables.length;
+    
+    if (renewableCount >= 4) {
+        greenScore += 30;
+        factors.push(`✅ High renewable mix (${renewableCount} techs)`);
+    } else if (renewableCount >= 2) {
+        greenScore += 20;
+        factors.push(`🟡 Moderate renewable mix (${renewableCount} techs)`);
+    } else if (renewableCount >= 1) {
+        greenScore += 10;
+        factors.push(`⚠️ Low renewable mix (${renewableCount} tech)`);
+    } else {
+        factors.push('❌ No renewables selected');
+    }
+    
+    // Storage (0-20 points)
+    maxScore += 20;
+    const storageTechs = ['battery', 'hydrogen', 'pumped'];
+    const selectedStorage = journeyState.selectedTechs.filter(t => storageTechs.includes(t));
+    const storageCount = selectedStorage.length;
+    
+    if (storageCount >= 3) {
+        greenScore += 20;
+        factors.push('✅ Comprehensive storage (battery + H₂ + pumped)');
+    } else if (storageCount >= 2) {
+        greenScore += 15;
+        factors.push('✅ Good storage diversity');
+    } else if (storageCount >= 1) {
+        greenScore += 8;
+        factors.push('🟡 Limited storage');
+    } else {
+        factors.push('⚠️ No storage - grid stability at risk');
+    }
+    
+    // Flexibility (0-10 points)
+    maxScore += 10;
+    const hasFlexibility = journeyState.flexibility && (
+        journeyState.flexibility.v2g?.enabled ||
+        journeyState.flexibility.dsm?.enabled ||
+        journeyState.flexibility.pth?.enabled
+    );
+    if (hasFlexibility) {
+        greenScore += 10;
+        factors.push('✅ Demand flexibility enabled');
+    } else {
+        factors.push('🟡 No demand flexibility');
+    }
+    
+    // Calculate percentage
+    const percentage = Math.round((greenScore / maxScore) * 100);
+    
+    // Set message and styling based on score
+    assessmentEl.classList.remove('green', 'yellow', 'red');
+    
+    if (percentage >= 70) {
+        assessmentEl.classList.add('green');
+        iconEl.textContent = '🌱';
+        messageEl.textContent = '🎉 Tu configuración ES amigable con el medio ambiente';
+        detailsEl.innerHTML = `
+            <div class="env-score green">Eco Score: ${percentage}%</div>
+            <div>${factors.join('<br>')}</div>
+            <div style="margin-top: 12px; font-style: italic; opacity: 0.8;">
+                Esta configuración contribuye significativamente a la descarbonización del sistema energético europeo.
+            </div>
+        `;
+    } else if (percentage >= 40) {
+        assessmentEl.classList.add('yellow');
+        iconEl.textContent = '🌍';
+        messageEl.textContent = '🟡 Tu configuración es MODERADAMENTE amigable con el medio ambiente';
+        detailsEl.innerHTML = `
+            <div class="env-score yellow">Eco Score: ${percentage}%</div>
+            <div>${factors.join('<br>')}</div>
+            <div style="margin-top: 12px; font-style: italic; opacity: 0.8;">
+                Hay espacio para mejorar. Considera agregar más renovables o una política de CO₂ más ambiciosa.
+            </div>
+        `;
+    } else {
+        assessmentEl.classList.add('red');
+        iconEl.textContent = '⚠️';
+        messageEl.textContent = '❌ Tu configuración NO ES amigable con el medio ambiente';
+        detailsEl.innerHTML = `
+            <div class="env-score red">Eco Score: ${percentage}%</div>
+            <div>${factors.join('<br>')}</div>
+            <div style="margin-top: 12px; font-style: italic; opacity: 0.8;">
+                Esta configuración resultaría en altas emisiones. Te recomendamos seleccionar tecnologías renovables y una política de CO₂ ambiciosa.
+            </div>
+        `;
+    }
 }
 
 // ==================== BASE RESULTS ====================

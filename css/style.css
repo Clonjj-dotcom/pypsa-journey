@@ -2476,3 +2476,94 @@ body {
     background: rgba(245, 158, 11, 0.2);
     color: var(--warning);
 }
+
+/* ========================================
+   ENVIRONMENTAL ASSESSMENT
+   ======================================== */
+
+.environmental-assessment {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.environmental-assessment.green {
+    border-color: var(--success);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+}
+
+.environmental-assessment.yellow {
+    border-color: var(--warning);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
+
+.environmental-assessment.red {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+}
+
+.env-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.env-message {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.environmental-assessment.green .env-message {
+    color: var(--success);
+}
+
+.environmental-assessment.yellow .env-message {
+    color: var(--warning);
+}
+
+.environmental-assessment.red .env-message {
+    color: #ef4444;
+}
+
+.env-details {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.env-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.env-score.green {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+.env-score.yellow {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.env-score.red {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
