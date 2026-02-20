@@ -2079,36 +2079,44 @@ function initSimpleTooltips() {
     triggers.forEach(card => {
         const tooltip = card.querySelector('.tooltip-content');
         if (!tooltip) return;
-        
+
         card.addEventListener('mouseenter', () => {
-            // Show tooltip first to get dimensions
-            tooltip.style.display = 'block';
-            
-            // Position above the KPI card
+            // Get card position
             const cardRect = card.getBoundingClientRect();
+
+            // First, show tooltip off-screen to measure it
+            tooltip.style.left = '-9999px';
+            tooltip.style.top = '-9999px';
+            tooltip.style.display = 'block';
+
+            // Now get tooltip dimensions
             const tooltipRect = tooltip.getBoundingClientRect();
-            
+            const tooltipWidth = tooltipRect.width;
+            const tooltipHeight = tooltipRect.height;
+
             // Calculate position - center above card
-            let left = cardRect.left + (cardRect.width / 2) - (tooltipRect.width / 2);
-            let top = cardRect.top - tooltipRect.height - 12;
-            
-            // Keep within viewport
+            let left = cardRect.left + (cardRect.width / 2) - (tooltipWidth / 2);
+            let top = cardRect.top - tooltipHeight - 12;
+
+            // Keep within viewport horizontally
             if (left < 10) left = 10;
-            if (left + tooltipRect.width > window.innerWidth - 10) {
-                left = window.innerWidth - tooltipRect.width - 10;
+            if (left + tooltipWidth > window.innerWidth - 10) {
+                left = window.innerWidth - tooltipWidth - 10;
             }
+
+            // Show below if not enough space above
             if (top < 10) {
-                // Show below instead
                 top = cardRect.bottom + 12;
                 tooltip.classList.add('tooltip-below');
             } else {
                 tooltip.classList.remove('tooltip-below');
             }
-            
+
+            // Apply final position
             tooltip.style.left = left + 'px';
             tooltip.style.top = top + 'px';
         });
-        
+
         card.addEventListener('mouseleave', () => {
             tooltip.style.display = 'none';
         });
