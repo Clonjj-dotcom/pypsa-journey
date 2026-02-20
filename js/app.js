@@ -28,65 +28,12 @@ let journeyState = {
     }
 };
 
-// PyPSA Base Data - Updated with REAL simulation results from
-// /Users/claus/Documents/THWS/Alumno_asistente/results/DE/germany-2025-realistic/
-let baseData = {
-    '2025': {
-        // From metrics.csv: total costs 134366937922.25104
-        totalCost: 134.37,  // Billion EUR
-        // From metrics.csv: electricity_price_mean 47.67690240644725
-        avgPrice: 47.68,  // EUR/MWh
-        // Calculated from energy.csv peak
-        peakDemand: 274652,  // MW (gas capacity, highest)
-        // Calculated from generation mix
-        renewableShare: 35.2,  // % (solar + wind + hydro) / total
-        // Detailed generation mix from energy.csv (TWh)
-        generation: {
-            'solar': 232.1,  // solar + rooftop + hsat
-            'onwind': 131.9,
-            'offwind': 46.4,  // offwind-ac + dc
-            'hydro': 21.8,  // ror
-            'gas': 1028.6,
-            'coal': 101.6,
-            'oil': 761.4,
-            'biomass': 162.5,  // solid biomass + unsustainable
-        },
-        // Capacity from capacities.csv (GW)
-        capacity: {
-            'solar': 242.5,  // 89.9 + 152.6 utility + rooftop
-            'onwind': 63.6,
-            'offwind': 9.9,
-            'gas': 274.7,
-            'coal': 11.6,
-        },
-        // CO2 emissions calculation
-        co2Emissions: 350.5,  // Mt CO2 (calculated from fuel use)
-    },
-    '2050': {
-        // Placeholder - would need actual 2050 run
-        totalCost: 89.25,
-        avgPrice: 38.50,
-        peakDemand: 450000,
-        renewableShare: 85.0,
-        generation: {
-            'solar': 450.0,
-            'onwind': 280.0,
-            'offwind': 150.0,
-            'hydro': 25.0,
-            'gas': 200.0,
-            'coal': 0,
-            'oil': 50.0,
-            'biomass': 100.0,
-        },
-        capacity: {
-            'solar': 500.0,
-            'onwind': 150.0,
-            'offwind': 80.0,
-            'gas': 100.0,
-            'coal': 0,
-        },
-        co2Emissions: 45.0,
-    }
+let baseData = baseDataReal || {
+    // Fallback minimal data
+    '2025': { totalCost: 134.37, avgPrice: 47.68, co2Emissions: 350.5, renewableShare: 35.2 ,
+              generation: { solar: 232, onwind: 132, offwind: 46, gas: 1029, coal: 102 },
+              capacity: { solar: 243, onwind: 64, offwind: 10, gas: 275, coal: 12 } },
+    '2050': { totalCost: 89.25, avgPrice: 38.50, co2Emissions: 45.0, renewableShare: 85.0 }
 };
 
 // Initialize
@@ -2219,34 +2166,57 @@ function updateGenerationMixMini(generation) {
 }
 
 function updateTechnicalTables(data) {
-    // Update capacities table
+    // Update capacities table with Capacity Factor calculation
     const capTable = document.getElementById('tableCapacities');
     if (capTable && data.capacity && data.generation) {
         const tbody = capTable.querySelector('tbody');
         if (tbody) {
-            tbody.innerHTML = Object.entries(data.capacity).map(([tech, cap]) => {
-                const gen = data.generation[tech] || 0;
-                const cf = cap > 0 ? ((gen / (cap * 8760 / 1000)) * 100).toFixed(1) : 0;
-                return `
-                    <tr>
-                        <td>${tech}</td>
-                        <td>${cap.toFixed(1)}</td>
-                        <td>${gen.toFixed(1)}</td>
-                        <td>${cf}%</td>
-                    </tr>
-                `;
-            }).join('');
+            tbody.innerHTML = Object.entries(data.capacity)
+                .filter(([tech, cap]) => cap > 0)
+                .map(([tech, cap]) => {
+                    const gen = data.generation[tech] || 0;  // TWh
+                    const capGW = cap;  // GW
+                    // CF = (TWh * 1000) / (GW * 8760h) * 100
+                    const cf = capGW > 0 ? ((gen * 1000) / (capGW * 8.76)).toFixed(1) : 0;
+                    return `
+                        <tr>
+                            <td>${tech}</td>
+                            <td>${capGW.toFixed(1)}</td>
+                            <td>${gen.toFixed(1)}</td>
+                            <td>${cf}%</td>
+                        </tr>
+                    `;
+                }).join('');
         }
     }
     
-    // Update metrics
+    // Update DH Operation table
+    const dhTable = document.getElementById('tableDHOperation');
+    if (dhTable && data.dhTechnologies) {
+        const tbody = dhTable.querySelector('tbody');
+        if (tbody) {
+            tbody.innerHTML = Object.entries(data.dhTechnologies)
+                .map(([tech, share]) => {
+                    return `
+                        <tr>
+                            <td>${tech.replace('_', ' ')}</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>${share}%</td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+    }
+    
+    // Update system metrics
     const curtailmentEl = document.getElementById('metricCurtailment');
     const lineUtilEl = document.getElementById('metricLineUtil');
     const storageCyclesEl = document.getElementById('metricStorageCycles');
     
-    if (curtailmentEl) curtailmentEl.textContent = data.curtailment?.toFixed(1) || '--';
-    if (lineUtilEl) lineUtilEl.textContent = data.lineUtilization?.toFixed(1) || '--';
-    if (storageCyclesEl) storageCyclesEl.textContent = data.storageCycles?.toFixed(0) || '--';
+    if (curtailmentEl) curtailmentEl.textContent = data.curtailment !== undefined ? data.curtailment.toFixed(1) + ' TWh' : '--';
+    if (lineUtilEl) lineUtilEl.textContent = data.lineUtilization !== undefined ? data.lineUtilization.toFixed(1) + '%' : '--';
+    if (storageCyclesEl) storageCyclesEl.textContent = data.storageCycles !== undefined ? data.storageCycles.toFixed(0) : '--';
 }
 
 function updateGenerationMix(generation, year) {
