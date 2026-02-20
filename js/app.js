@@ -1037,24 +1037,82 @@ function normalizeCapacities() {
     
     if (genTechs.length === 0) return;
     
-    // Normalize to 100%
+    // Calculate current total
+    let currentTotal = 0;
+    genTechs.forEach(tech => {
+        currentTotal += journeyState.techCapacities[tech] || 0;
+    });
+    
+    const deficit = 100 - currentTotal;
+    
+    // If already ~100%, do nothing
+    if (Math.abs(deficit) < 0.5) {
+        const totalEl = document.getElementById('totalAllocation');
+        if (totalEl) {
+            totalEl.textContent = '100%';
+            totalEl.className = 'total-value success';
+        }
+        return;
+    }
+    
+    // If deficit > 0 (need to increase), find cheapest renewable
+    if (deficit > 0) {
+        const renewableTechs = genTechs.filter(tech => {
+            const spec = techSpecs[tech];
+            return spec && spec.category === 'renewable';
+        });
+        
+        if (renewableTechs.length > 0) {
+            // Find renewable with lowest average cost (LCOE)
+            const cheapestRenewable = renewableTechs.reduce((cheapest, tech) => {
+                const spec = techSpecs[tech];
+                const avgCost = (spec.minCost + spec.maxCost) / 2;
+                const cheapestSpec = techSpecs[cheapest];
+                const cheapestCost = (cheapestSpec.minCost + cheapestSpec.maxCost) / 2;
+                return avgCost < cheapestCost ? tech : cheapest;
+            });
+            
+            // Add deficit to cheapest renewable
+            const currentCap = journeyState.techCapacities[cheapestRenewable] || 0;
+            const newCap = Math.min(100, currentCap + deficit);
+            journeyState.techCapacities[cheapestRenewable] = newCap;
+            
+            // Update slider
+            const slider = document.getElementById(`slider-${cheapestRenewable}`);
+            const valueEl = document.getElementById(`sliderValue-${cheapestRenewable}`);
+            if (slider) slider.value = newCap;
+            if (valueEl) valueEl.textContent = `${Math.round(newCap)}%`;
+            
+            // Show notification
+            const techName = getTechDisplayName(cheapestRenewable);
+            console.log(`✓ Increased ${techName} by ${Math.round(deficit)}% to reach 100%`);
+        } else {
+            // No renewables available, distribute equally
+            distributeEqually(genTechs);
+        }
+    } else {
+        // Excess > 0 (need to decrease), reduce proportionally
+        distributeEqually(genTechs);
+    }
+    
+    updateAllocationDisplay();
+    updateTechSummary();
+}
+
+function distributeEqually(genTechs) {
+    // Original equal distribution logic
     const equalShare = Math.floor(100 / genTechs.length);
     let remainder = 100 - (equalShare * genTechs.length);
     
     genTechs.forEach((tech, index) => {
-        // First techs get the extra 1% to make 100
         const share = index < remainder ? equalShare + 1 : equalShare;
         journeyState.techCapacities[tech] = share;
         
-        // Update slider
         const slider = document.getElementById(`slider-${tech}`);
         const valueEl = document.getElementById(`sliderValue-${tech}`);
         if (slider) slider.value = share;
         if (valueEl) valueEl.textContent = `${share}%`;
     });
-    
-    updateAllocationDisplay();
-    updateTechSummary();
 }
 
 function selectAllTechs() {
