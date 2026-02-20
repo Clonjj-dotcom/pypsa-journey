@@ -2374,6 +2374,23 @@ body {
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
 
+.storage-source-link {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-top: 8px;
+    margin-left: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.storage-source-link:hover {
+    opacity: 1;
+    color: var(--primary-light);
+    text-decoration: underline;
+}
+
 /* ========================================
    FLEXIBILITY PRESETS
    ======================================== */
@@ -2422,6 +2439,21 @@ body {
 .flexibility-presets .preset-chip.germany:hover {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.flex-source-link {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-left: auto;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.flex-source-link:hover {
+    opacity: 1;
+    color: var(--primary-light);
+    text-decoration: underline;
 }
 
 /* Flex status indicators */
