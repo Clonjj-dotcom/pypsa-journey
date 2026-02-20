@@ -896,6 +896,7 @@ function initTechCards() {
 function toggleTech(techId) {
     const index = journeyState.selectedTechs.indexOf(techId);
     const card = document.querySelector(`.tech-card[data-tech="${techId}"]`);
+    const spec = techSpecs[techId];
     
     if (index === -1) {
         journeyState.selectedTechs.push(techId);
@@ -910,6 +911,25 @@ function toggleTech(techId) {
             });
         }
         if (card) card.classList.add('selected');
+        
+        // Link storage tech cards to their config toggles
+        if (spec && spec.category === 'storage') {
+            const toggleMap = {
+                'battery': { toggle: 'enableBattery', config: 'batteryConfig' },
+                'hydrogen': { toggle: 'enableHydrogen', config: 'hydrogenConfig' },
+                'pumped': { toggle: 'enablePumped', config: 'pumpedConfig' }
+            };
+            const mapping = toggleMap[techId];
+            if (mapping) {
+                const toggle = document.getElementById(mapping.toggle);
+                if (toggle && !toggle.checked) {
+                    toggle.checked = true;
+                    toggleFlexibilitySection(mapping.toggle, mapping.config);
+                    updateFlexibilityState();
+                    updateFlexibilitySummary();
+                }
+            }
+        }
     } else {
         journeyState.selectedTechs.splice(index, 1);
         delete journeyState.techCapacities[techId];
@@ -921,6 +941,25 @@ function toggleTech(techId) {
             });
         }
         if (card) card.classList.remove('selected');
+        
+        // Also uncheck the toggle when deselecting storage
+        if (spec && spec.category === 'storage') {
+            const toggleMap = {
+                'battery': { toggle: 'enableBattery', config: 'batteryConfig' },
+                'hydrogen': { toggle: 'enableHydrogen', config: 'hydrogenConfig' },
+                'pumped': { toggle: 'enablePumped', config: 'pumpedConfig' }
+            };
+            const mapping = toggleMap[techId];
+            if (mapping) {
+                const toggle = document.getElementById(mapping.toggle);
+                if (toggle && toggle.checked) {
+                    toggle.checked = false;
+                    toggleFlexibilitySection(mapping.toggle, mapping.config);
+                    updateFlexibilityState();
+                    updateFlexibilitySummary();
+                }
+            }
+        }
     }
     
     renderCapacitySliders();
@@ -1215,6 +1254,15 @@ function updateFlexibilityConfig() {
     // Update journey state
     updateFlexibilityState();
     
+    // Sync toggle state to tech cards (bidirectional)
+    const batteryToggle = document.getElementById('enableBattery');
+    const hydrogenToggle = document.getElementById('enableHydrogen');
+    const pumpedToggle = document.getElementById('enablePumped');
+    
+    if (batteryToggle) syncToggleToTechCard('battery', batteryToggle.checked);
+    if (hydrogenToggle) syncToggleToTechCard('hydrogen', hydrogenToggle.checked);
+    if (pumpedToggle) syncToggleToTechCard('pumped', pumpedToggle.checked);
+    
     // Update summary
     updateFlexibilitySummary();
 }
@@ -1225,6 +1273,30 @@ function toggleFlexibilitySection(toggleId, configId) {
     if (toggle && config) {
         config.style.display = toggle.checked ? 'block' : 'none';
     }
+}
+
+// Function to sync toggle changes back to tech cards
+function syncToggleToTechCard(techId, enabled) {
+    const card = document.querySelector(`.tech-card[data-tech="${techId}"]`);
+    if (!card) return;
+    
+    const isSelected = journeyState.selectedTechs.includes(techId);
+    
+    if (enabled && !isSelected) {
+        // Add to selected techs
+        journeyState.selectedTechs.push(techId);
+        card.classList.add('selected');
+    } else if (!enabled && isSelected) {
+        // Remove from selected techs
+        const index = journeyState.selectedTechs.indexOf(techId);
+        if (index > -1) {
+            journeyState.selectedTechs.splice(index, 1);
+            delete journeyState.techCapacities[techId];
+        }
+        card.classList.remove('selected');
+    }
+    
+    updateTechSummary();
 }
 
 function updateFlexibilityState() {
