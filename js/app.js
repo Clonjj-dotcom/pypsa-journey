@@ -2081,11 +2081,32 @@ function initSimpleTooltips() {
         if (!tooltip) return;
         
         card.addEventListener('mouseenter', () => {
-            const rect = card.getBoundingClientRect();
-            const tooltipHeight = tooltip.offsetHeight || 150;
+            // Show tooltip first to get dimensions
             tooltip.style.display = 'block';
-            tooltip.style.left = (rect.left + rect.width / 2 - 130) + 'px';
-            tooltip.style.top = (rect.top - tooltipHeight - 10) + 'px';
+            
+            // Position above the KPI card
+            const cardRect = card.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            // Calculate position - center above card
+            let left = cardRect.left + (cardRect.width / 2) - (tooltipRect.width / 2);
+            let top = cardRect.top - tooltipRect.height - 12;
+            
+            // Keep within viewport
+            if (left < 10) left = 10;
+            if (left + tooltipRect.width > window.innerWidth - 10) {
+                left = window.innerWidth - tooltipRect.width - 10;
+            }
+            if (top < 10) {
+                // Show below instead
+                top = cardRect.bottom + 12;
+                tooltip.classList.add('tooltip-below');
+            } else {
+                tooltip.classList.remove('tooltip-below');
+            }
+            
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
         });
         
         card.addEventListener('mouseleave', () => {
@@ -2289,60 +2310,141 @@ function updateGenerationMix(generation, year) {
     }).join('');
 }
 
+// Chart instances for cleanup
+let baseCharts = {};
+
 function updateBaseCharts(data, year) {
+    // Destroy existing charts
+    Object.values(baseCharts).forEach(chart => chart?.destroy?.());
+    baseCharts = {};
+    
+    // Colors for energy technologies
+    const techColors = {
+        'solar': '#fbbf24',
+        'onwind': '#60a5fa',
+        'offwind': '#3b82f6',
+        'hydro': '#06b6d4',
+        'gas': '#ef4444',
+        'coal': '#7c2d12',
+        'oil': '#854d0e',
+        'biomass': '#22c55e'
+    };
+    
     // Update electricity generation chart
     const elecChart = document.getElementById('baseElectricityChart');
     if (elecChart && data.generation) {
         const ctx = elecChart.getContext('2d');
         
-        // Simple bar chart using canvas
-        const generation = data.generation;
-        const labels = Object.keys(generation);
-        const values = Object.values(generation);
+        // Sort by value and filter out zeros
+        const sorted = Object.entries(data.generation)
+            .filter(([_, v]) => v > 0)
+            .sort((a, b) => b[1] - a[1]);
         
-        drawBarChart(ctx, labels, values, 'TWh');
+        const labels = sorted.map(([k]) => k);
+        const values = sorted.map(([, v]) => v);
+        const colors = sorted.map(([k]) => techColors[k] || '#94a3b8');
+        
+        baseCharts.electricity = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Generation (TWh)',
+                    data: values,
+                    backgroundColor: colors,
+                    borderColor: colors.map(c => c),
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#94a3b8',
+                        borderColor: 'rgba(99, 102, 241, 0.3)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: (ctx) => `${ctx.parsed.y.toFixed(1)} TWh`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', maxRotation: 45 }
+                    }
+                }
+            }
+        });
     }
     
     // Update capacity chart
     const capChart = document.getElementById('baseCapacityChart');
     if (capChart && data.capacity) {
         const ctx = capChart.getContext('2d');
-        const capacity = data.capacity;
-        drawBarChart(ctx, Object.keys(capacity), Object.values(capacity), 'GW');
+        
+        const sorted = Object.entries(data.capacity)
+            .filter(([_, v]) => v > 0)
+            .sort((a, b) => b[1] - a[1]);
+        
+        const labels = sorted.map(([k]) => k);
+        const values = sorted.map(([, v]) => v);
+        const colors = sorted.map(([k]) => techColors[k] || '#94a3b8');
+        
+        baseCharts.capacity = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Capacity (GW)',
+                    data: values,
+                    backgroundColor: colors,
+                    borderColor: colors,
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#94a3b8',
+                        borderColor: 'rgba(99, 102, 241, 0.3)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: (ctx) => `${ctx.parsed.x.toFixed(1)} GW`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
     }
-}
-
-function drawBarChart(ctx, labels, values, unit) {
-    const canvas = ctx.canvas;
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = canvas.offsetHeight;
-    
-    const maxVal = Math.max(...values);
-    const barWidth = width / (labels.length * 1.5);
-    const spacing = barWidth * 0.5;
-    
-    ctx.clearRect(0, 0, width, height);
-    
-    labels.forEach((label, i) => {
-        const val = values[i];
-        const barHeight = (val / maxVal) * (height - 40);
-        const x = i * (barWidth + spacing) + spacing;
-        const y = height - barHeight - 20;
-        
-        // Draw bar
-        ctx.fillStyle = '#6366f1';
-        ctx.fillRect(x, y, barWidth, barHeight);
-        
-        // Draw label
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '10px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(label.substring(0, 8), x + barWidth/2, height - 5);
-        
-        // Draw value
-        ctx.fillStyle = '#f1f5f9';
-        ctx.fillText(`${val.toFixed(0)}${unit === 'TWh' ? '' : ''}`, x + barWidth/2, y - 5);
-    });
 }
 
 function showComparison() {
