@@ -1951,6 +1951,150 @@ body {
 }
 
 /* ========================================
+   TECH GENERATION MIX VISUALIZATION
+   ======================================== */
+
+.tech-mix-panel {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    backdrop-filter: blur(10px);
+}
+
+.mix-title {
+    color: #f1f5f9;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mix-subtitle {
+    color: #94a3b8;
+    font-size: 12px;
+    margin: 0 0 20px 0;
+}
+
+.tech-mix-chart {
+    margin-bottom: 20px;
+}
+
+.mix-bar-container {
+    display: flex;
+    height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(30, 41, 59, 0.5);
+    margin-bottom: 16px;
+}
+
+.mix-bar {
+    height: 100%;
+    transition: width 0.5s ease, opacity 0.3s ease;
+    position: relative;
+}
+
+.mix-bar:hover {
+    opacity: 0.9;
+}
+
+.solar-bar { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.onwind-bar { background: linear-gradient(90deg, #34d399, #10b981); }
+.offwind-bar { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.ccgt-bar { background: linear-gradient(90deg, #f97316, #ea580c); }
+.coal-bar { background: linear-gradient(90deg, #6b7280, #374151); }
+.nuclear-bar { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+.ocgt-bar { background: linear-gradient(90deg, #f43f5e, #e11d48); }
+.hydro-bar { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+.battery-bar { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.hydrogen-bar { background: linear-gradient(90deg, #ec4899, #be185d); }
+.other-bar { background: linear-gradient(90deg, #64748b, #475569); }
+
+.mix-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #cbd5e1;
+    padding: 4px 8px;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 4px;
+}
+
+.legend-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-item .dot.solar { background: #fbbf24; }
+.legend-item .dot.onwind { background: #34d399; }
+.legend-item .dot.offwind { background: #3b82f6; }
+.legend-item .dot.gas { background: #f97316; }
+.legend-item .dot.coal { background: #6b7280; }
+.legend-item .dot.nuclear { background: #a855f7; }
+.legend-item .dot.other { background: #64748b; }
+
+.tech-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.tech-stat {
+    text-align: center;
+    padding: 12px;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.tech-stat:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.tech-stat .stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #60a5fa;
+    margin-bottom: 4px;
+}
+
+.tech-stat .stat-label {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .tech-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mix-legend {
+        font-size: 11px;
+    }
+}
+
+/* ========================================
    RESPONSIVE
    ======================================== */
 
