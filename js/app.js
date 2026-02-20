@@ -4,7 +4,7 @@
 // State
 let currentTab = 'generator';
 let currentGenScreen = 0;
-const totalGenScreens = 7;  // Updated: Countries, Temporal, CO2, Tech, Storage, Speed, Generate
+const totalGenScreens = 7;  // 0:Countries, 1:Temporal, 2:CO2, 3:Tech, 4:Storage&Flex, 5:Speed/Res, 6:Generate
 
 let journeyState = {
     countries: [],

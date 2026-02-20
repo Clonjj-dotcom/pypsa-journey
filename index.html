@@ -917,40 +917,8 @@
                 </div>
             </div>
 
-            <!-- Screen 4: Storage Config -->
+            <!-- Screen 4: Storage & Flexibility -->
             <div class="gen-screen" data-screen="4">
-                <div class="content-panel">
-                    <h2 class="screen-title">🔋 Storage Configuration</h2>
-                    
-                    <div class="storage-config">
-                        <div class="storage-item">
-                            <div class="storage-header">
-                                <span class="storage-icon">🔋</span>
-                                <span class="storage-name">Battery Duration</span>
-                            </div>
-                            <input type="range" id="batteryDuration" min="1" max="12" value="4" class="slider">
-                            <span class="slider-value" id="batteryDurationValue">4h</span>
-                        </div>
-                        
-                        <div class="storage-item">
-                            <div class="storage-header">
-                                <span class="storage-icon">💧</span>
-                                <span class="storage-name">Hydrogen Duration</span>
-                            </div>
-                            <input type="range" id="hydrogenDuration" min="24" max="168" value="168" class="slider">
-                            <span class="slider-value" id="hydrogenDurationValue">168h (1 week)</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="navigation">
-                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
-                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
-                </div>
-            </div>
-
-            <!-- Screen 5: Storage & Flexibility -->
-            <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
                     <h2 class="screen-title">🔋 Storage & Flexibility</h2>
                     <p class="screen-desc">Configure storage technologies and demand flexibility options</p>
@@ -1233,6 +1201,9 @@
                     <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
                 </div>
             </div>
+
+            <!-- Screen 5: Model Resolution (Speed) -->
+            <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
                     <h2 class="screen-title">🚀 Model Resolution</h2>
                     
@@ -1255,7 +1226,7 @@
                 
                 <div class="navigation">
                     <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
-                    <button class="nav-btn next" onclick="nextGenScreen()">Generate →</button>
+                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
                 </div>
             </div>
 
