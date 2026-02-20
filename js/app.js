@@ -721,6 +721,107 @@ function updateTechSummary() {
         emissionsEl.textContent = avgEmissions === 0 ? '0 gCO₂/kWh' : `~${avgEmissions} gCO₂/kWh`;
         emissionsEl.style.color = avgEmissions === 0 ? '#10b981' : avgEmissions < 50 ? '#059669' : avgEmissions < 200 ? '#f59e0b' : '#ef4444';
     }
+    
+    // Calculate and display generation mix
+    updateGenerationMix(selected);
+}
+
+function updateGenerationMix(selected) {
+    // Capacity Factors from PyPSA-Eur (annual averages)
+    const capacityFactors = {
+        solar: 0.15, onwind: 0.30, offwind: 0.45, hydro: 0.40,
+        ccgt: 0.60, ocgt: 0.10, coal: 0.50, nuclear: 0.85
+    };
+    
+    // Calculate generation contribution (capacity × CF)
+    const generation = {};
+    let totalGen = 0;
+    let cfSum = 0;
+    let cfCount = 0;
+    let renewableGen = 0;
+    let dispatchableGen = 0;
+    const renewableTechs = ['solar', 'onwind', 'offwind', 'hydro'];
+    const dispatchableTechs = ['ccgt', 'ocgt', 'coal', 'nuclear'];
+    
+    selected.forEach(tech => {
+        const cf = capacityFactors[tech];
+        if (cf) {
+            // Assume normalized capacity = 1 for each selected tech
+            const gen = cf;
+            generation[tech] = gen;
+            totalGen += gen;
+            cfSum += cf;
+            cfCount++;
+            
+            if (renewableTechs.includes(tech)) renewableGen += gen;
+            if (dispatchableTechs.includes(tech)) dispatchableGen += gen;
+        }
+    });
+    
+    // Calculate percentages
+    const mix = {};
+    Object.entries(generation).forEach(([tech, gen]) => {
+        mix[tech] = totalGen > 0 ? Math.round((gen / totalGen) * 100) : 0;
+    });
+    
+    // Sort by percentage
+    const sorted = Object.entries(mix).sort((a, b) => b[1] - a[1]).filter(([, pct]) => pct > 0);
+    
+    // Calculate stats
+    const renewableShare = Math.round((renewableGen / totalGen) * 100) || 0;
+    const dispatchableShare = Math.round((dispatchableGen / totalGen) * 100) || 0;
+    const avgCF = cfCount > 0 ? Math.round((cfSum / cfCount) * 100) : 0;
+    
+    // Update UI stats
+    const renewableShareEl = document.getElementById('renewableShare');
+    const dispatchableBackupEl = document.getElementById('dispatchableBackup');
+    const avgCfEl = document.getElementById('avgCapacityFactor');
+    
+    if (renewableShareEl) renewableShareEl.textContent = totalGen > 0 ? `${renewableShare}%` : '0%';
+    if (dispatchableBackupEl) dispatchableBackupEl.textContent = totalGen > 0 ? `${dispatchableShare}%` : '0%';
+    if (avgCfEl) avgCfEl.textContent = totalGen > 0 ? `${avgCF}%` : '0%';
+    
+    // Update visualization
+    updateMixChart(sorted);
+}
+
+function updateMixChart(sortedTechs) {
+    const barContainer = document.querySelector('.mix-bar-container');
+    const legend = document.querySelector('.mix-legend');
+    
+    if (!barContainer || !legend) return;
+    
+    // Tech colors matching CSS
+    const techColors = {
+        solar: { color: 'linear-gradient(90deg, #fbbf24, #f59e0b)', label: 'Solar PV', icon: '☀️' },
+        onwind: { color: 'linear-gradient(90deg, #34d399, #10b981)', label: 'Onshore Wind', icon: '🌬️' },
+        offwind: { color: 'linear-gradient(90deg, #3b82f6, #1d4ed8)', label: 'Offshore Wind', icon: '⚡' },
+        hydro: { color: 'linear-gradient(90deg, #06b6d4, #0891b2)', label: 'Hydro', icon: '💧' },
+        ccgt: { color: 'linear-gradient(90deg, #f97316, #ea580c)', label: 'Natural Gas', icon: '🔥' },
+        ocgt: { color: 'linear-gradient(90deg, #f43f5e, #e11d48)', label: 'Gas Peaker', icon: '🔧' },
+        coal: { color: 'linear-gradient(90deg, #6b7280, #374151)', label: 'Coal', icon: '🪨' },
+        nuclear: { color: 'linear-gradient(90deg, #a855f7, #7c3aed)', label: 'Nuclear', icon: '⚛️' }
+    };
+    
+    // Build bars
+    let barsHTML = '';
+    sortedTechs.forEach(([tech, pct]) => {
+        if (techColors[tech]) {
+            barsHTML += `<div class="mix-bar ${tech}-bar" style="width: ${pct}%; background: ${techColors[tech].color};" title="${techColors[tech].label}: ${pct}%"></div>`;
+        }
+    });
+    
+    // Build legend
+    let legendHTML = '';
+    sortedTechs.forEach(([tech, pct]) => {
+        if (techColors[tech]) {
+            const bg = techColors[tech].color.split(',')[0].replace('linear-gradient(90deg, ', '');
+            legendHTML += `<div class="legend-item"><span class="dot" style="background: ${bg};"></span>${techColors[tech].icon} ${techColors[tech].label}: ${pct}%</div>`;
+        }
+    });
+    
+    barContainer.innerHTML = barsHTML || '<div style="text-align: center; padding: 15px; color: #94a3b8; font-size: 12px;">Select technologies to see estimated mix</div>';
+    legend.innerHTML = legendHTML || '<div style="color: #94a3b8;">No generation data</div>';
 }
 
 function initTechCards() {
