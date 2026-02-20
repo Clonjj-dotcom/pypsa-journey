@@ -1652,12 +1652,51 @@ function generateYAML() {
 function buildYAML() {
     const { countries, timePeriod, snapshot, horizon, nodes, co2Mechanism, co2CapLevel, co2Price, selectedTechs, storage, speed } = journeyState;
     
-    const generators = selectedTechs.filter(t => 
-        ['solar', 'onwind', 'offwind', 'hydro', 'nuclear', 'ccgt', 'ocgt', 'coal'].includes(t)
-    );
-    const stores = selectedTechs.filter(t => 
-        ['battery', 'hydrogen', 'pumped'].includes(t)
-    );
+    // Map de ID de UI a nombres PyPSA
+    const generatorMapping = {
+        // Solar variants
+        'solar': 'solar',
+        'solar-rooftop': 'solar',
+        'solar-hsat': 'solar',
+        // Wind
+        'onwind': 'onwind',
+        'offwind': 'offwind',  // legacy
+        'offwind-ac': 'offwind',
+        'offwind-dc': 'offwind',
+        'offwind-float': 'offwind',
+        // Hydro
+        'hydro': 'hydro',
+        'hydro-reservoir': 'hydro',
+        // Biomasa y otros
+        'biomass': 'biomass',
+        'geothermal': 'geothermal',
+        'wave': 'wave',
+        'tidal': 'tidal',
+        // Térmicos
+        'ccgt': 'ccgt',
+        'ocgt': 'ocgt',
+        'coal': 'coal',
+        'lignite': 'coal',
+        'oil': 'oil',
+        'nuclear': 'nuclear',
+        'waste': 'waste'
+    };
+    
+    const storeMapping = {
+        'battery': 'battery',
+        'hydrogen': 'hydrogen',
+        'pumped': 'pumped'
+    };
+    
+    // Agrupar generadores seleccionados y mapear a nombres PyPSA
+    const generators = [...new Set(
+        selectedTechs
+            .filter(t => generatorMapping[t])
+            .map(t => generatorMapping[t])
+    )];
+    
+    // Agrupar storage
+    const stores = selectedTechs.filter(t => storeMapping[t]);
     
     const timeConfig = timePeriodConfig[timePeriod] || timePeriodConfig.quarter;
     const safeTimePeriod = timePeriod || 'quarter';
@@ -1711,9 +1750,14 @@ function buildYAML() {
         yaml += `  # CO2 tax applied to all emitting generators\n`;
     }
     
+    // Debug: log selected techs
+    console.log('Selected techs:', selectedTechs);
+    console.log('Mapped generators:', generators);
+    console.log('Mapped stores:', stores);
+    
     yaml += `  extendable_carriers:\n`;
     
-    // Generators
+    // Generators - show ALL selected (including variants)
     const generatorList = generators.length > 0 ? generators.join(', ') : 'solar, onwind';
     yaml += `    Generator: [${generatorList}]\n`;
     
@@ -1723,11 +1767,17 @@ function buildYAML() {
         yaml += `    StorageUnit: [${storageUnits.join(', ')}]\n`;
     }
     
-    // Stores (battery, hydrogen)
+    // Stores (battery, hydrogen) - mapped from UI selections
     const storeList = stores.filter(s => ['battery', 'hydrogen'].includes(s));
     if (storeList.length > 0) {
         yaml += `    Store: [${storeList.join(', ')}]\n`;
     }
+    
+    // Add section showing all selected technologies
+    yaml += `\n# Technologies Selected (${selectedTechs.length} total)\n`;
+    yaml += `# - Generators: ${generators.join(', ') || 'none'}\n`;
+    yaml += `# - Storage: ${storeList.join(', ') || 'none'}\n`;
+    yaml += `# - Pumped Hydro: ${storageUnits.length > 0 ? 'yes' : 'no'}\n`;
     
     yaml += `\n`;
     
