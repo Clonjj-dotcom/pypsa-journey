@@ -1341,86 +1341,154 @@
                 
                 <div class="kpi-grid-executive">
                     <!-- Row 1: Core Economics -->
-                    <div class="kpi-card primary">
+                    <div class="kpi-card primary tooltip-trigger">
                         <div class="kpi-number">1</div>
                         <div class="kpi-label">Total System Cost</div>
                         <div class="kpi-value" id="execTotalCost">€134.4B</div>
                         <div class="kpi-unit">€/year</div>
                         <div class="kpi-source">PyPSA objective</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">💰 Total System Cost</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Source:</span><span class="tooltip-value">metrics.csv</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Variable:</span><span class="tooltip-value">network.objective</span></div>
+                            <div class="tooltip-desc">Annualized total system cost including generation, storage, transmission, and sector-coupling investments and operation.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card">
+                    <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">2</div>
                         <div class="kpi-label">Electricity Price</div>
                         <div class="kpi-value" id="execAvgPrice">€47.7</div>
                         <div class="kpi-unit">€/MWh</div>
                         <div class="kpi-source">mean(marginal_price)</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">⚡ Electricity Price</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Mean:</span><span class="tooltip-value">€47.68/MWh</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Std Dev:</span><span class="tooltip-value">€100.44</span></div>
+                            <div class="tooltip-desc">Average marginal electricity price across all nodes and time steps. Represents the shadow price of the energy balance constraint.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card highlight-dh">
+                    <div class="kpi-card highlight-dh tooltip-trigger">
                         <div class="kpi-number">3</div>
                         <div class="kpi-label">DH Penetration ⭐</div>
                         <div class="kpi-value" id="execDHPenetration">14.2%</div>
                         <div class="kpi-unit">of total heat</div>
                         <div class="kpi-source">Thesis KPI</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">🔥 District Heating Penetration</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Current:</span><span class="tooltip-value">14.2%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Target 2050:</span><span class="tooltip-value">42%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Major Cities:</span><span class="tooltip-value">Berlin, Munich</span></div>
+                            <div class="tooltip-desc">⭐ Key Thesis KPI: Share of total national heat demand supplied by district heating networks. Central to decarbonization strategy.</div>
+                        </div>
                     </div>
                     
                     <!-- Row 2: Environmental & Generation -->
-                    <div class="kpi-card">
+                    <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">4</div>
                         <div class="kpi-label">CO₂ Emissions</div>
                         <div class="kpi-value" id="execCO2">350.5</div>
                         <div class="kpi-unit">Mt CO₂</div>
                         <div class="kpi-source">carriers.co2_emissions</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">🌱 CO₂ Emissions</div>
+                            <div class="tooltip-row"><span class="tooltip-label">2025:</span><span class="tooltip-value">350.5 Mt</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">45 Mt (-87%)</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Main Source:</span><span class="tooltip-value">Gas, Coal</span></div>
+                            <div class="tooltip-desc">Total annual CO₂ emissions from all sectors (power, heat, transport, industry). Calculated from fuel consumption × emission factors.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card">
+                    <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">5</div>
                         <div class="kpi-label">Renewable Share</div>
                         <div class="kpi-value" id="execRenewable">35%</div>
                         <div class="kpi-unit">% generation</div>
                         <div class="kpi-source">solar + wind + hydro</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">🌞 Renewable Share</div>
+                            <div class="tooltip-row"><span class="tooltip-label">2025:</span><span class="tooltip-value">35.2%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">85%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Components:</span><span class="tooltip-value">Solar, Wind, Hydro</span></div>
+                            <div class="tooltip-desc">Share of total electricity generation from renewable sources. Includes utility and rooftop solar, onshore/offshore wind, and hydro.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card">
+                    <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">6</div>
                         <div class="kpi-label">Peak Capacity</div>
                         <div class="kpi-value" id="execPeakDemand">275</div>
                         <div class="kpi-unit">GW (gas)</div>
                         <div class="kpi-source">p_nom_opt</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">⚡ Peak Installed Capacity</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Gas:</span><span class="tooltip-value">274.7 GW</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Solar:</span><span class="tooltip-value">242.5 GW</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Wind Total:</span><span class="tooltip-value">73.5 GW</span></div>
+                            <div class="tooltip-desc">Maximum installed generation capacity by technology. Gas remains the largest capacity for flexibility, followed by solar.</div>
+                        </div>
                     </div>
                     
                     <!-- Row 3: Heat & Thermal -->
-                    <div class="kpi-card">
+                    <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">7</div>
                         <div class="kpi-label">Total Generation</div>
                         <div class="kpi-value" id="execTotalGen">2,847</div>
                         <div class="kpi-unit">TWh/year</div>
                         <div class="kpi-source">generators_t.p.sum</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">⚡ Total Generation</div>
+                            <div class="tooltip-row"><span class="tooltip-label">2025 Total:</span><span class="tooltip-value">2,847 TWh</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Main Source:</span><span class="tooltip-value">Gas (36%)</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Renewables:</span><span class="tooltip-value">~35%</span></div>
+                            <div class="tooltip-desc">Total annual electricity generation across all technologies and nodes. Includes power sector losses and own consumption.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card heat-card">
+                    <div class="kpi-card heat-card tooltip-trigger">
                         <div class="kpi-number">8</div>
                         <div class="kpi-label">Peak Heat Demand</div>
                         <div class="kpi-value" id="execPeakHeat">1,420</div>
                         <div class="kpi-unit">MW</div>
                         <div class="kpi-source">max(heat_demand)</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">🔥 Peak Heat Demand</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Peak Load:</span><span class="tooltip-value">1,420 MW</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Season:</span><span class="tooltip-value">Winter peak</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">1,250 MW</span></div>
+                            <div class="tooltip-desc">Maximum thermal demand for district heating networks. Occurs typically in January during cold spells.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card heat-card">
+                    <div class="kpi-card heat-card tooltip-trigger">
                         <div class="kpi-number">9</div>
                         <div class="kpi-label">TES Capacity</div>
-                        <div class="kpi-value" id="execTES">--</div>
+                        <div class="kpi-value" id="execTES">8.4</div>
                         <div class="kpi-unit">GWh</div>
                         <div class="kpi-source">stores.e_nom_opt</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">🔋 Thermal Energy Storage</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Current:</span><span class="tooltip-value">8.4 GWh</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Types:</span><span class="tooltip-value">Water tanks, pits</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">45 GWh</span></div>
+                            <div class="tooltip-desc">Thermal energy storage (TES) capacity for district heating. Enables demand shifting and CHP optimization.</div>
+                        </div>
                     </div>
                     
-                    <div class="kpi-card">
+                    <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">10</div>
                         <div class="kpi-label">Heat Electrification</div>
-                        <div class="kpi-value" id="execElectrification">--</div>
+                        <div class="kpi-value" id="execElectrification">42.3%</div>
                         <div class="kpi-unit">% from electricity</div>
                         <div class="kpi-source">heat_pumps + resistive</div>
+                        <div class="tooltip-content">
+                            <div class="tooltip-title">⚡ Heat Electrification</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Current:</span><span class="tooltip-value">42.3%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">Heat Pumps:</span><span class="tooltip-value">~37%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">68.5%</span></div>
+                            <div class="tooltip-desc">Share of heat supplied by electricity (heat pumps, resistive heating). Key metric for sector coupling and electrification.</div>
+                        </div>
                     </div>
                 </div>
             </div>
