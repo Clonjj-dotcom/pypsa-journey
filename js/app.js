@@ -1083,6 +1083,45 @@ function selectDefaultTechs() {
     updateTechSummary();
 }
 
+// Germany 2024 Real Mix - Based on official data from Fraunhofer ISE & Bundesnetzagentur
+// Source: https://www.ise.fraunhofer.de/en/press-media/press-releases/2025/
+// Mix normalized to generation share (TWh-based)
+const germany2024Mix = {
+    'onwind': 25.3,      // 110.7 TWh - Largest source
+    'solar': 16.5,       // 72.2 TWh - Record growth
+    'lignite': 16.2,     // ~71.1 TWh - Still significant
+    'ccgt': 13.0,        // ~57.0 TWh - Gas backup
+    'biomass': 8.2,      // 36.0 TWh - Stable
+    'coal': 6.4,         // 28.2 TWh - Declining
+    'hydro': 5.0,        // 21.7 TWh - Variable
+    'offwind': 5.9,      // 25.7 TWh - Growing
+    'oil': 0.6,          // ~2.8 TWh - Peakers
+    'ocgt': 0.6,         // Emergency backup
+    'nuclear': 0         // Phase-out complete April 2023
+};
+
+function loadGermany2024Mix() {
+    // Select all technologies in the Germany mix
+    journeyState.selectedTechs = Object.keys(germany2024Mix).filter(tech => germany2024Mix[tech] > 0);
+    
+    // Set capacities from the real mix
+    Object.entries(germany2024Mix).forEach(([tech, percentage]) => {
+        if (percentage > 0) {
+            journeyState.techCapacities[tech] = percentage;
+        }
+    });
+    
+    // Update UI
+    document.querySelectorAll('.tech-card').forEach(card => {
+        const techId = card.dataset.tech;
+        card.classList.toggle('selected', journeyState.selectedTechs.includes(techId));
+    });
+    
+    // Update sliders if visible
+    renderCapacitySliders();
+    updateTechSummary();
+}
+
 // ==================== YAML GENERATION ====================
 
 function generateYAML() {
