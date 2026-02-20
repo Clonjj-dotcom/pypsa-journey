@@ -2059,7 +2059,6 @@ function initBaseResults() {
     console.log('Initializing Base Results with real data...');
     if (typeof baseDataReal !== 'undefined') {
         console.log('Using baseDataReal with', Object.keys(baseDataReal).length, 'scenarios');
-        // Copy data from baseDataReal
         Object.assign(baseData, baseDataReal);
     }
     switchBaseYear('2025');
@@ -2070,6 +2069,61 @@ function initBaseResults() {
     
     if (layer2) layer2.classList.add('collapsed');
     if (layer3) layer3.classList.add('collapsed');
+    
+    // Initialize tooltips
+    initTooltips();
+}
+
+function initTooltips() {
+    // Get all tooltip triggers
+    const triggers = document.querySelectorAll('.tooltip-trigger');
+    
+    triggers.forEach(trigger => {
+        const tooltip = trigger.querySelector('.tooltip-content');
+        if (!tooltip) return;
+        
+        // Show tooltip on mouseenter
+        trigger.addEventListener('mouseenter', (e) => {
+            showTooltip(tooltip, trigger);
+        });
+        
+        // Hide tooltip on mouseleave
+        trigger.addEventListener('mouseleave', () => {
+            hideTooltip(tooltip);
+        });
+    });
+}
+
+function showTooltip(tooltip, trigger) {
+    // Calculate position
+    const rect = trigger.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    // Position above the trigger
+    let top = rect.top - tooltipRect.height - 10;
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    
+    // Keep within viewport
+    const padding = 10;
+    if (left < padding) left = padding;
+    if (left + tooltipRect.width > window.innerWidth - padding) {
+        left = window.innerWidth - tooltipRect.width - padding;
+    }
+    if (top < padding) {
+        top = rect.bottom + 10; // Show below if not enough space above
+    }
+    
+    tooltip.style.position = 'fixed';
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+    tooltip.style.opacity = '1';
+    tooltip.style.visibility = 'visible';
+    tooltip.style.zIndex = '99999';
+}
+
+function hideTooltip(tooltip) {
+    tooltip.style.opacity = '0';
+    tooltip.style.visibility = 'hidden';
 }
 
 function switchBaseYear(year) {
