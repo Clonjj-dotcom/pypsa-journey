@@ -1152,7 +1152,7 @@ const germany2024Mix = {
     'ccgt': 13.3,        // ~57.0 TWh (13.0% → normalized)
     'biomass': 8.4,      // 36.0 TWh (8.2% → normalized)
     'coal': 6.6,         // 28.2 TWh (6.4% → normalized)
-    'offwind': 6.0,      // 25.7 TWh (5.9% → normalized)
+    'offwind-ac': 6.0,   // 25.7 TWh (5.9% → normalized) [FIX: was 'offwind']
     'hydro': 5.1,        // 21.7 TWh (5.0% → normalized)
     'oil': 1.2,          // ~2.8 TWh (peakers)
     'ocgt': 0.0,         // Included in oil
