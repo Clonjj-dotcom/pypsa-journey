@@ -1316,59 +1316,206 @@
         </div>
     </section>
 
-    <!-- TAB 2: BASE RESULTS -->
+    <!-- TAB 2: BASE RESULTS - 3 LAYER STRUCTURE (Dr. Eureka Analysis) -->
     <section id="tab-results" class="tab-content">
         <div class="content-panel">
-            <h2 class="screen-title">📊 Base Results: 2025 vs 2050</h2>
-            <p class="screen-desc">Reference simulation results from PyPSA-Eur model</p>
-            
-            <!-- Year Selector -->
-            <div class="year-selector">
-                <button class="year-btn active" data-year="2025" onclick="switchBaseYear('2025')">2025 Base</button>
-                <button class="year-btn" data-year="2050" onclick="switchBaseYear('2050')">2050 Optimized</button>
-                <button class="year-btn" data-year="compare" onclick="switchBaseYear('compare')">↔ Compare</button>
-            </div>
-
-            <!-- Detailed KPI Grid -->
-            <div class="results-grid detailed">
-                <div class="result-card highlight">
-                    <div class="result-label">Total System Cost</div>
-                    <div class="result-value" id="baseTotalCost">€134.4B</div>
-                    <div class="result-compare">Annualized</div>
-                    <div class="result-source">📊 Real PyPSA-Eur DE 2025</div>
-                </div>
-                <div class="result-card">
-                    <div class="result-label">Avg Electricity Price</div>
-                    <div class="result-value" id="baseAvgPrice">€47.7</div>
-                    <div class="result-compare">€/MWh (wholesale)</div>
-                </div>
-                <div class="result-card">
-                    <div class="result-label">Peak Capacity</div>
-                    <div class="result-value" id="basePeakDemand">274.7</div>
-                    <div class="result-compare">GW (gas)</div>
-                </div>
-                <div class="result-card">
-                    <div class="result-label">Renewable Share</div>
-                    <div class="result-value" id="baseRenewableShare">35%</div>
-                    <div class="result-compare">of generation</div>
-                </div>
-                <div class="result-card new">
-                    <div class="result-label">CO₂ Emissions</div>
-                    <div class="result-value" id="baseCO2">350.5</div>
-                    <div class="result-compare">Mt CO₂ / year</div>
-                </div>
-                <div class="result-card new">
-                    <div class="result-label">Total Generation</div>
-                    <div class="result-value" id="baseGeneration">2,847</div>
-                    <div class="result-compare">TWh / year</div>
+            <div class="results-header">
+                <h2 class="screen-title">📊 Base Results Dashboard</h2>
+                <p class="screen-desc">PyPSA-Eur Simulation Results • Germany 2025 (37 nodes) • Based on Dr. Eureka Analysis</p>
+                
+                <!-- Year Selector -->
+                <div class="year-selector">
+                    <button class="year-btn active" data-year="2025" onclick="switchBaseYear('2025')">2025 Base</button>
+                    <button class="year-btn" data-year="2050" onclick="switchBaseYear('2050')">2050 Target</button>
+                    <button class="year-btn" data-year="compare" onclick="switchBaseYear('compare')">↔ Compare</button>
                 </div>
             </div>
 
-            <!-- Generation Mix Detail -->
-            <div class="detail-section">
-                <h3>⚡ Generation Mix 2025 (Real Data)</h3>
-                <div class="mix-grid" id="generationMix2025">
-                    <!-- Filled by JS -->
+            <!-- 🔵 CAPA 1: EXECUTIVE SUMMARY (10 KPIs) -->
+            <div class="layer-section layer-1">
+                <div class="layer-header">
+                    <span class="layer-badge">🔵</span>
+                    <h3>Executive Summary</h3>
+                    <span class="layer-desc">10 Essential KPIs – Immediate Visibility</span>
+                </div>
+                
+                <div class="kpi-grid-executive">
+                    <!-- Row 1: Core Economics -->
+                    <div class="kpi-card primary">
+                        <div class="kpi-number">1</div>
+                        <div class="kpi-label">Total System Cost</div>
+                        <div class="kpi-value" id="execTotalCost">€134.4B</div>
+                        <div class="kpi-unit">€/year</div>
+                        <div class="kpi-source">PyPSA objective</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-number">2</div>
+                        <div class="kpi-label">Electricity Price</div>
+                        <div class="kpi-value" id="execAvgPrice">€47.7</div>
+                        <div class="kpi-unit">€/MWh</div>
+                        <div class="kpi-source">mean(marginal_price)</div>
+                    </div>
+                    
+                    <div class="kpi-card highlight-dh">
+                        <div class="kpi-number">3</div>
+                        <div class="kpi-label">DH Penetration ⭐</div>
+                        <div class="kpi-value" id="execDHPenetration">14.2%</div>
+                        <div class="kpi-unit">of total heat</div>
+                        <div class="kpi-source">Thesis KPI</div>
+                    </div>
+                    
+                    <!-- Row 2: Environmental & Generation -->
+                    <div class="kpi-card">
+                        <div class="kpi-number">4</div>
+                        <div class="kpi-label">CO₂ Emissions</div>
+                        <div class="kpi-value" id="execCO2">350.5</div>
+                        <div class="kpi-unit">Mt CO₂</div>
+                        <div class="kpi-source">carriers.co2_emissions</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-number">5</div>
+                        <div class="kpi-label">Renewable Share</div>
+                        <div class="kpi-value" id="execRenewable">35%</div>
+                        <div class="kpi-unit">% generation</div>
+                        <div class="kpi-source">solar + wind + hydro</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-number">6</div>
+                        <div class="kpi-label">Peak Capacity</div>
+                        <div class="kpi-value" id="execPeakDemand">275</div>
+                        <div class="kpi-unit">GW (gas)</div>
+                        <div class="kpi-source">p_nom_opt</div>
+                    </div>
+                    
+                    <!-- Row 3: Heat & Thermal -->
+                    <div class="kpi-card">
+                        <div class="kpi-number">7</div>
+                        <div class="kpi-label">Total Generation</div>
+                        <div class="kpi-value" id="execTotalGen">2,847</div>
+                        <div class="kpi-unit">TWh/year</div>
+                        <div class="kpi-source">generators_t.p.sum</div>
+                    </div>
+                    
+                    <div class="kpi-card heat-card">
+                        <div class="kpi-number">8</div>
+                        <div class="kpi-label">Peak Heat Demand</div>
+                        <div class="kpi-value" id="execPeakHeat">1,420</div>
+                        <div class="kpi-unit">MW</div>
+                        <div class="kpi-source">max(heat_demand)</div>
+                    </div>
+                    
+                    <div class="kpi-card heat-card">
+                        <div class="kpi-number">9</div>
+                        <div class="kpi-label">TES Capacity</div>
+                        <div class="kpi-value" id="execTES">--</div>
+                        <div class="kpi-unit">GWh</div>
+                        <div class="kpi-source">stores.e_nom_opt</div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-number">10</div>
+                        <div class="kpi-label">Heat Electrification</div>
+                        <div class="kpi-value" id="execElectrification">--</div>
+                        <div class="kpi-unit">% from electricity</div>
+                        <div class="kpi-source">heat_pumps + resistive</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generation Mix Mini Chart -->
+            <div class="mini-chart-section">
+                <h4>⚡ Generation Mix 2025</h4>
+                <div class="mix-bar-container" id="generationMixMini"></div>
+            </div>
+
+            <!-- 🟡 CAPA 2: TECHNICAL ANALYSIS (Expandible) -->
+            <div class="layer-section layer-2">
+                <div class="layer-header expandable" onclick="toggleLayer('layer2')">
+                    <span class="layer-badge">🟡</span>
+                    <h3>Technical Analysis</h3>
+                    <span class="layer-desc">15-20 Indicators + Maps • Click to expand</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                
+                <div id="layer2" class="layer-content collapsed">
+                    <!-- Maps Section -->
+                    <div class="maps-section">
+                        <h4>🗺️ Geographic Visualization</h4>
+                        <div class="maps-grid">
+                            <div class="map-card high-priority" id="mapCapacity">
+                                <div class="map-title">M1: Installed Capacity by Bus</div>
+                                <div class="map-placeholder">🗺️ Map showing capacity distribution across 37 nodes</div>
+                                <div class="map-priority">⭐ High</div>
+                            </div>
+                            <div class="map-card high-priority" id="mapGeneration">
+                                <div class="map-title">M2: Generation by Node</div>
+                                <div class="map-placeholder">🗺️ Energy production TWh by geographic location</div>
+                                <div class="map-priority">⭐ High</div>
+                            </div>
+                            <div class="map-card high-priority" id="mapPrices">
+                                <div class="map-title">M3: Marginal Prices</div>
+                                <div class="map-placeholder">🗺️ Avg price €/MWh by bus</div>
+                                <div class="map-priority">⭐ High</div>
+                            </div>
+                            <div class="map-card high-priority" id="mapHeat">
+                                <div class="map-title">M4: District Heating Coverage</div>
+                                <div class="map-placeholder">🗺️ DH demand by zone (thermal)</div>
+                                <div class="map-priority">⭐ High</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Tables -->
+                    <div class="technical-tables">
+                        <h4>📈 Detailed Indicators</h4>
+                        
+                        <!-- Generation & Capacity -->
+                        <div class="tech-table-section">
+                            <h5>2.1 Generation & Capacities</h5>
+                            <table class="tech-table" id="tableCapacities">
+                                <thead>
+                                    <tr><th>Technology</th><th>Capacity (GW)</th><th>Generation (TWh)</th><th>CF (%)</th></tr>
+                                </thead>
+                                <tbody><!-- Filled by JS --></tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- DH Operation -->
+                        <div class="tech-table-section">
+                            <h5>2.2 District Heating Operation</h5>
+                            <table class="tech-table" id="tableDHOperation">
+                                <thead>
+                                    <tr><th>Component</th><th>Capacity (MW)</th><th>Production (MWh)</th><th>Share (%)</th></tr>
+                                </thead>
+                                <tbody><!-- Filled by JS --></tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- System Operation -->
+                        <div class="tech-table-section">
+                            <h5>2.3 System Performance</h5>
+                            <div class="metrics-row" id="systemMetrics">
+                                <div class="metric-box">
+                                    <span class="metric-label">Curtailment</span>
+                                    <span class="metric-value" id="metricCurtailment">--</span>
+                                    <span class="metric-unit">MWh</span>
+                                </div>
+                                <div class="metric-box">
+                                    <span class="metric-label">Line Utilization</span>
+                                    <span class="metric-value" id="metricLineUtil">--</span>
+                                    <span class="metric-unit">%</span>
+                                </div>
+                                <div class="metric-box">
+                                    <span class="metric-label">Storage Cycles</span>
+                                    <span class="metric-value" id="metricStorageCycles">--</span>
+                                    <span class="metric-unit">cycles/year</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1388,18 +1535,10 @@
                 </div>
             </div>
 
-            <!-- Cost Breakdown -->
-            <div class="detail-section">
-                <h3>💰 Cost Breakdown</h3>
-                <div class="cost-breakdown" id="costBreakdown">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-
             <!-- Comparison Table -->
             <div class="comparison-section">
                 <h3>📊 2025 vs 2050 Comparison
-                    <span class="source-badge">Real Simulation vs Projection</span>
+                    <span class="source-badge">Real Simulation vs Target Scenario</span>
                 </h3>
                 <table class="comparison-table">
                     <thead>
@@ -1416,19 +1555,55 @@
                 </table>
             </div>
 
-            <!-- Data Source Note -->
-            <div class="data-source-panel">
-                <h4>📊 Data Source</h4>
-                <p>
-                    Results from PyPSA-Eur simulation run for <strong>Germany 2025</strong> with 37-node network.
-                    Location: <code>/Users/claus/Documents/THWS/Alumno_asistente/results/DE/germany-2025-realistic/</code>
-                </p>
-                <div class="file-list">
-                    <span>metrics.csv</span>
-                    <span>capacities.csv</span>
-                    <span>energy.csv</span>
-                    <span>costs.csv</span>
-                    <span>prices.csv</span>
+            <!-- 🟢 CAPA 3: SUPPORTING DATA (On Demand) -->
+            <div class="layer-section layer-3">
+                <div class="layer-header expandable" onclick="toggleLayer('layer3')">
+                    <span class="layer-badge">🟢</span>
+                    <h3>Data & Downloads</h3>
+                    <span class="layer-desc">Supporting Data Available on Demand • CSV Downloads</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                
+                <div id="layer3" class="layer-content collapsed">
+                    <div class="download-grid">
+                        <div class="download-card">
+                            <h5>3.1 Time Series Data</h5>
+                            <p>8760h complete profiles for selected carriers</p>
+                            <button class="btn btn-secondary" onclick="downloadCSV('timeseries')">📥 Download CSV</button>
+                        </div>
+                        <div class="download-card">
+                            <h5>3.2 Node-Level Data</h5>
+                            <p>Production, consumption, prices by each of 37 nodes</p>
+                            <button class="btn btn-secondary" onclick="downloadCSV('nodal')">📥 Download CSV</button>
+                        </div>
+                        <div class="download-card">
+                            <h5>3.3 Cost Breakdown</h5>
+                            <p>CAPEX/OPEX detailed by technology</p>
+                            <button class="btn btn-secondary" onclick="downloadCSV('costs')">📥 Download CSV</button>
+                        </div>
+                        <div class="download-card">
+                            <h5>3.4 Industry & Transport</h5>
+                            <p>Industrial demand, EV charging, V2G profiles</p>
+                            <button class="btn btn-secondary" onclick="downloadCSV('sector')">📥 Download CSV</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Source -->
+                    <div class="data-source-panel">
+                        <h4>📊 Data Source</h4>
+                        <p>
+                            <strong>PyPSA-Eur v0.12.0</strong> simulation for Germany 2025 with 37-node network aggregation.
+                            <br>Location: <code>/Users/claus/Documents/THWS/Alumno_asistente/results/DE/germany-2025-realistic/</code>
+                        </p>
+                        <div class="file-list">
+                            <span>metrics.csv</span>
+                            <span>capacities.csv</span>
+                            <span>energy.csv</span>
+                            <span>costs.csv</span>
+                            <span>prices.csv</span>
+                            <span>network.nc</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

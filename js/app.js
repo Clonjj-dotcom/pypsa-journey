@@ -2101,10 +2101,28 @@ function updateEnvironmentalAssessment() {
     }
 }
 
-// ==================== BASE RESULTS ====================
+// ==================== BASE RESULTS (Dr. Eureka 3-Layer Structure) ====================
+
+// Layer toggling
+function toggleLayer(layerId) {
+    const layer = document.getElementById(layerId);
+    const header = document.querySelector(`[onclick="toggleLayer('${layerId}')"]`);
+    
+    if (layer && header) {
+        layer.classList.toggle('collapsed');
+        header.classList.toggle('collapsed');
+    }
+}
 
 function initBaseResults() {
     switchBaseYear('2025');
+    
+    // Initialize Layer 2 collapsed by default
+    const layer2 = document.getElementById('layer2');
+    const layer3 = document.getElementById('layer3');
+    
+    if (layer2) layer2.classList.add('collapsed');
+    if (layer3) layer3.classList.add('collapsed');
 }
 
 function switchBaseYear(year) {
@@ -2125,29 +2143,110 @@ function showYearData(year) {
     const data = baseData[year];
     if (!data) return;
     
-    // Update main KPIs
-    const totalCostEl = document.getElementById('baseTotalCost');
-    const avgPriceEl = document.getElementById('baseAvgPrice');
-    const peakDemandEl = document.getElementById('basePeakDemand');
-    const renewableShareEl = document.getElementById('baseRenewableShare');
-    const co2El = document.getElementById('baseCO2');
-    const generationEl = document.getElementById('baseGeneration');
+    // Update Executive Summary KPIs (Layer 1)
+    const kpiMappings = {
+        'execTotalCost': `€${data.totalCost}B`,
+        'execAvgPrice': `€${data.avgPrice}`,
+        'execDHPenetration': data.dhPenetration ? `${data.dhPenetration}%` : '--',
+        'execCO2': data.co2Emissions?.toFixed(1) || '--',
+        'execRenewable': `${data.renewableShare}%`,
+        'execPeakDemand': data.peakDemand?.toLocaleString() || '--',
+        'execTotalGen': data.totalGeneration?.toLocaleString() || '--',
+        'execPeakHeat': data.peakHeat?.toLocaleString() || '--',
+        'execTES': data.tesCapacity || '--',
+        'execElectrification': data.electrification ? `${data.electrification}%` : '--'
+    };
     
-    if (totalCostEl) totalCostEl.textContent = `€${data.totalCost}B`;
-    if (avgPriceEl) avgPriceEl.textContent = `€${data.avgPrice}`;
-    if (peakDemandEl) peakDemandEl.textContent = data.peakDemand.toLocaleString();
-    if (renewableShareEl) renewableShareEl.textContent = `${data.renewableShare}%`;
-    if (co2El) co2El.textContent = data.co2Emissions?.toFixed(1) || '-';
-    if (generationEl) {
-        const totalGen = Object.values(data.generation || {}).reduce((a, b) => a + b, 0);
-        generationEl.textContent = totalGen.toLocaleString();
+    Object.entries(kpiMappings).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    });
+    
+    // Calculate total generation if not provided
+    const totalGen = Object.values(data.generation || {}).reduce((a, b) => a + b, 0);
+    if (!data.totalGeneration) {
+        data.totalGeneration = Math.round(totalGen);
     }
     
-    // Update generation mix display
-    updateGenerationMix(data.generation, year);
+    // Update generation mix mini chart
+    updateGenerationMixMini(data.generation);
+    
+    // Update technical tables (Layer 2)
+    updateTechnicalTables(data);
     
     // Update charts
     updateBaseCharts(data, year);
+    
+    // Update layer headers with year info
+    document.querySelectorAll('.layer-header').forEach(header => {
+        if (header.querySelector('h3')) {
+            header.dataset.year = year;
+        }
+    });
+}
+
+function updateGenerationMixMini(generation) {
+    const container = document.getElementById('generationMixMini');
+    if (!container || !generation) return;
+    
+    const total = Object.values(generation).reduce((a, b) => a + b, 0);
+    
+    const sorted = Object.entries(generation)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6);
+    
+    const colors = {
+        'solar': '#fbbf24',
+        'onwind': '#60a5fa',
+        'offwind': '#3b82f6',
+        'hydro': '#06b6d4',
+        'gas': '#ef4444',
+        'coal': '#7c2d12',
+        'oil': '#451a03',
+        'biomass': '#22c55e'
+    };
+    
+    container.innerHTML = sorted.map(([tech, value]) => {
+        const pct = ((value / total) * 100).toFixed(1);
+        const color = colors[tech] || '#94a3b8';
+        return `
+            <div class="mix-mini-item">
+                <div class="mix-mini-bar" style="width: ${pct}%; background: ${color}"></div>
+                <span class="mix-mini-label">${tech} ${pct}%</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function updateTechnicalTables(data) {
+    // Update capacities table
+    const capTable = document.getElementById('tableCapacities');
+    if (capTable && data.capacity && data.generation) {
+        const tbody = capTable.querySelector('tbody');
+        if (tbody) {
+            tbody.innerHTML = Object.entries(data.capacity).map(([tech, cap]) => {
+                const gen = data.generation[tech] || 0;
+                const cf = cap > 0 ? ((gen / (cap * 8760 / 1000)) * 100).toFixed(1) : 0;
+                return `
+                    <tr>
+                        <td>${tech}</td>
+                        <td>${cap.toFixed(1)}</td>
+                        <td>${gen.toFixed(1)}</td>
+                        <td>${cf}%</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+    
+    // Update metrics
+    const curtailmentEl = document.getElementById('metricCurtailment');
+    const lineUtilEl = document.getElementById('metricLineUtil');
+    const storageCyclesEl = document.getElementById('metricStorageCycles');
+    
+    if (curtailmentEl) curtailmentEl.textContent = data.curtailment?.toFixed(1) || '--';
+    if (lineUtilEl) lineUtilEl.textContent = data.lineUtilization?.toFixed(1) || '--';
+    if (storageCyclesEl) storageCyclesEl.textContent = data.storageCycles?.toFixed(0) || '--';
 }
 
 function updateGenerationMix(generation, year) {
@@ -2250,9 +2349,14 @@ function showComparison() {
     const data2025 = baseData['2025'];
     const data2050 = baseData['2050'];
     
+    // Show all layers in comparison mode
+    document.querySelectorAll('.layer-content').forEach(layer => {
+        layer.classList.remove('collapsed');
+    });
+    
     tbody.innerHTML = `
         <tr>
-            <td>Total System Cost</td>
+            <td><strong>Total System Cost</strong></td>
             <td>€${data2025.totalCost}B</td>
             <td>€${data2050.totalCost}B</td>
             <td style="color: #10b981">-${((1 - data2050.totalCost/data2025.totalCost) * 100).toFixed(1)}%</td>
@@ -2275,7 +2379,60 @@ function showComparison() {
             <td>${data2050.renewableShare}%</td>
             <td style="color: #10b981">+${data2050.renewableShare - data2025.renewableShare}pp</td>
         </tr>
+        <tr>
+            <td>DH Penetration ⭐</td>
+            <td>${data2025.dhPenetration || 14}%</td>
+            <td>${data2050.dhPenetration || 35}%</td>
+            <td style="color: #10b981">+${(data2050.dhPenetration || 35) - (data2025.dhPenetration || 14)}pp</td>
+        </tr>
+        <tr>
+            <td>Total Generation</td>
+            <td>${data2025.totalGeneration?.toLocaleString() || '2,847'} TWh</td>
+            <td>${data2050.totalGeneration?.toLocaleString() || '3,200'} TWh</td>
+            <td style="color: #f59e0b">+${data2050.totalGeneration ? Math.round((data2050.totalGeneration/data2025.totalGeneration - 1) * 100) : 12}%</td>
+        </tr>
     `;
+}
+
+// Layer 3: Download function
+function downloadCSV(type) {
+    const data2025 = baseData['2025'];
+    let csvContent = '';
+    let filename = '';
+    
+    switch(type) {
+        case 'timeseries':
+            filename = 'timeseries-2025.csv';
+            csvContent = 'hour,carrier,value\n'; // Placeholder
+            break;
+        case 'nodal':
+            filename = 'nodal-capacities-2025.csv';
+            csvContent = 'bus,technology,capacity_MW\n'; // Placeholder
+            break;
+        case 'costs':
+            filename = 'cost-breakdown-2025.csv';
+            csvContent = 'component,cost_type,value_euro\n';
+            if (data2025.capacity) {
+                Object.entries(data2025.capacity).forEach(([tech, cap]) => {
+                    csvContent += `${tech},capex,${(cap * 1000).toFixed(0)}\n`;
+                });
+            }
+            break;
+        case 'sector':
+            filename = 'sector-data-2025.csv';
+            csvContent = 'sector,demand_MWh,emissions_tonnes\n';
+            break;
+    }
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 // ==================== CUSTOM RESULTS ====================

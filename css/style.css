@@ -2649,6 +2649,368 @@ canvas {
 }
 
 /* ========================================
+   DR. EUREKA 3-LAYER STRUCTURE
+   ======================================== */
+
+.results-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* Layer Sections */
+.layer-section {
+    margin: 24px 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.layer-1 {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.02) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.layer-2 {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.02) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.layer-3 {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.02) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.layer-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.layer-header.expandable {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.layer-header.expandable:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.layer-badge {
+    font-size: 20px;
+}
+
+.layer-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.layer-desc {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.expand-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.layer-content {
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.layer-content.collapsed {
+    display: none;
+}
+
+.layer-header:not(.collapsed) .expand-icon {
+    transform: rotate(180deg);
+}
+
+/* Executive Summary KPI Grid */
+.kpi-grid-executive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
+.kpi-card {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.kpi-card.primary {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.kpi-card.highlight-dh {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-tertiary) 100%);
+}
+
+.kpi-card.heat-card {
+    border-left: 3px solid #ef4444;
+}
+
+.kpi-number {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.2);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-light);
+}
+
+.kpi-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.kpi-unit {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.kpi-source {
+    font-size: 10px;
+    color: var(--text-muted);
+    opacity: 0.7;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Mini Chart Section */
+.mini-chart-section {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid var(--border);
+}
+
+.mini-chart-section h4 {
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.mix-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Mini Mix Bars (Executive Summary) */
+.mix-mini-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.mix-mini-bar {
+    height: 20px;
+    border-radius: 4px;
+    min-width: 4px;
+    transition: width 0.5s ease;
+}
+
+.mix-mini-label {
+    white-space: nowrap;
+    color: var(--text-secondary);
+}
+
+/* Maps Section */
+.maps-section {
+    margin: 20px 0;
+}
+
+.maps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.map-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+}
+
+.map-card.high-priority {
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.map-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.map-placeholder {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.map-priority {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    padding: 2px 8px;
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border-radius: 4px;
+}
+
+/* Technical Tables */
+.technical-tables {
+    margin-top: 24px;
+}
+
+.tech-table-section {
+    margin: 20px 0;
+}
+
+.tech-table-section h5 {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    padding-left: 8px;
+    border-left: 2px solid var(--primary);
+}
+
+.tech-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tech-table th,
+.tech-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.tech-table th {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.tech-table td {
+    color: var(--text-primary);
+}
+
+/* Metrics Row */
+.metrics-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.metric-box {
+    flex: 1;
+    min-width: 150px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+}
+
+.metric-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.metric-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.metric-unit {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Download Section */
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.download-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.download-card h5 {
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.download-card p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+/* ========================================
    ENVIRONMENTAL ASSESSMENT
    ======================================== */
 
