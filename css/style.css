@@ -2914,24 +2914,6 @@ canvas {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* KPI Card Tooltips */
-.kpi-card {
-    position: relative;
-}
-
-.kpi-card .tooltip-content {
-    bottom: auto;
-    top: 100%;
-    transform: translateX(-50%) translateY(8px);
-}
-
-.kpi-card .tooltip-content::after {
-    top: auto;
-    bottom: 100%;
-    border-top-color: transparent;
-    border-bottom-color: rgba(30, 41, 59, 0.98);
-}
-
 /* Map Card Tooltips */
 .map-card {
     position: relative;
