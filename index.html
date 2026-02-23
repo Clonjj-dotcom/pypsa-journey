@@ -297,24 +297,9 @@
                     <!-- Model Resolution (Speed) -->
                     <div class="temporal-section">
                         <h3 class="temporal-title">🚀 Model Resolution</h3>
-                        <p class="temporal-desc">Configure computational resolution settings</p>
+                        <p class="temporal-desc">Configure temporal resolution for simulation</p>
                         
                         <div class="resolution-config">
-                            <div class="config-item">
-                                <label class="slider-label">
-                                    Spatial Resolution (Clusters)
-                                    <span class="slider-value" id="clustersValue">40</span>
-                                </label>
-                                <input type="range" id="clustersSlider" min="10" max="100" value="40" class="slider">
-                                <div class="resolution-presets">
-                                    <button class="preset-chip" onclick="setClusters(10)">10</button>
-                                    <button class="preset-chip" onclick="setClusters(20)">20</button>
-                                    <button class="preset-chip active" onclick="setClusters(40)">40</button>
-                                    <button class="preset-chip" onclick="setClusters(60)">60</button>
-                                    <button class="preset-chip" onclick="setClusters(100)">100</button>
-                                </div>
-                            </div>
-                            
                             <div class="config-item">
                                 <label class="slider-label">
                                     Temporal Resolution
@@ -341,16 +326,12 @@
                             <span class="summary-value" id="snapshotDisplay">2024</span>
                         </div>
                         <div class="summary-row">
-                            <span class="summary-label">Network nodes:</span>
+                            <span class="summary-label">Network nodes/clusters:</span>
                             <span class="summary-value" id="nodesDisplay">40</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Planning for:</span>
                             <span class="summary-value" id="horizonDisplay">2050</span>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-label">Spatial clusters:</span>
-                            <span class="summary-value" id="clustersDisplay">40</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Timestep:</span>
