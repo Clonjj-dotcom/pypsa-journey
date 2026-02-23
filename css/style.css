@@ -278,20 +278,20 @@ body {
 .country {
     fill: #475569;
     stroke: #64748b;
-    stroke-width: 0.5;
+    stroke-width: 0.5px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
 }
 
 .country:hover {
-    fill: #6366f1;
-    stroke: #818cf8;
+    fill: #6366f1 !important;
+    stroke: #818cf8 !important;
 }
 
 .country.selected {
-    fill: #6366f1;
-    stroke: #a5b4fc;
-    stroke-width: 1.5;
+    fill: #6366f1 !important;
+    stroke: #a5b4fc !important;
+    stroke-width: 1.5px !important;
 }
 
 .map-label {
