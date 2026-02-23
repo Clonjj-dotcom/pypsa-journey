@@ -4,7 +4,7 @@
 // State
 let currentTab = 'generator';
 let currentGenScreen = 0;
-const totalGenScreens = 6;  // 0:Countries, 1:Temporal, 2:CO2, 3:Tech, 4:Storage+Sectors, 5:Generate
+const totalGenScreens = 7;  // 0:Countries, 1:Temporal, 2:CO2, 3:Tech, 4:Storage, 5:Pendientes, 6:Generate
 
 let journeyState = {
     countries: [],
@@ -1023,6 +1023,80 @@ function updateForesightConfig() {
     const select = document.getElementById('foresightMode');
     if (select) {
         journeyState.foresight = select.value;
+    }
+}
+
+// ==================== PENDIENTES CONFIG ====================
+
+function updateCO2Budget(year, value) {
+    if (!journeyState.co2Budget) journeyState.co2Budget = {};
+    journeyState.co2Budget[year] = parseInt(value);
+    
+    const display = document.getElementById(`co2val${year}`);
+    if (display) display.textContent = `${value}%`;
+}
+
+function updateSectorConfig() {
+    if (!journeyState.sector) journeyState.sector = {};
+    
+    const gasNetwork = document.getElementById('gasNetwork');
+    const h2Retrofit = document.getElementById('h2Retrofit');
+    
+    if (gasNetwork) journeyState.sector.gasNetwork = gasNetwork.checked;
+    if (h2Retrofit) journeyState.sector.h2Retrofit = h2Retrofit.checked;
+}
+
+function updateDHConfig() {
+    if (!journeyState.districtHeating) journeyState.districtHeating = {};
+    
+    const potential = document.getElementById('dhPotential');
+    const prog2030 = document.getElementById('dhProgress2030');
+    const prog2050 = document.getElementById('dhProgress2050');
+    
+    if (potential) {
+        journeyState.districtHeating.potential = parseInt(potential.value) / 100;
+        document.getElementById('dhPotValue').textContent = `${potential.value}%`;
+    }
+    if (prog2030) {
+        if (!journeyState.districtHeating.progress) journeyState.districtHeating.progress = {};
+        journeyState.districtHeating.progress[2030] = parseInt(prog2030.value) / 100;
+        document.getElementById('dhProg2030').textContent = `${prog2030.value}%`;
+    }
+    if (prog2050) {
+        if (!journeyState.districtHeating.progress) journeyState.districtHeating.progress = {};
+        journeyState.districtHeating.progress[2050] = parseInt(prog2050.value) / 100;
+        document.getElementById('dhProg2050').textContent = `${prog2050.value}%`;
+    }
+}
+
+function updateCostModifier(tech, value) {
+    if (!journeyState.costModifiers) journeyState.costModifiers = {};
+    
+    const multiplier = parseInt(value);
+    if (multiplier === 0) {
+        delete journeyState.costModifiers[tech];
+    } else {
+        journeyState.costModifiers[tech] = multiplier;
+    }
+    
+    const display = document.getElementById(`cost${tech.charAt(0).toUpperCase() + tech.slice(1)}Val`);
+    if (display) {
+        const sign = multiplier > 0 ? '+' : '';
+        display.textContent = `${sign}${multiplier}%`;
+    }
+}
+
+function updateAtliteConfig() {
+    const select = document.getElementById('atliteCutout');
+    if (select) {
+        journeyState.atliteCutout = select.value;
+    }
+}
+
+function updateCostsConfig() {
+    const select = document.getElementById('costsYear');
+    if (select) {
+        journeyState.costsYear = parseInt(select.value);
     }
 }
 

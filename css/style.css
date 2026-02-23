@@ -1,60 +1,118 @@
 
 /* ========================================
-   SECTORS CSS
+   PENDIENTES SCREEN CSS
    ======================================== */
 
-.sectors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+.budget-years {
+    display: flex;
+    flex-direction: column;
     gap: 16px;
     margin: 20px 0;
 }
 
-.sector-card {
+.budget-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
     background: var(--bg-secondary);
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
 }
 
-.sector-card:hover {
-    border-color: var(--primary);
-    background: rgba(99, 102, 241, 0.05);
-}
-
-.sector-card.selected {
-    border-color: var(--primary);
-    background: rgba(99, 102, 241, 0.15);
-}
-
-.sector-icon {
-    font-size: 28px;
-    margin-bottom: 8px;
-}
-
-.sector-code {
-    display: inline-block;
-    background: var(--bg-tertiary);
-    color: var(--primary-light);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 8px;
-}
-
-.sector-name {
+.budget-row span:first-child {
+    width: 60px;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 4px;
 }
 
-.sector-desc {
-    font-size: 11px;
-    color: var(--text-muted);
-    line-height: 1.4;
+.budget-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary);
+}
+
+.budget-row span:last-child {
+    width: 50px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-light);
+}
+
+.gas-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-row:hover {
+    border-color: var(--primary);
+}
+
+.toggle-row input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+}
+
+.toggle-row span {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.dh-config-advanced {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.cost-modifiers-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.modifier-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.modifier-item span:first-child {
+    width: 120px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.modifier-item input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary);
+}
+
+.modifier-item span:last-child {
+    width: 60px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-light);
 }

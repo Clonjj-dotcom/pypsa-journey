@@ -51,7 +51,8 @@
                 <span class="step" data-step="2">CO₂ Political</span>
                 <span class="step" data-step="3">Technologies</span>
                 <span class="step" data-step="4">Storage</span>
-                <span class="step" data-step="5">Generate</span>
+                <span class="step" data-step="5">Pendientes</span>
+                <span class="step" data-step="6">Generate</span>
             </div>
         </div>
 
@@ -1304,8 +1305,142 @@
                 </div>
             </div>
 
-            <!-- Screen 5: YAML Output -->
+            <!-- Screen 5: Pendientes (Advanced Config) -->
             <div class="gen-screen" data-screen="5">
+                <div class="content-panel">
+                    <h2 class="screen-title">⚙️ Pendientes</h2>
+                    <p class="screen-desc">Configuración avanzada para YAML completo</p>
+                    
+                    <!-- CO2 Budget Anual -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">📉 CO₂ Budget Anual</h3>
+                        <p class="temporal-desc">Emisiones objetivo % del año base 1990</p>
+                        <div class="budget-years">
+                            <div class="budget-row">
+                                <span>2030:</span>
+                                <input type="range" id="co2Budget2030" min="0" max="100" value="45" 
+                                       oninput="updateCO2Budget('2030', this.value)">
+                                <span id="co2val2030">45%</span>
+                            </div>
+                            <div class="budget-row">
+                                <span>2040:</span>
+                                <input type="range" id="co2Budget2040" min="0" max="100" value="10" 
+                                       oninput="updateCO2Budget('2040', this.value)">
+                                <span id="co2val2040">10%</span>
+                            </div>
+                            <div class="budget-row">
+                                <span>2050:</span>
+                                <input type="range" id="co2Budget2050" min="0" max="100" value="0" 
+                                       oninput="updateCO2Budget('2050', this.value)">
+                                <span id="co2val2050">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gas Network -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🔥 Gas Network & H₂</h3>
+                        <div class="gas-toggles">
+                            <label class="toggle-row">
+                                <input type="checkbox" id="gasNetwork" onchange="updateSectorConfig()">
+                                <span>Habilitar Gas Network</span>
+                            </label>
+                            <label class="toggle-row">
+                                <input type="checkbox" id="h2Retrofit" onchange="updateSectorConfig()">
+                                <span>H₂ Retrofit (convertir gasoductos a H₂)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- District Heating -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🏙️ District Heating</h3>
+                        <div class="dh-config-advanced">
+                            <div class="config-row">
+                                <span>Potencial DH:</span>
+                                <input type="range" id="dhPotential" min="0" max="100" value="60" 
+                                       oninput="updateDHConfig()">
+                                <span id="dhPotValue">60%</span>
+                            </div>
+                            <div class="config-row">
+                                <span>Prog. 2030:</span>
+                                <input type="range" id="dhProgress2030" min="0" max="100" value="25" 
+                                       oninput="updateDHConfig()">
+                                <span id="dhProg2030">25%</span>
+                            </div>
+                            <div class="config-row">
+                                <span>Prog. 2050:</span>
+                                <input type="range" id="dhProgress2050" min="0" max="100" value="100" 
+                                       oninput="updateDHConfig()">
+                                <span id="dhProg2050">100%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cost Modifiers -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">💰 Cost Modifiers</h3>
+                        <p class="temporal-desc">Ajustes de costo para tecnologías (ej: +p3 = +30%)</p>
+                        <div class="cost-modifiers-grid">
+                            <div class="modifier-item">
+                                <span>Solar PV</span>
+                                <input type="range" id="costSolar" min="-50" max="50" value="0" 
+                                       oninput="updateCostModifier('solar', this.value)">
+                                <span id="costSolarVal">0%</span>
+                            </div>
+                            <div class="modifier-item">
+                                <span>Onshore Wind</span>
+                                <input type="range" id="costOnwind" min="-50" max="50" value="0" 
+                                       oninput="updateCostModifier('onwind', this.value)">
+                                <span id="costOnwindVal">0%</span>
+                            </div>
+                            <div class="modifier-item">
+                                <span>Offshore Wind</span>
+                                <input type="range" id="costOffwind" min="-50" max="50" value="0" 
+                                       oninput="updateCostModifier('offwind', this.value)">
+                                <span id="costOffwindVal">0%</span>
+                            </div>
+                            
+                            <div class="modifier-item">
+                                <span>Battery Storage</span>
+                                <input type="range" id="costBattery" min="-50" max="50" value="0" 
+                                       oninput="updateCostModifier('battery', this.value)">
+                                <span id="costBatteryVal">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Atlite Cutout -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🌤️ Weather Cutout (Atlite)</h3>
+                        <div class="config-row">
+                            <span style="flex: 1;">Cutout:</span>
+                            <select id="atliteCutout" onchange="updateAtliteConfig()" style="flex: 2;">
+                                <option value="europe-2013-sarah3-era5" selected>Europe 2013 (ERA5)</option>
+                                <option value="europe-2014-era5">Europe 2014 (ERA5)</option>
+                                <option value="europe-2020-era5">Europe 2020 (ERA5)</option>
+                                <option value="europe-2024-era5">Europe 2024 (ERA5)</option>
+                            </select>
+                        </div>
+                        <div class="config-row">
+                            <span style="flex: 1;">Year Costos:</span>
+                            <select id="costsYear" onchange="updateCostsConfig()" style="flex: 2;">
+                                <option value="2020">2020</option>
+                                <option value="2025">2025</option>
+                                <option value="2030">2030</option>
+                                <option value="2050" selected>2050 (Target)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>                
+                <div class="navigation">
+                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
+                    <button class="nav-btn next" onclick="nextGenScreen()">Generate YAML →</button>
+                </div>
+            </div>
+
+            <!-- Screen 6: YAML Output -->
+            <div class="gen-screen" data-screen="6">
                 <div class="content-panel">
                     <h2 class="screen-title">⚡ Your Configuration</h2>
                     
