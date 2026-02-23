@@ -4,20 +4,20 @@
 // State
 let currentTab = 'generator';
 let currentGenScreen = 0;
-const totalGenScreens = 6;  // 0:Countries, 1:Temporal+Speed, 2:CO2, 3:Tech, 4:Storage&Flex, 5:Generate
+const totalGenScreens = 7;  // 0:Countries, 1:Temporal, 2:CO2, 3:Tech, 4:Sectors, 5:Storage, 6:Generate
 
 let journeyState = {
     countries: [],
-    timePeriod: 'quarter',  // week, month, quarter, semester, year
-    snapshot: 2024,  // Historical data year (2013, 2024, 2025)
-    horizon: 2050,   // Planning horizon (future year)
-    nodes: 40,       // Number of network nodes
+    timePeriod: 'quarter',
+    snapshot: 2024,
+    horizon: 2050,
+    nodes: 40,
     co2Political: 100,
     co2Mechanism: 'none',
-    co2CapLevel: 75,  // 0-100% reduction
+    co2CapLevel: 75,
     co2Price: 100,
     selectedTechs: ['solar', 'onwind'],
-    techCapacities: {}, // Map: techId -> percentage (0-100)
+    techCapacities: {},
     storage: {
         battery: 4,
         hydrogen: 168
@@ -25,7 +25,9 @@ let journeyState = {
     speed: {
         clusters: 40,
         resolution: 3
-    }
+    },
+    sectors: [],
+    foresight: 'overnight'
 };
 
 let baseData = {};
@@ -1001,6 +1003,27 @@ function toggleTech(techId) {
     
     renderCapacitySliders();
     updateTechSummary();
+}
+
+// Sector toggling
+function toggleSector(sectorCode) {
+    const index = journeyState.sectors.indexOf(sectorCode);
+    const card = document.querySelector(`.sector-card[data-sector=\"${sectorCode}\"]");
+    
+    if (index === -1) {
+        journeyState.sectors.push(sectorCode);
+        if (card) card.classList.add('selected');
+    } else {
+        journeyState.sectors.splice(index, 1);
+        if (card) card.classList.remove('selected');
+    }
+}
+
+function updateForesightConfig() {
+    const select = document.getElementById('foresightMode');
+    if (select) {
+        journeyState.foresight = select.value;
+    }
 }
 
 function renderCapacitySliders() {
