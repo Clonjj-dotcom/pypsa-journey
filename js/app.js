@@ -4,7 +4,7 @@
 // State
 let currentTab = 'generator';
 let currentGenScreen = 0;
-const totalGenScreens = 7;  // 0:Countries, 1:Temporal, 2:CO2, 3:Tech, 4:Sectors, 5:Storage, 6:Generate
+const totalGenScreens = 6;  // 0:Countries, 1:Temporal+Speed, 2:CO2, 3:Tech, 4:Storage&Flex, 5:Generate
 
 let journeyState = {
     countries: [],
@@ -1607,67 +1607,6 @@ function clearAllFlexibility() {
     // Update state
     updateFlexibilityConfig();
     updateFlexibilitySummary();
-}
-
-// ==================== SECTORS & ADVANCED ====================
-
-function setForesight(mode) {
-    if (!journeyState.hasOwnProperty('foresight')) {
-        journeyState.foresight = 'overnight';
-    }
-    journeyState.foresight = mode;
-    
-    // Update UI
-    document.querySelectorAll('.foresight-card').forEach(card => {
-        card.classList.remove('active');
-    });
-    const selected = document.querySelector(`.foresight-card[onclick*="'${mode}'"]`);
-    if (selected) selected.classList.add('active');
-}
-
-function toggleSector(sectorCode) {
-    if (!journeyState.hasOwnProperty('sectors')) {
-        journeyState.sectors = [];
-    }
-    
-    const index = journeyState.sectors.indexOf(sectorCode);
-    const card = document.querySelector(`.sector-card[data-sector="${sectorCode}"]`);
-    
-    if (index === -1) {
-        journeyState.sectors.push(sectorCode);
-        if (card) card.classList.add('selected');
-    } else {
-        journeyState.sectors.splice(index, 1);
-        if (card) card.classList.remove('selected');
-    }
-}
-
-function updateGasConfig() {
-    if (!journeyState.hasOwnProperty('gas')) {
-        journeyState.gas = {};
-    }
-    
-    const gasNetwork = document.getElementById('gasNetwork');
-    const h2Retrofit = document.getElementById('h2Retrofit');
-    const co2Spatial = document.getElementById('co2Spatial');
-    
-    if (gasNetwork) journeyState.gas.network = gasNetwork.checked;
-    if (h2Retrofit) journeyState.gas.h2Retrofit = h2Retrofit.checked;
-    if (co2Spatial) journeyState.gas.co2Spatial = co2Spatial.checked;
-}
-
-function updateCostModifier(tech, value) {
-    if (!journeyState.hasOwnProperty('costModifiers')) {
-        journeyState.costModifiers = {};
-    }
-    
-    journeyState.costModifiers[tech] = parseInt(value);
-    
-    const display = document.getElementById(`${tech}ModValue`);
-    if (display) {
-        const sign = value >= 0 ? '+' : '';
-        display.textContent = `${sign}${value}%`;
-    }
 }
 
 // ==================== YAML GENERATION ====================

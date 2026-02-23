@@ -50,9 +50,8 @@
                 <span class="step" data-step="1">Temporal</span>
                 <span class="step" data-step="2">CO₂ Political</span>
                 <span class="step" data-step="3">Technologies</span>
-                <span class="step" data-step="4">Sectors</span>
-                <span class="step" data-step="5">Storage</span>
-                <span class="step" data-step="6">Generate</span>
+                <span class="step" data-step="4">Storage</span>
+                <span class="step" data-step="5">Generate</span>
             </div>
         </div>
 
@@ -943,8 +942,11 @@
                 </div>
             </div>
 
-            <!-- Screen 6: YAML Output -->
-            <div class="gen-screen" data-screen="6">
+            <!-- Screen 4: Storage & Flexibility -->
+            <div class="gen-screen" data-screen="4">
+                <div class="content-panel">
+                    <h2 class="screen-title">🔋 Storage & Flexibility</h2>
+                    <p class="screen-desc">Configure storage technologies and demand flexibility options</p>
                     
                     <!-- Storage Technology Selection -->
                     <div class="storage-tech-section">
@@ -1250,143 +1252,10 @@
                 </div>
             </div>
 
-            <!-- Screen 4: Sectors & Advanced -->
-            <div class="gen-screen" data-screen="4">
-                <div class="content-panel">
-                    <h2 class="screen-title">🏭 Sectors & Advanced Options</h2>
-                    <p class="screen-desc">Configure sector-coupling, foresight mode, gas networks, and advanced parameters</p>
-                    
-                    <!-- Foresight Mode -->
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">🔮 Foresight Mode</h3>
-                        <p class="temporal-desc">Planning horizon optimization approach</p>
-                        <div class="foresight-options">
-                            <div class="foresight-card active" onclick="setForesight('overnight')">
-                                <div class="foresight-icon">⚡</div>
-                                <div class="foresight-name">Overnight</div>
-                                <div class="foresight-desc">Single-period optimization. Plans for final year without considering interim investments.</div>
-                            </div>
-                            <div class="foresight-card" onclick="setForesight('myopic')">
-                                <div class="foresight-icon">👁️</div>
-                                <div class="foresight-name">Myopic</div>
-                                <div class="foresight-desc">Rolling horizon. Optimiza año a año con información limitada.</div>
-                            </div>
-                            <div class="foresight-card" onclick="setForesight('perfect')">
-                                <div class="foresight-icon">✨</div>
-                                <div class="foresight-name">Perfect</div>
-                                <div class="foresight-desc">Perfect foresight. Conoce todo el futuro al optimizar.</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Sector Coupling (T-H-B-I-A) -->
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">🔗 Sector Options (sector_opts)</h3>
-                        <p class="temporal-desc">Select which sectors to include in the coupled model</p>
-                        <div class="sectors-grid">
-                            <div class="sector-card" data-sector="T" onclick="toggleSector('T')">
-                                <div class="sector-icon">🚗</div>
-                                <div class="sector-code">T</div>
-                                <div class="sector-name">Transport</div>
-                                <div class="sector-desc">Land transport (cars, trucks, buses)</div>
-                            </div>
-                            <div class="sector-card" data-sector="H" onclick="toggleSector('H')">
-                                <div class="sector-icon">🏠</div>
-                                <div class="sector-code">H</div>
-                                <div class="sector-name">Heating</div>
-                                <div class="sector-desc">Building heating & cooling</div>
-                            </div>
-                            <div class="sector-card" data-sector="B" onclick="toggleSector('B')">
-                                <div class="sector-icon">🌿</div>
-                                <div class="sector-code">B</div>
-                                <div class="sector-name">Biomass</div>
-                                <div class="sector-desc">Biomass supply chain</div>
-                            </div>
-                            <div class="sector-card" data-sector="I" onclick="toggleSector('I')">
-                                <div class="sector-icon">🏭</div>
-                                <div class="sector-code">I</div>
-                                <div class="sector-name">Industry</div>
-                                <div class="sector-desc">Industry + shipping + aviation</div>
-                            </div>
-                            <div class="sector-card" data-sector="A" onclick="toggleSector('A')">
-                                <div class="sector-icon">🚜</div>
-                                <div class="sector-code">A</div>
-                                <div class="sector-name">Agriculture</div>
-                                <div class="sector-desc">Agro, forestry & fishing</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Gas Network Options -->
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">🔥 Gas Network & H₂</h3>
-                        <div class="gas-options">
-                            <label class="gas-toggle">
-                                <input type="checkbox" id="gasNetwork" onchange="updateGasConfig()">
-                                <span class="toggle-label">Enable Gas Network</span>
-                            </label>
-                            <label class="gas-toggle">
-                                <input type="checkbox" id="h2Retrofit" onchange="updateGasConfig()">
-                                <span class="toggle-label">H₂ Retrofit (convert gas pipes to hydrogen)</span>
-                            </label>
-                            <label class="gas-toggle">
-                                <input type="checkbox" id="co2Spatial" onchange="updateGasConfig()">
-                                <span class="toggle-label">Spatial CO₂ (node-specific emissions)</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <!-- District Heating -->
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">🏙️ District Heating</h3>
-                        <div class="dh-config">
-                            <div class="config-row">
-                                <span>Heat Pump Sources</span>
-                                <div class="hp-sources">
-                                    <label><input type="checkbox" id="hpAir" checked> Air</label>
-                                    <label><input type="checkbox" id="hpGeothermal"> Geothermal</label>
-                                    <label><input type="checkbox" id="hpRiver"> River water</label>
-                                    <label><input type="checkbox" id="hpSea"> Sea water</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Cost Modifiers -->
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">💰 Cost Modifiers</h3>
-                        <p class="temporal-desc">Adjust technology costs (e.g., solar+p3 = +30% cost)</p>
-                        <div class="cost-modifiers" id="costModifiers">
-                            <div class="modifier-item">
-                                <span>Solar PV</span>
-                                <input type="range" min="-50" max="50" value="0" id="modifierSolar" oninput="updateCostModifier('solar', this.value)">
-                                <span id="solarModValue">0%</span>
-                            </div>
-                            <div class="modifier-item">
-                                <span>Onshore Wind</span>
-                                <input type="range" min="-50" max="50" value="0" id="modifierOnwind" oninput="updateCostModifier('onwind', this.value)">
-                                <span id="onwindModValue">0%</span>
-                            </div>
-                            <div class="modifier-item">
-                                <span>Offshore Wind</span>
-                                <input type="range" min="-50" max="50" value="0" id="modifierOffwind" oninput="updateCostModifier('offwind', this.value)">
-                                <span id="offwindModValue">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="navigation">
-                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
-                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
-                </div>
-            </div>
-
-            <!-- Screen 5: Storage & Flexibility -->
+            <!-- Screen 5: YAML Output -->
             <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
-                    <h2 class="screen-title">🔋 Storage & Flexibility</h2>
-                    <p class="screen-desc">Configure storage technologies and demand flexibility options</p>
+                    <h2 class="screen-title">⚡ Your Configuration</h2>
                     
                     <div class="config-summary">
                         <h3>Summary</h3>
