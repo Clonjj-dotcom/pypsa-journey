@@ -122,6 +122,18 @@
                                     .attr("d", path)
                                     .attr("id", d => countryCodes[d.properties.name])
                                     .attr("data-name", d => d.properties.name)
+                                    .style("fill", "#475569")
+                                    .style("stroke", "#64748b")
+                                    .style("stroke-width", "0.5px")
+                                    .style("cursor", "pointer")
+                                    .on("mouseenter", function() {
+                                        d3.select(this).style("fill", "#6366f1").style("stroke", "#818cf8");
+                                    })
+                                    .on("mouseleave", function() {
+                                        if (!d3.select(this).classed("selected")) {
+                                            d3.select(this).style("fill", "#475569").style("stroke", "#64748b");
+                                        }
+                                    })
                                     .on("click", function(event, d) {
                                         const code = countryCodes[d.properties.name];
                                         if (code && typeof toggleCountry === 'function') {
