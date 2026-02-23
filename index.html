@@ -50,9 +50,8 @@
                 <span class="step" data-step="1">Temporal</span>
                 <span class="step" data-step="2">CO₂ Political</span>
                 <span class="step" data-step="3">Technologies</span>
-                <span class="step" data-step="4">Sectors</span>
-                <span class="step" data-step="5">Storage</span>
-                <span class="step" data-step="6">Generate</span>
+                <span class="step" data-step="4">Storage</span>
+                <span class="step" data-step="5">Generate</span>
             </div>
         </div>
 
@@ -943,66 +942,8 @@
                 </div>
             </div>
 
-            <!-- Screen 4: Sectors -->
+            <!-- Screen 4: Storage, Flexibility & Sectors -->
             <div class="gen-screen" data-screen="4">
-                <div class="content-panel">
-                    <h2 class="screen-title">🏭 Sector Coupling</h2>
-                    <p class="screen-desc">Select which sectors to include (T-H-B-I-A)</p>
-                    
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">🔗 Sectors (sector_opts)</h3>
-                        <div class="sectors-grid">
-                            <div class="sector-card" data-sector="T" onclick="toggleSector('T')">
-                                <div class="sector-icon">🚗</div>
-                                <div class="sector-code">T</div>
-                                <div class="sector-name">Transport</div>
-                                <div class="sector-desc">Land transport</div>
-                            </div>
-                            <div class="sector-card" data-sector="H" onclick="toggleSector('H')">
-                                <div class="sector-icon">🏠</div>
-                                <div class="sector-code">H</div>
-                                <div class="sector-name">Heating</div>
-                                <div class="sector-desc">Building heating</div>
-                            </div>
-                            <div class="sector-card" data-sector="B" onclick="toggleSector('B')">
-                                <div class="sector-icon">🌿</div>
-                                <div class="sector-code">B</div>
-                                <div class="sector-name">Biomass</div>
-                                <div class="sector-desc">Biomass supply</div>
-                            </div>
-                            <div class="sector-card" data-sector="I" onclick="toggleSector('I')">
-                                <div class="sector-icon">🏭</div>
-                                <div class="sector-code">I</div>
-                                <div class="sector-name">Industry</div>
-                                <div class="sector-desc">Industry + shipping</div>
-                            </div>
-                            <div class="sector-card" data-sector="A" onclick="toggleSector('A')">
-                                <div class="sector-icon">🚜</div>
-                                <div class="sector-code">A</div>
-                                <div class="sector-name">Agriculture</div>
-                                <div class="sector-desc">Agro & forestry</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="temporal-section">
-                        <h3 class="temporal-title">🔮 Foresight Mode</h3>
-                        <select id="foresightMode" class="slider" onchange="updateForesightConfig()">
-                            <option value="overnight" selected>Overnight (single-period)</option>
-                            <option value="myopic">Myopic (rolling horizon)</option>
-                            <option value="perfect">Perfect (full foresight)</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="navigation">
-                    <button class="nav-btn prev" onclick="prevGenScreen()">← Back</button>
-                    <button class="nav-btn next" onclick="nextGenScreen()">Continue →</button>
-                </div>
-            </div>
-
-            <!-- Screen 5: Storage & Flexibility -->
-            <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
                     <h2 class="screen-title">🔋 Storage & Flexibility</h2>
                     <p class="screen-desc">Configure storage technologies and demand flexibility options</p>
@@ -1286,6 +1227,58 @@
                         </a>
                     </div>
                     
+                    <!-- Sector Coupling (T-H-B-I-A) -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🔗 Sector Coupling (sector_opts)</h3>
+                        <p class="temporal-desc">Select which demand sectors to include in the model</p>
+                        <div class="sectors-grid">
+                            <div class="sector-card" data-sector="T" onclick="toggleSector('T')">
+                                <div class="sector-icon">🚗</div>
+                                <div class="sector-code">T</div>
+                                <div class="sector-name">Transport</div>
+                                <div class="sector-desc">Land transport (V2G, EV charging)</div>
+                            </div>
+                            <div class="sector-card" data-sector="H" onclick="toggleSector('H')">
+                                <div class="sector-icon">🏠</div>
+                                <div class="sector-code">H</div>
+                                <div class="sector-name">Heating</div>
+                                <div class="sector-desc">Building heating (heat pumps)</div>
+                            </div>
+                            <div class="sector-card" data-sector="B" onclick="toggleSector('B')">
+                                <div class="sector-icon">🌿</div>
+                                <div class="sector-code">B</div>
+                                <div class="sector-name">Biomass</div>
+                                <div class="sector-desc">Biomass supply chain</div>
+                            </div>
+                            <div class="sector-card" data-sector="I" onclick="toggleSector('I')">
+                                <div class="sector-icon">🏭</div>
+                                <div class="sector-code">I</div>
+                                <div class="sector-name">Industry</div>
+                                <div class="sector-desc">Industry + shipping + aviation</div>
+                            </div>
+                            <div class="sector-card" data-sector="A" onclick="toggleSector('A')">
+                                <div class="sector-icon">🚜</div>
+                                <div class="sector-code">A</div>
+                                <div class="sector-name">Agriculture</div>
+                                <div class="sector-desc">Agro, forestry & fishing</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Foresight Mode -->
+                    <div class="temporal-section">
+                        <h3 class="temporal-title">🔮 Foresight Mode</h3>
+                        <p class="temporal-desc">Optimization planning horizon approach</p>
+                        <div class="config-row">
+                            <span style="flex: 1;">Planning approach:</span>
+                            <select id="foresightMode" onchange="updateForesightConfig()" style="flex: 2;">
+                                <option value="overnight" selected>⚡ Overnight (single-period)</option>
+                                <option value="myopic">👁️ Myopic (rolling horizon)</option>
+                                <option value="perfect">✨ Perfect (full foresight)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
                     <div class="flexibility-summary" id="flexSummary">
                         <h4>📊 Storage & Flexibility Summary</h4>
                         <div class="summary-stats">
@@ -1311,8 +1304,8 @@
                 </div>
             </div>
 
-            <!-- Screen 6: YAML Output -->
-            <div class="gen-screen" data-screen="6">
+            <!-- Screen 5: YAML Output -->
+            <div class="gen-screen" data-screen="5">
                 <div class="content-panel">
                     <h2 class="screen-title">⚡ Your Configuration</h2>
                     
