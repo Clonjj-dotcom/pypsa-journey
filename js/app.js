@@ -2750,3 +2750,133 @@ function updateCustomResults() {
     if (co2El) co2El.textContent = `${co2}%`;
     if (renewableEl) renewableEl.textContent = `${Math.min(renewable, 95)}%`;
 }
+
+// ==================== MINI MAPS ====================
+
+function initMiniMap(containerId, mapType) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    // Mark as loaded
+    container.classList.add('loaded');
+    container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-size: 12px;">Loading map...</div>';
+    
+    // Load D3 if not already loaded
+    if (typeof d3 === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://d3js.org/d3.v7.min.js';
+        script.onload = () => renderMiniMap(container, mapType);
+        document.head.appendChild(script);
+    } else {
+        renderMiniMap(container, mapType);
+    }
+}
+
+function renderMiniMap(container, mapType) {
+    // Clear container
+    container.innerHTML = '';
+    
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Create SVG
+    const svg = d3.select(container)
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+    
+    // Simplified Germany outline (mock for now)
+    const germanyOutline = [
+        [0.1, 0.8], [0.15, 0.6], [0.25, 0.4], [0.4, 0.3], [0.6, 0.25], 
+        [0.8, 0.3], [0.9, 0.4], [0.85, 0.6], [0.75, 0.75], [0.6, 0.85], 
+        [0.4, 0.9], [0.2, 0.85], [0.1, 0.8]
+    ];
+    
+    // Scale to container
+    const scaleX = d3.scaleLinear().domain([0, 1]).range([20, width - 20]);
+    const scaleY = d3.scaleLinear().domain([0, 1]).range([height - 20, 20]);
+    
+    // Draw Germany outline
+    const line = d3.line()
+        .x(d => scaleX(d[0]))
+        .y(d => scaleY(d[1]))
+        .curve(d3.curveLinearClosed);
+    
+    svg.append('path')
+        .datum(germanyOutline)
+        .attr('d', line)
+        .attr('fill', '#1e293b')
+        .attr('stroke', '#475569')
+        .attr('stroke-width', 2);
+    
+    // Add data points based on mapType
+    const nodeData = getMockNodeData(mapType);
+    
+    svg.selectAll('circle.node')
+        .data(nodeData)
+        .enter()
+        .append('circle')
+        .attr('class', 'node')
+        .attr('cx', d => scaleX(d.x))
+        .attr('cy', d => scaleY(d.y))
+        .attr('r', d => Math.max(3, d.value / 10))
+        .attr('fill', d => d.color)
+        .attr('opacity', 0.8)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 1)
+        .append('title')
+        .text(d => `${d.name}: ${d.value} ${d.unit}`);
+    
+    // Add legend
+    const legend = svg.append('g')
+        .attr('transform', `translate(10, ${height - 60})`);
+    
+    legend.append('rect')
+        .attr('width', 120)
+        .attr('height', 50)
+        .attr('fill', 'rgba(15, 23, 42, 0.9)')
+        .attr('rx', 4);
+    
+    legend.append('text')
+        .attr('x', 8)
+        .attr('y', 15)
+        .text(mapType.toUpperCase())
+        .attr('fill', '#94a3b8')
+        .attr('font-size', '10px');
+}
+
+function getMockNodeData(mapType) {
+    const colors = {
+        capacity: '#6366f1',
+        generation: '#10b981', 
+        prices: '#f59e0b',
+        heat: '#ef4444'
+    };
+    
+    const mockData = {
+        capacity: [
+            {name: 'North Wind', x: 0.5, y: 0.3, value: 45, unit: 'GW', color: colors.capacity},
+            {name: 'Solar South', x: 0.3, y: 0.7, value: 38, unit: 'GW', color: colors.capacity},
+            {name: 'CHP Berlin', x: 0.7, y: 0.4, value: 12, unit: 'GW', color: colors.heat},
+            {name: 'Gas Munich', x: 0.4, y: 0.8, value: 25, unit: 'GW', color: '#ef4444'}
+        ],
+        generation: [
+            {name: 'Offshore Wind', x: 0.6, y: 0.2, value: 89, unit: 'TWh', color: colors.generation},
+            {name: 'Bavaria Solar', x: 0.35, y: 0.75, value: 67, unit: 'TWh', color: '#fbbf24'},
+            {name: 'Ruhr Industry', x: 0.25, y: 0.45, value: 120, unit: 'TWh', color: '#ef4444'}
+        ],
+        prices: [
+            {name: 'North Node', x: 0.5, y: 0.3, value: 44.2, unit: '€/MWh', color: colors.prices},
+            {name: 'South Node', x: 0.35, y: 0.75, value: 51.3, unit: '€/MWh', color: '#ef4444'},
+            {name: 'East Node', x: 0.8, y: 0.5, value: 48.7, unit: '€/MWh', color: colors.prices}
+        ],
+        heat: [
+            {name: 'Berlin DH', x: 0.7, y: 0.4, value: 85, unit: '% coverage', color: colors.heat},
+            {name: 'Munich DH', x: 0.4, y: 0.8, value: 72, unit: '% coverage', color: colors.heat},
+            {name: 'Hamburg DH', x: 0.6, y: 0.25, value: 68, unit: '% coverage', color: colors.heat},
+            {name: 'Cologne DH', x: 0.2, y: 0.55, value: 45, unit: '% coverage', color: '#f59e0b'}
+        ]
+    };
+    
+    return mockData[mapType] || mockData.capacity;
+}

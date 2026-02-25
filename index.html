@@ -1807,6 +1807,50 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- 🗺️ MAPAS: Generación y Capacidades -->
+                        <div class="maps-subsection">
+                            <h5>🗺️ Visualización Geográfica</h5>
+                            <div class="maps-grid">
+                                <div class="map-card high-priority" id="mapCapacity6h">
+                                    <div class="map-title">M1: Installed Capacity by Bus</div>
+                                    <div class="map-status">🗺️ Interactive Map</div>
+                                    <div id="d3MapCapacity6h" class="map-container-mini" style="height: 180px; background: linear-gradient(135deg, #1e293b, #334155); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="initMiniMap('d3MapCapacity6h', 'capacity')">
+                                        <div style="text-align: center; color: #94a3b8;">
+                                            <div style="font-size: 24px; margin-bottom: 8px;">🗺️</div>
+                                            <div style="font-size: 11px;">Click to load map</div>
+                                            <div style="font-size: 9px; margin-top: 4px; opacity: 0.7;">Capacidad instalada por nodo</div>
+                                        </div>
+                                    </div>
+                                    <div class="map-data-preview">
+                                        <div class="preview-row"><span>Total Nodes:</span> <strong>37</strong></div>
+                                        <div class="preview-row"><span>Max Capacity:</span> <strong>Gas 275 GW</strong></div>
+                                        <div class="preview-row"><span>North DE:</span> <strong>High Wind</strong></div>
+                                        <div class="preview-row"><span>South DE:</span> <strong>High Solar</strong></div>
+                                    </div>
+                                    <div class="map-note">📍 Source: nodal_capacities.csv</div>
+                                </div>
+                                
+                                <div class="map-card high-priority" id="mapGeneration6h">
+                                    <div class="map-title">M2: Generation by Node</div>
+                                    <div class="map-status">🗺️ Interactive Map</div>
+                                    <div id="d3MapGeneration6h" class="map-container-mini" style="height: 180px; background: linear-gradient(135deg, #1e293b, #334155); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="initMiniMap('d3MapGeneration6h', 'generation')">
+                                        <div style="text-align: center; color: #94a3b8;">
+                                            <div style="font-size: 24px; margin-bottom: 8px;">⚡</div>
+                                            <div style="font-size: 11px;">Click to load map</div>
+                                            <div style="font-size: 9px; margin-top: 4px; opacity: 0.7;">Generación por nodo</div>
+                                        </div>
+                                    </div>
+                                    <div class="map-data-preview">
+                                        <div class="preview-row"><span>Total Gen:</span> <strong>580 TWh</strong></div>
+                                        <div class="preview-row"><span>Offshore:</span> <strong>North Sea</strong></div>
+                                        <div class="preview-row"><span>Solar:</span> <strong>Bavaria, NRW</strong></div>
+                                        <div class="preview-row"><span>Industry:</span> <strong>Ruhr, Saxony</strong></div>
+                                    </div>
+                                    <div class="map-note">📍 Source: nodal_energy.csv</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Sección B: Operación DH -->
@@ -1865,6 +1909,31 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- 🗺️ MAPA: District Heating -->
+                        <div class="maps-subsection">
+                            <h5>🗺️ Visualización Geográfica</h5>
+                            <div class="maps-grid single-map">
+                                <div class="map-card high-priority wide" id="mapHeat6h">
+                                    <div class="map-title">M4: District Heating Coverage</div>
+                                    <div class="map-status">🗺️ Interactive Map</div>
+                                    <div id="d3MapHeat6h" class="map-container-mini" style="height: 200px; background: linear-gradient(135deg, #1e293b, #334155); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="initMiniMap('d3MapHeat6h', 'heat')">
+                                        <div style="text-align: center; color: #94a3b8;">
+                                            <div style="font-size: 24px; margin-bottom: 8px;">🔥</div>
+                                            <div style="font-size: 11px;">Click to load map</div>
+                                            <div style="font-size: 9px; margin-top: 4px; opacity: 0.7;">Cobertura de district heating</div>
+                                        </div>
+                                    </div>
+                                    <div class="map-data-preview">
+                                        <div class="preview-row"><span>Coverage:</span> <strong>14.2%</strong></div>
+                                        <div class="preview-row"><span>Urban DH:</span> <strong>Berlin, Munich</strong></div>
+                                        <div class="preview-row"><span>Industrial:</span> <strong>Ruhr, Hamburg</strong></div>
+                                        <div class="preview-row"><span>CHP Sites:</span> <strong>23 nodes</strong></div>
+                                    </div>
+                                    <div class="map-note">📍 Source: nodal_heat.csv</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Sección C: Sistema Eléctrico -->
@@ -1920,6 +1989,31 @@
                                     <div class="tooltip-title">🔥 Horas Stress Térmico</div>
                                     <div class="tooltip-row"><span class="tooltip-value">156 horas/año</span></div>
                                     <div class="tooltip-desc">Horas donde oferta térmica no cubre demanda. Indica necesidad de mayor capacidad o flexibilidad.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 🗺️ MAPA: Sistema Eléctrico (Precios) -->
+                        <div class="maps-subsection">
+                            <h5>🗺️ Visualización Geográfica</h5>
+                            <div class="maps-grid single-map">
+                                <div class="map-card high-priority wide" id="mapPrices6h">
+                                    <div class="map-title">M3: Marginal Prices by Node</div>
+                                    <div class="map-status">🗺️ Interactive Map</div>
+                                    <div id="d3MapPrices6h" class="map-container-mini" style="height: 200px; background: linear-gradient(135deg, #1e293b, #334155); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="initMiniMap('d3MapPrices6h', 'prices')">
+                                        <div style="text-align: center; color: #94a3b8;">
+                                            <div style="font-size: 24px; margin-bottom: 8px;">💶</div>
+                                            <div style="font-size: 11px;">Click to load map</div>
+                                            <div style="font-size: 9px; margin-top: 4px; opacity: 0.7;">Precios marginales por nodo</div>
+                                        </div>
+                                    </div>
+                                    <div class="map-data-preview">
+                                        <div class="preview-row"><span>National Avg:</span> <strong>€47.7/MWh</strong></div>
+                                        <div class="preview-row"><span>North:</span> <strong>€44.2 (wind)</strong></div>
+                                        <div class="preview-row"><span>South:</span> <strong>€51.3 (import)</strong></div>
+                                        <div class="preview-row"><span>Congestion:</span> <strong>+15%</strong></div>
+                                    </div>
+                                    <div class="map-note">📍 Source: nodal_prices.csv</div>
                                 </div>
                             </div>
                         </div>
