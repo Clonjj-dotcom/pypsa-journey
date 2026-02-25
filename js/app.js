@@ -300,7 +300,11 @@ function selectPreset(preset) {
         'group4': ['AL', 'AT', 'BA', 'BE', 'BG', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'HU', 'IE', 'IS', 'IT', 'LT', 'LU', 'LV', 'ME', 'MK', 'NL', 'NO', 'PL', 'PT', 'RO', 'RS', 'SE', 'SI', 'SK', 'XK']
     };
     
-    document.querySelectorAll('.country').forEach(c => c.classList.remove('selected'));
+    // Clear current selection safely
+    const countries = document.querySelectorAll('.country');
+    if (countries.length > 0) {
+        countries.forEach(c => c.classList.remove('selected'));
+    }
     journeyState.countries = [];
     
     const selected = presets[preset] || [];
@@ -313,10 +317,18 @@ function selectPreset(preset) {
     });
     
     updateCountryDisplay();
+    
+    // Update visual state of buttons
+    const presetBtns = document.querySelectorAll('.preset-btn');
+    presetBtns.forEach(btn => btn.classList.remove('active'));
+    event?.target?.classList?.add('active');
 }
 
 function clearAll() {
-    document.querySelectorAll('.country').forEach(c => c.classList.remove('selected'));
+    const countries = document.querySelectorAll('.country');
+    if (countries.length > 0) {
+        countries.forEach(c => c.classList.remove('selected'));
+    }
     journeyState.countries = [];
     updateCountryDisplay();
 }

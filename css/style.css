@@ -323,6 +323,12 @@ body {
     border-color: var(--primary);
 }
 
+.preset-btn.active {
+    background: var(--primary);
+    border-color: var(--primary-light);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
 .selected-countries {
     background: var(--bg-tertiary);
     border-radius: 8px;
