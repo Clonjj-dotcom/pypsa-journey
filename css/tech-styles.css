@@ -809,15 +809,15 @@
    ======================================== */
 
 .tech-capacity-sliders {
-    margin: 24px 0;
-    padding: 20px;
+    margin: 20px 0;
+    padding: 16px;
     background: var(--bg-secondary);
     border-radius: 12px;
     border: 1px solid var(--border);
 }
 
 .sliders-title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 4px;
@@ -827,95 +827,119 @@
 }
 
 .sliders-subtitle {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
+/* Compact grid layout for sliders */
 .sliders-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
 }
 
-/* Individual slider row */
+/* Scrollbar styling */
+.sliders-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sliders-container::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.sliders-container::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+/* Individual slider row - compact */
 .tech-slider-row {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 10px 12px;
+    gap: 8px;
+    padding: 8px 10px;
     background: var(--bg-tertiary);
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--border);
 }
 
 .tech-slider-icon {
-    font-size: 20px;
-    width: 30px;
+    font-size: 16px;
+    width: 24px;
     text-align: center;
 }
 
 .tech-slider-name {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: var(--text-primary);
-    width: 120px;
+    width: 70px;
     flex-shrink: 0;
+    line-height: 1.2;
 }
 
 .tech-slider {
     flex: 1;
-    height: 6px;
+    height: 4px;
     background: var(--bg-secondary);
-    border-radius: 3px;
+    border-radius: 2px;
     -webkit-appearance: none;
+    min-width: 60px;
 }
 
 .tech-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid var(--text-primary);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
 }
 
 .tech-slider-value {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--primary-light);
-    width: 45px;
+    width: 40px;
     text-align: right;
 }
 
+/* Summary bar - compact */
 .sliders-summary {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: 10px;
+    padding: 10px 12px;
     background: var(--bg-tertiary);
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--border);
+    margin-top: 12px;
 }
 
 .sliders-summary .total-label {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--text-secondary);
 }
 
 .sliders-summary .total-value {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--accent-green);
-    min-width: 50px;
+    min-width: 40px;
 }
 
 .sliders-summary .btn-small {
-    padding: 6px 12px;
-    font-size: 11px;
+    padding: 4px 10px;
+    font-size: 10px;
+    margin-left: auto;
 }
 
 /* ========================================
