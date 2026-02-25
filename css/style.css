@@ -1353,3 +1353,142 @@ body {
 .navigation {
     margin-top: 40px;
 }
+
+/* ========================================
+   CO₂ POLITICAL - Mechanism Cards
+   ======================================== */
+
+.co2-panel {
+    padding-bottom: 40px;
+}
+
+.co2-mechanism-section {
+    margin: 24px 0;
+}
+
+.mechanism-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.mechanism-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+    position: relative;
+}
+
+.mechanism-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+}
+
+.mechanism-card.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-color: var(--primary-light);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+}
+
+.mechanism-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    transition: transform 0.2s ease;
+}
+
+.mechanism-card.active .mechanism-icon {
+    transform: scale(1.15);
+}
+
+.mechanism-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.mechanism-card.active .mechanism-name {
+    color: var(--text-primary);
+}
+
+.mechanism-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.mechanism-card.active .mechanism-detail {
+    color: rgba(241, 245, 249, 0.9);
+}
+
+/* Mechanism Options Section */
+.mechanism-options {
+    margin: 24px 0;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    min-height: 100px;
+}
+
+.mechanism-options:empty {
+    display: none;
+}
+
+/* Cap Level Options */
+.cap-level-section,
+.price-section {
+    margin: 20px 0;
+}
+
+.cap-level-section h4,
+.price-section h4 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.cap-presets,
+.price-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.cap-chip,
+.price-chip {
+    padding: 8px 16px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cap-chip:hover,
+.price-chip:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.cap-chip.active,
+.price-chip.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-color: var(--primary-light);
+    color: var(--text-primary);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
