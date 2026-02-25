@@ -2755,35 +2755,171 @@ function updateCustomResults() {
 
 function initMiniMap(containerId, mapType) {
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+        console.error('Container not found:', containerId);
+        return;
+    }
+    
+    // Save dimensions before clearing
+    const rect = container.getBoundingClientRect();
+    const width = Math.max(rect.width, 250);
+    const height = Math.max(rect.height, 150);
     
     // Mark as loaded
     container.classList.add('loaded');
-    container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-size: 12px;">Loading map...</div>';
+    
+    // Show loading
+    container.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-size: 12px;"><div style="font-size: 24px; margin-bottom: 8px;">🗺️</div><div>Loading map...</div></div>';
     
     // Load D3 if not already loaded
     if (typeof d3 === 'undefined') {
         const script = document.createElement('script');
         script.src = 'https://d3js.org/d3.v7.min.js';
-        script.onload = () => renderMiniMap(container, mapType);
+        script.onload = () => {
+            renderMiniMap(container, mapType, width, height);
+        };
+        script.onerror = () => {
+            container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ef4444; font-size: 11px; padding: 10px;">Failed to load D3 library</div>';
+        };
         document.head.appendChild(script);
     } else {
-        renderMiniMap(container, mapType);
+        setTimeout(() => renderMiniMap(container, mapType, width, height), 100);
     }
 }
 
-function renderMiniMap(container, mapType) {
+function renderMiniMap(container, mapType, width, height) {
     // Clear container
     container.innerHTML = '';
     
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    try {
+        console.log(`Rendering ${mapType} map: ${width}x${height}`);
+        
+        // Create SVG
+        const svg = d3.select(container)
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .style('background', '#1e293b');
+        
+        // Germany outline (simplified polygon)
+        const germanyPoints = [
+            [0.15, 0.25], [0.25, 0.15], [0.45, 0.12], [0.65, 0.15], [0.80, 0.22],
+            [0.88, 0.35], [0.85, 0.55], [0.78, 0.72], [0.60, 0.85], [0.40, 0.88],
+            [0.22, 0.82], [0.12, 0.65], [0.10, 0.45], [0.15, 0.25]
+        ];
+        
+        const scaleX = d3.scaleLinear().domain([0, 1]).range([30, width - 30]);
+        const scaleY = d3.scaleLinear().domain([0, 1]).range([height - 30, 30]);
+        
+        // Draw Germany outline
+        const line = d3.line()
+            .x(d => scaleX(d[0]))
+            .y(d => scaleY(d[1]))
+            .curve(d3.curveLinearClosed);
+        
+        svg.append('path')
+            .datum(germanyPoints)
+            .attr('d', line)
+            .attr('fill', '#334155')
+            .attr('stroke', '#475569')
+            .attr('stroke-width', 2);
+        
+        // Get data and add points
+        const nodeData = getMockNodeData(mapType);
+        
+        // Add node circles
+        svg.selectAll('circle.node')
+            .data(nodeData)
+            .enter()
+            .append('circle')
+            .attr('class', 'node')
+            .attr('cx', d => scaleX(d.x))
+            .attr('cy', d => scaleY(d.y))
+            .attr('r', d => Math.max(4, Math.min(12, d.value / 8)))
+            .attr('fill', d => d.color)
+            .attr('opacity', 0.85)
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 1.5)
+            .style('cursor', 'pointer');
+        
+        // Add labels
+        svg.selectAll('text.node-label')
+            .data(nodeData)
+            .enter()
+            .append('text')
+            .attr('class', 'node-label')
+            .attr('x', d => scaleX(d.x))
+            .attr('y', d => scaleY(d.y) - 8)
+            .attr('text-anchor', 'middle')
+            .attr('fill', '#e2e8f0')
+            .attr('font-size', '9px')
+            .attr('font-weight', '600')
+            .text(d => d.value);
+        
+        // Add legend box
+        const legendG = svg.append('g')
+            .attr('transform', `translate(8, ${height - 55})`);
+        
+        legendG.append('rect')
+            .attr('width', 110)
+            .attr('height', 48)
+            .attr('fill', 'rgba(15, 23, 42, 0.95)')
+            .attr('stroke', '#475569')
+            .attr('rx', 4);
+        
+        legendG.append('text')
+            .attr('x', 6)
+            .attr('y', 14)
+            .text(mapType.toUpperCase())
+            .attr('fill', '#94a3b8')
+            .attr('font-size', '9px')
+            .attr('font-weight', '600');
+        
+        // Add color indicator
+        const typeColors = {
+            capacity: '#6366f1',
+            generation: '#10b981',
+            prices: '#f59e0b',
+            heat: '#ef4444'
+        };
+        
+        legendG.append('rect')
+            .attr('x', 6)
+            .attr('y', 22)
+            .attr('width', 8)
+            .attr('height', 8)
+            .attr('fill', typeColors[mapType] || '#6366f1')
+            .attr('rx', 2);
+        
+        legendG.append('text')
+            .attr('x', 18)
+            .attr('y', 30)
+            .text('Nodes')
+            .attr('fill', '#cbd5e1')
+            .attr('font-size', '9px');
+        
+        legendG.append('text')
+            .attr('x', 6)
+            .attr('y', 42)
+            .text('Click for details')
+            .attr('fill', '#64748b')
+            .attr('font-size', '8px')
+            .attr('font-style', 'italic');
+            
+    } catch (error) {
+        console.error('Map rendering error:', error);
+        container.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ef4444; font-size: 11px; padding: 10px;">Error: ${error.message}</div>`;
+    }
+}
     
-    // Create SVG
+    // Create SVG with viewBox for responsiveness
     const svg = d3.select(container)
         .append('svg')
-        .attr('width', width)
-        .attr('height', height);
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
     
     // Simplified Germany outline (mock for now)
     const germanyOutline = [
