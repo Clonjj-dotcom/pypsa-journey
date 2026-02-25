@@ -2215,3 +2215,59 @@ body {
     line-height: 1.4;
     font-style: italic;
 }
+
+/* ========================================
+   LAYER 2: Technical DH Analysis
+   ======================================== */
+
+.layer-2 {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid var(--border);
+}
+
+.kpi-subsection {
+    margin: 24px 0;
+}
+
+.kpi-subsection h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.kpi-grid-technical {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.kpi-card.tech-card {
+    background: linear-gradient(135deg, var(--bg-tertiary), rgba(99, 102, 241, 0.05));
+    border-color: var(--border);
+}
+
+.kpi-card.tech-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.1);
+}
+
+.kpi-source {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Layer badge colors */
+.layer-1 .layer-badge {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.layer-2 .layer-badge {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}

@@ -1716,6 +1716,273 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Capa 2: Análisis Técnico DH -->
+                <div class="layer-section layer-2">
+                    <div class="layer-header">
+                        <span class="layer-badge">🟡</span>
+                        <h3>Technical DH Analysis</h3>
+                        <span class="layer-desc">18 Technical Indicators – District Heating Deep Dive</span>
+                    </div>
+                    
+                    <!-- Sección A: Generación y Capacidades -->
+                    <div class="kpi-subsection">
+                        <h4>⚡ Generación y Capacidades</h4>
+                        <div class="kpi-grid-technical">
+                            <!-- KPI 11: Capacidad Solar Total -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">11</div>
+                                <div class="kpi-label">Solar Capacity</div>
+                                <div class="kpi-value">142.5</div>
+                                <div class="kpi-unit">GW | generators.p_nom_opt</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">☀️ Capacidad Solar Total</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">142.5 GW</span></div>
+                                    <div class="tooltip-desc">generators.p_nom_opt para tech='solar'. Capacidad óptima instalada de solar fotovoltaica.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 12: Capacidad Eólica Total -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">12</div>
+                                <div class="kpi-label">Wind Capacity</div>
+                                <div class="kpi-value">98.3</div>
+                                <div class="kpi-unit">GW | generators.p_nom_opt</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">💨 Capacidad Eólica Total</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">98.3 GW</span></div>
+                                    <div class="tooltip-desc">generators.p_nom_opt (onwind + offwind). Capacidad óptima de turbinas eólicas.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 13: Capacidad Heat Pumps -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">13</div>
+                                <div class="kpi-label">Heat Pump Capacity</div>
+                                <div class="kpi-value">45.2</div>
+                                <div class="kpi-unit">GW | links.p_nom_opt</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🔥 Capacidad Heat Pumps</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">45.2 GW</span></div>
+                                    <div class="tooltip-desc">links.p_nom_opt (heat pumps). Capacidad instalada de bombas de calor para DH.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 14: Capacidad CHP -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">14</div>
+                                <div class="kpi-label">CHP Capacity</div>
+                                <div class="kpi-value">28.7</div>
+                                <div class="kpi-unit">GW | generators.p_nom_opt</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🏭 Capacidad CHP</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">28.7 GW</span></div>
+                                    <div class="tooltip-desc">generators.p_nom_opt (CHP). Capacidad de cogeneración para redes de calor.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 15: Factor de Capacidad Solar -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">15</div>
+                                <div class="kpi-label">Solar CF</div>
+                                <div class="kpi-value">14.2%</div>
+                                <div class="kpi-unit">% | mean(generators_t.p) / p_nom</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">☀️ Factor Capacidad Solar</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">14.2%</span></div>
+                                    <div class="tooltip-desc">Capacity Factor = mean(generators_t.p) / p_nom. Ratio de generación real vs. capacidad nominal.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 16: Factor Capacidad Eólico -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">16</div>
+                                <div class="kpi-label">Wind CF</div>
+                                <div class="kpi-value">28.8%</div>
+                                <div class="kpi-unit">% | mean(generators_t.p) / p_nom</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">💨 Factor Capacidad Eólico</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">28.8%</span></div>
+                                    <div class="tooltip-desc">Capacity Factor eólico. Mejor que solar por perfil de generación más constante.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección B: Operación DH -->
+                    <div class="kpi-subsection">
+                        <h4>🔥 Operación District Heating</h4>
+                        <div class="kpi-grid-technical">
+                            <!-- KPI 17: Demanda Térmica Total -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">17</div>
+                                <div class="kpi-label">Total Heat Demand</div>
+                                <div class="kpi-value">856</div>
+                                <div class="kpi-unit">TWh/year | loads_t.p</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🔥 Demanda Térmica Total</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">856 TWh/año</span></div>
+                                    <div class="tooltip-desc">sum(loads_t.p) para heat. Demanda total de calor espacial y temporalmente agregada.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 18: Producción DH Total -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">18</div>
+                                <div class="kpi-label">DH Production</div>
+                                <div class="kpi-value">121.5</div>
+                                <div class="kpi-unit">TWh/year | links_t.p0</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🏭 Producción DH Total</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">121.5 TWh/año</span></div>
+                                    <div class="tooltip-desc">sum(links_t.p0) para heat links. Calor generado y distribuido por la red DH.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 19: Pérdidas DH -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">19</div>
+                                <div class="kpi-label">DH Losses</div>
+                                <div class="kpi-value">8.2%</div>
+                                <div class="kpi-unit">% | links.efficiency</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">📉 Pérdidas DH</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">8.2%</span></div>
+                                    <div class="tooltip-desc">links.efficiency. Pérdidas de transporte en redes de calor según distancia/aislamiento.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 20: COP Promedio Heat Pumps -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">20</div>
+                                <div class="kpi-label">Avg Heat Pump COP</div>
+                                <div class="kpi-value">3.2</div>
+                                <div class="kpi-unit">COP | links.efficiency</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🔥 COP Heat Pumps</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">3.2</span></div>
+                                    <div class="tooltip-desc">links.efficiency representa COP. Eficiencia de bombas de calor (3.2 = 1kWh eléctrico → 3.2kWh calor).</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección C: Sistema Eléctrico -->
+                    <div class="kpi-subsection">
+                        <h4>⚡ Sistema Eléctrico</h4>
+                        <div class="kpi-grid-technical">
+                            <!-- KPI 21: Curtailment Renovable -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">21</div>
+                                <div class="kpi-label">Renewable Curtailment</div>
+                                <div class="kpi-value">3.8%</div>
+                                <div class="kpi-unit">% | Available - Used</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🌱 Curtailment Renovable</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">3.8%</span></div>
+                                    <div class="tooltip-desc">Energía renovable disponible pero no utilizada por constraints de red/balance. Menor con mayor resolución temporal.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 22: Peak Net Load -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">22</div>
+                                <div class="kpi-label">Peak Net Load</div>
+                                <div class="kpi-value">98.5</div>
+                                <div class="kpi-unit">GW | Demand - VRE</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">⚡ Peak Net Load</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">98.5 GW</span></div>
+                                    <div class="tooltip-desc">Demanda eléctrica pico menos generación renovable variable. Define capacidad de respaldo necesaria.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 23: Flexibilidad Térmica Usada -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">23</div>
+                                <div class="kpi-label">Thermal Flex Used</div>
+                                <div class="kpi-value">68%</div>
+                                <div class="kpi-unit">% | stores_t.e / e_nom</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🔋 Flexibilidad Térmica</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">68%</span></div>
+                                    <div class="tooltip-desc">Uso relativo de almacenamiento térmico. Mayor uso indica mayor flexibilidad del sistema DH.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 24: Horas de Stress Térmico -->
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">24</div>
+                                <div class="kpi-label">Heat Stress Hours</div>
+                                <div class="kpi-value">156</div>
+                                <div class="kpi-unit">hours | supply < demand</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🔥 Horas Stress Térmico</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">156 horas/año</span></div>
+                                    <div class="tooltip-desc">Horas donde oferta térmica no cubre demanda. Indica necesidad de mayor capacidad o flexibilidad.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección D: Comparaciones 2025 vs 2050 -->
+                    <div class="kpi-subsection">
+                        <h4>📊 Comparaciones 2025 vs 2050</h4>
+                        <div class="kpi-grid-technical">
+                            <!-- KPI 25: Reducción Emisiones 2050 -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">25</div>
+                                <div class="kpi-label">CO₂ Reduction 2050</div>
+                                <div class="kpi-value">-87%</div>
+                                <div class="kpi-unit">vs 2025 | carriers.co2</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🌱 Reducción CO₂ 2050</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">-87%</span></div>
+                                    <div class="tooltip-desc">Reducción proyectada de emisiones CO₂ en escenario Net Zero 2050 vs. baseline 2025.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 26: Penetración DH 2050 -->
+                            <div class="kpi-card tech-card heat-card highlight-dh">
+                                <div class="kpi-number">26</div>
+                                <div class="kpi-label">DH Penetration 2050</div>
+                                <div class="kpi-value">52%</div>
+                                <div class="kpi-unit">% | vs 14.2% 2025</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">🔥 Penetración DH 2050</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">52%</span></div>
+                                    <div class="tooltip-desc">Proyección de penetración DH en 2050. Aumento de 14.2% a 52% con políticas de descarbonización.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 27: Share Electrificación 2050 -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">27</div>
+                                <div class="kpi-label">Electrification 2050</div>
+                                <div class="kpi-value">68%</div>
+                                <div class="kpi-unit">% | vs 35% 2025</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">⚡ Electrificación 2050</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">68%</span></div>
+                                    <div class="tooltip-desc">Grado de electrificación del calor en 2050. Transición de 35% a 68% mediante heat pumps.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI 28: Costo Sistema 2050 -->
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">28</div>
+                                <div class="kpi-label">System Cost 2050</div>
+                                <div class="kpi-value">€124B</div>
+                                <div class="kpi-unit">/year | network.objective</div>
+                                <div class="tooltip-content">
+                                    <div class="tooltip-title">💰 Costo Sistema 2050</div>
+                                    <div class="tooltip-row"><span class="tooltip-value">€124B/año</span></div>
+                                    <div class="tooltip-desc">Costo anualizado en escenario 2050. Mayor que 2025 por inversión en descarbonización.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
