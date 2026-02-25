@@ -2426,197 +2426,33 @@
             </div>
         </div>
     </section>
-                <div class="layer-header">
-                    <span class="layer-badge">🔵</span>
-                    <h3>Executive Summary</h3>
-                    <span class="layer-desc">10 Essential KPIs – Immediate Visibility</span>
-                </div>
-                
-                <div class="kpi-grid-executive">
-                    <!-- Row 1: Core Economics -->
-                    <div class="kpi-card primary tooltip-trigger">
-                        <div class="kpi-number">1</div>
-                        <div class="kpi-label">Total System Cost</div>
-                        <div class="kpi-value" id="execTotalCost">€89.25B</div>
-                        <div class="kpi-unit">€/year</div>
-                        <div class="kpi-source">PyPSA objective</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">💰 Total System Cost</div>
-                            <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
-                            <div class="tooltip-desc">Annualized total system cost including generation, storage, transmission, and sector-coupling investments and operation. Compare 6h vs 12h temporal resolution.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card tooltip-trigger">
-                        <div class="kpi-number">2</div>
-                        <div class="kpi-label">Electricity Price</div>
-                        <div class="kpi-value" id="execAvgPrice">€38.5</div>
-                        <div class="kpi-unit">€/MWh</div>
-                        <div class="kpi-source">mean(marginal_price)</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">⚡ Electricity Price</div>
-                            <div class="tooltip-row"><span class="tooltip-label">6h Mean:</span><span class="tooltip-value">€38.5/MWh</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">12h Mean:</span><span class="tooltip-value">€38.5/MWh</span></div>
-                            <div class="tooltip-desc">Average marginal electricity price across all nodes and time steps. Compare temporal resolution impact on pricing.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card highlight-dh tooltip-trigger">
-                        <div class="kpi-number">3</div>
-                        <div class="kpi-label">DH Penetration ⭐</div>
-                        <div class="kpi-value" id="execDHPenetration">14.2%</div>
-                        <div class="kpi-unit">of total heat</div>
-                        <div class="kpi-source">Thesis KPI</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">🔥 District Heating Penetration</div>
-                            <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">14.2%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">14.2%</span></div>
-                            <div class="tooltip-desc">⭐ Key Thesis KPI: Compare how temporal resolution affects district heating penetration calculations. Both resolutions should show similar aggregate values but may differ in peak demands.</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Row 2: Environmental & Generation -->
-                    <div class="kpi-card tooltip-trigger">
-                        <div class="kpi-number">4</div>
-                        <div class="kpi-label">CO₂ Emissions</div>
-                        <div class="kpi-value" id="execCO2">350.5</div>
-                        <div class="kpi-unit">Mt CO₂</div>
-                        <div class="kpi-source">carriers.co2_emissions</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">🌱 CO₂ Emissions</div>
-                            <div class="tooltip-row"><span class="tooltip-label">2025:</span><span class="tooltip-value">350.5 Mt</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">45 Mt (-87%)</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Main Source:</span><span class="tooltip-value">Gas, Coal</span></div>
-                            <div class="tooltip-desc">Total annual CO₂ emissions from all sectors (power, heat, transport, industry). Calculated from fuel consumption × emission factors.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card tooltip-trigger">
-                        <div class="kpi-number">5</div>
-                        <div class="kpi-label">Renewable Share</div>
-                        <div class="kpi-value" id="execRenewable">35%</div>
-                        <div class="kpi-unit">% generation</div>
-                        <div class="kpi-source">solar + wind + hydro</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">🌞 Renewable Share</div>
-                            <div class="tooltip-row"><span class="tooltip-label">2025:</span><span class="tooltip-value">35.2%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">85%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Components:</span><span class="tooltip-value">Solar, Wind, Hydro</span></div>
-                            <div class="tooltip-desc">Share of total electricity generation from renewable sources. Includes utility and rooftop solar, onshore/offshore wind, and hydro.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card tooltip-trigger">
-                        <div class="kpi-number">6</div>
-                        <div class="kpi-label">Peak Capacity</div>
-                        <div class="kpi-value" id="execPeakDemand">275</div>
-                        <div class="kpi-unit">GW (gas)</div>
-                        <div class="kpi-source">p_nom_opt</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">⚡ Peak Installed Capacity</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Gas:</span><span class="tooltip-value">274.7 GW</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Solar:</span><span class="tooltip-value">242.5 GW</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Wind Total:</span><span class="tooltip-value">73.5 GW</span></div>
-                            <div class="tooltip-desc">Maximum installed generation capacity by technology. Gas remains the largest capacity for flexibility, followed by solar.</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Row 3: Heat & Thermal -->
-                    <div class="kpi-card tooltip-trigger">
-                        <div class="kpi-number">7</div>
-                        <div class="kpi-label">Total Generation</div>
-                        <div class="kpi-value" id="execTotalGen">2,847</div>
-                        <div class="kpi-unit">TWh/year</div>
-                        <div class="kpi-source">generators_t.p.sum</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">⚡ Total Generation</div>
-                            <div class="tooltip-row"><span class="tooltip-label">2025 Total:</span><span class="tooltip-value">2,847 TWh</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Main Source:</span><span class="tooltip-value">Gas (36%)</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Renewables:</span><span class="tooltip-value">~35%</span></div>
-                            <div class="tooltip-desc">Total annual electricity generation across all technologies and nodes. Includes power sector losses and own consumption.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card heat-card tooltip-trigger">
-                        <div class="kpi-number">8</div>
-                        <div class="kpi-label">Peak Heat Demand</div>
-                        <div class="kpi-value" id="execPeakHeat">1,420</div>
-                        <div class="kpi-unit">MW</div>
-                        <div class="kpi-source">max(heat_demand)</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">🔥 Peak Heat Demand</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Peak Load:</span><span class="tooltip-value">1,420 MW</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Season:</span><span class="tooltip-value">Winter peak</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">1,250 MW</span></div>
-                            <div class="tooltip-desc">Maximum thermal demand for district heating networks. Occurs typically in January during cold spells.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card heat-card tooltip-trigger">
-                        <div class="kpi-number">9</div>
-                        <div class="kpi-label">TES Capacity</div>
-                        <div class="kpi-value" id="execTES">8.4</div>
-                        <div class="kpi-unit">GWh</div>
-                        <div class="kpi-source">stores.e_nom_opt</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">🔋 Thermal Energy Storage</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Current:</span><span class="tooltip-value">8.4 GWh</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Types:</span><span class="tooltip-value">Water tanks, pits</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">45 GWh</span></div>
-                            <div class="tooltip-desc">Thermal energy storage (TES) capacity for district heating. Enables demand shifting and CHP optimization.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="kpi-card tooltip-trigger">
-                        <div class="kpi-number">10</div>
-                        <div class="kpi-label">Heat Electrification</div>
-                        <div class="kpi-value" id="execElectrification">42.3%</div>
-                        <div class="kpi-unit">% from electricity</div>
-                        <div class="kpi-source">heat_pumps + resistive</div>
-                        <div class="tooltip-content">
-                            <div class="tooltip-title">⚡ Heat Electrification</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Current:</span><span class="tooltip-value">42.3%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Heat Pumps:</span><span class="tooltip-value">~37%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">2050 Target:</span><span class="tooltip-value">68.5%</span></div>
-                            <div class="tooltip-desc">Share of heat supplied by electricity (heat pumps, resistive heating). Key metric for sector coupling and electrification.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Generation Mix Mini Chart -->
-            <div class="mini-chart-section">
-                <h4>⚡ Generation Mix 2025</h4>
-                <div class="mix-bar-container" id="generationMixMini"></div>
-            </div>
-
-            <!-- 🟡 CAPA 2: TECHNICAL ANALYSIS (Expandible) -->
-            <div class="layer-section layer-2">
-                <div class="layer-header expandable" onclick="toggleLayer('layer2')">
-                    <span class="layer-badge">🟡</span>
-                    <h3>Technical Analysis</h3>
-                    <span class="layer-desc">15-20 Indicators + Maps • Click to expand</span>
-                    <span class="expand-icon">▼</span>
-                </div>
-                
-                <div id="layer2" class="layer-content collapsed">
-                    <!-- Maps Section -->
-                    <div class="maps-section">
-                        <h4>🗺️ Geographic Visualization</h4>
-                        <div class="maps-grid">
-                            <div class="map-card high-priority" id="mapCapacity">
-                                <div class="map-title">M1: Installed Capacity by Bus</div>
-                                <div class="map-status">🗺️ Visualización Geográfica</div>
-                                <div class="map-data-preview">
-                                    <div class="preview-row"><span>Total Nodes:</span> <strong>37</strong></div>
-                                    <div class="preview-row"><span>Max Capacity:</span> <strong>Gas 275 GW</strong></div>
-                                    <div class="preview-row"><span>North DE:</span> <strong>High Wind</strong></div>
-                                    <div class="preview-row"><span>South DE:</span> <strong>High Solar</strong></div>
-                                </div>
-                                <div class="map-note">📍 Source: nodal_capacities.csv</div>
-                                <div class="map-priority">⭐ High</div>
-                            </div>
+    <!-- 🟡 CAPA 2: TECHNICAL ANALYSIS (Expandible) -->
+    <div class="layer-section layer-2">
+        <div class="layer-header expandable" onclick="toggleLayer('layer2')">
+            <span class="layer-badge">🟡</span>
+            <h3>Technical Analysis</h3>
+            <span class="layer-desc">15-20 Indicators + Maps • Click to expand</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div id="layer2" class="layer-content collapsed">
+            <!-- Maps Section -->
+            <div class="maps-section">
+                <h4>🗺️ Geographic Visualization</h4>
+                <div class="maps-grid">
+                    <div class="map-card high-priority" id="mapCapacity">
+                        <div class="map-title">M1: Installed Capacity by Bus</div>
+                        <div class="map-status">🗺️ Visualización Geográfica</div>
+                        <div class="map-data-preview">
+                            <div class="preview-row"><span>Total Nodes:</span> <strong>37</strong></div>
+                            <div class="preview-row"><span>Max Capacity:</span> <strong>Gas 275 GW</strong></div>
+                            <div class="preview-row"><span>North DE:</span> <strong>High Wind</strong></div>
+                            <div class="preview-row"><span>South DE:</span> <strong>High Solar</strong></div>
+                        </div>
+                        <div class="map-note">📍 Source: nodal_capacities.csv</div>
+                        <div class="map-priority">⭐ High</div>
+                    </div>
                             
                             <div class="map-card high-priority" id="mapGeneration">
                                 <div class="map-title">M2: Generation by Node</div>
