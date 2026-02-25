@@ -1814,3 +1814,210 @@ body {
     color: var(--primary-light);
     font-size: 16px;
 }
+
+/* ========================================
+   SUB-TABS FOR BASE RESULTS
+   ======================================== */
+
+.sub-tabs {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+.sub-tab {
+    flex: 1;
+    padding: 12px 24px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.sub-tab:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.sub-tab.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-color: var(--primary-light);
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.subtab-content {
+    display: none;
+}
+
+.subtab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Comparison table */
+.compare-table-container {
+    margin: 24px 0;
+    overflow-x: auto;
+}
+
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.compare-table th {
+    background: var(--bg-tertiary);
+    padding: 16px 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border);
+}
+
+.compare-table td {
+    padding: 14px 12px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.compare-table tr.highlight {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.compare-table tr.highlight-heat {
+    background: rgba(234, 88, 12, 0.1);
+}
+
+.tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.tag.neutral { background: var(--bg-tertiary); color: var(--text-secondary); }
+.tag.warning { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.tag.slight-positive { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.tag.slight-negative { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+
+.highlight-diff { position: relative; }
+.highlight-diff::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.insights-box {
+    margin: 32px 0;
+    padding: 24px;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.insights-box h4 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.insights-box li {
+    margin: 12px 0;
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.thesis-note {
+    margin-top: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: 12px;
+    border-left: 4px solid var(--primary);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.mix-section {
+    margin: 24px 0;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+.mix-bar-container {
+    display: flex;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.mix-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.mix-bar.gas-bar { background: linear-gradient(90deg, #6b7280, #9ca3af); }
+.mix-bar.solar-bar { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.mix-bar.wind-bar { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.mix-bar.coal-bar { background: linear-gradient(90deg, #451a03, #78350f); }
+.mix-bar.other-bar { background: linear-gradient(90deg, #475569, #64748b); }
+
+.mix-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.legend-item .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-item .dot.solar { background: #f59e0b; }
+.legend-item .dot.wind { background: #3b82f6; }
+.legend-item .dot.gas { background: #6b7280; }
+.legend-item .dot.coal { background: #451a03; }
+.legend-item .dot.other { background: #475569; }

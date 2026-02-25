@@ -2289,11 +2289,30 @@ function initSimpleTooltips() {
     });
 }
 
-function switchBaseYear(year) {
-    // Update buttons
-    document.querySelectorAll('.year-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.year === year);
+// Sub-tab switching for Base Results
+function switchSubTab(subtab) {
+    // Update button states
+    document.querySelectorAll('.sub-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.subtab === subtab);
     });
+    
+    // Show/hide content
+    document.querySelectorAll('.subtab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    document.getElementById(`subtab-${subtab}`).classList.add('active');
+}
+
+function switchBaseYear(year) {
+    // Legacy function - redirect to sub-tabs
+    if (year === '2025-6h') {
+        switchSubTab('6h');
+    } else if (year === '2025-12h') {
+        switchSubTab('12h');
+    } else if (year === 'compare') {
+        switchSubTab('compare');
+    }
+}
     
     // Update display
     if (year === 'compare') {
