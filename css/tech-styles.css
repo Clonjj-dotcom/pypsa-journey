@@ -22,11 +22,12 @@
     background: var(--bg-secondary);
     border: 2px solid var(--border);
     border-radius: 8px;
-    padding: 16px;
+    padding: 12px 8px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+    min-height: 100px;
 }
 
 .tech-card:hover {
@@ -44,25 +45,27 @@
 }
 
 .tech-icon {
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-
-.tech-name {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 24px;
     margin-bottom: 4px;
 }
 
-.tech-cost {
+.tech-name {
     font-size: 11px;
-    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 2px;
+    line-height: 1.2;
+}
+
+/* Hide inline details - show in tooltip */
+.tech-cost,
+.tech-capacity {
+    display: none;
 }
 
 .tech-status {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--accent-cyan);
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
 /* Selection Summary */
@@ -703,4 +706,100 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 8px;
+}
+
+/* ========================================
+   TECH TOOLTIPS ON HOVER
+   ======================================== */
+
+.tech-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    padding: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+    margin-bottom: 12px;
+    pointer-events: none;
+}
+
+.tech-card:hover .tech-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+.tech-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--bg-primary);
+}
+
+.tooltip-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tech-tooltip p {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.tooltip-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.tooltip-specs .spec {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+}
+
+.tooltip-specs .spec span:first-child {
+    color: var(--text-muted);
+}
+
+.tooltip-specs .spec span:last-child {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Category title smaller */
+.category-title {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 20px 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-title .category-icon {
+    font-size: 14px;
+}
+
+.category-title .category-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
 }
