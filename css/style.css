@@ -2021,3 +2021,197 @@ body {
 .legend-item .dot.gas { background: #6b7280; }
 .legend-item .dot.coal { background: #451a03; }
 .legend-item .dot.other { background: #475569; }
+
+/* ========================================
+   KPI GRID - Executive Summary Cards
+   ======================================== */
+
+.kpi-grid-executive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.kpi-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+    position: relative;
+    min-height: 140px;
+}
+
+.kpi-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+    background: var(--bg-secondary);
+}
+
+.kpi-card.primary {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--bg-tertiary), rgba(99, 102, 241, 0.1));
+}
+
+.kpi-card.highlight-dh {
+    border-color: var(--success);
+    background: linear-gradient(135deg, var(--bg-tertiary), rgba(16, 185, 129, 0.1));
+}
+
+.kpi-card.highlight-dh:hover {
+    border-color: var(--success);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+}
+
+.kpi-card.heat-card {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, var(--bg-tertiary), rgba(245, 158, 11, 0.1));
+}
+
+.kpi-card.heat-card:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.15);
+}
+
+.kpi-number {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.kpi-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 12px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.kpi-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.kpi-card.highlight-dh .kpi-value {
+    background: linear-gradient(135deg, var(--text-primary), var(--success));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.kpi-card.heat-card .kpi-value {
+    background: linear-gradient(135deg, var(--text-primary), #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.kpi-unit {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* KPI Tooltip on Hover */
+.kpi-card .tooltip-content {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    min-width: 260px;
+    max-width: 320px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.kpi-card:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.kpi-card .tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--bg-secondary);
+}
+
+.tooltip-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 12px;
+}
+
+.tooltip-label {
+    color: var(--text-muted);
+}
+
+.tooltip-value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.tooltip-value.better {
+    color: var(--success);
+}
+
+.tooltip-value.worse {
+    color: var(--danger);
+}
+
+.tooltip-desc {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    font-style: italic;
+}
