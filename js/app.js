@@ -2227,7 +2227,7 @@ function initBaseResults() {
         console.log('Using baseDataReal with', Object.keys(baseDataReal).length, 'scenarios');
         Object.assign(baseData, baseDataReal);
     }
-    switchBaseYear('2025');
+    switchBaseYear('2025-6h');  // Default to 6h resolution
     
     // Initialize Layer 2 collapsed by default
     const layer2 = document.getElementById('layer2');
