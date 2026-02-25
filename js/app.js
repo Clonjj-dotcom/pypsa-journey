@@ -89,14 +89,29 @@ function selectSnapshot(year) {
 // ==================== TIME PERIOD ====================
 
 function selectTimePeriod(period) {
+    if (!period || !timePeriodConfig[period]) {
+        console.warn('Invalid time period:', period);
+        return;
+    }
+    
     journeyState.timePeriod = period;
     
-    // Update UI
-    document.querySelectorAll('.time-card').forEach(card => {
-        card.classList.toggle('active', card.dataset.time === period);
+    // Update UI safely
+    const cards = document.querySelectorAll('.time-card');
+    if (cards.length === 0) {
+        console.warn('No time cards found');
+        return;
+    }
+    
+    cards.forEach(card => {
+        const isActive = card.dataset.time === period;
+        card.classList.toggle('active', isActive);
     });
     
     updateTemporalDisplay();
+    
+    // Log para debug
+    console.log('Time period selected:', period, timePeriodConfig[period]);
 }
 
 const timePeriodConfig = {
@@ -199,12 +214,26 @@ function updateTemporalDisplay() {
     const spanEl = document.getElementById('spanDisplay');
     
     const timeConfig = timePeriodConfig[journeyState.timePeriod];
-    if (timeEl) timeEl.textContent = `${timeConfig.label} (${timeConfig.days} days)`;
-    if (snapshotEl) snapshotEl.textContent = journeyState.snapshot;
-    if (nodesEl) nodesEl.textContent = journeyState.nodes;
-    if (horizonEl) horizonEl.textContent = journeyState.horizon;
+    
+    if (!timeConfig) {
+        console.warn('No time config for:', journeyState.timePeriod);
+        return;
+    }
+    
+    if (timeEl) {
+        timeEl.textContent = `${timeConfig.label} (${timeConfig.days} days)`;
+    }
+    if (snapshotEl) {
+        snapshotEl.textContent = journeyState.snapshot || 'N/A';
+    }
+    if (nodesEl) {
+        nodesEl.textContent = journeyState.nodes || 'N/A';
+    }
+    if (horizonEl) {
+        horizonEl.textContent = journeyState.horizon || 'N/A';
+    }
     if (spanEl) {
-        const years = journeyState.horizon - journeyState.snapshot;
+        const years = (journeyState.horizon || 0) - (journeyState.snapshot || 0);
         spanEl.textContent = `${years} year${years !== 1 ? 's' : ''}`;
     }
 }
