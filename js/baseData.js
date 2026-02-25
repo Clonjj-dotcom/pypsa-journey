@@ -1,7 +1,7 @@
 // Base Results Data - 6h vs 12h Resolution Comparison
 // Data from PyPSA simulations: germany-2025-true-baseline-v2
 
-const baseDataReal = {
+const baseData = {
     '2025-6h': {
         totalCost: 89.25,
         avgPrice: 38.5,
@@ -32,5 +32,5 @@ const baseDataReal = {
 
 // Export for use in app.js
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { baseDataReal };
+    module.exports = { baseData };
 }

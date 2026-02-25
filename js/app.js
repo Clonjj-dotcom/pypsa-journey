@@ -2312,7 +2312,6 @@ function switchBaseYear(year) {
     } else if (year === 'compare') {
         switchSubTab('compare');
     }
-}
     
     // Update display
     if (year === 'compare') {
