@@ -1539,12 +1539,26 @@
                     <p class="screen-desc">1460 timesteps • 37 nodes • 6-hour temporal resolution</p>
                 </div>
 
+                <!-- Export Actions -->
+                <div class="export-actions">
+                    <button class="export-btn" onclick="downloadResultsPDF()">
+                        <span>📄</span> Export PDF Report
+                    </button>
+                    <button class="export-btn" onclick="downloadResultsCSV()">
+                        <span>📊</span> Export Data (CSV)
+                    </button>
+                    <button class="export-btn" onclick="copyResultsLink()">
+                        <span>🔗</span> Share Results
+                    </button>
+                </div>
+
                 <!-- Capa 1: Executive Summary -->
                 <div class="layer-section layer-1">
                     <div class="layer-header">
                         <span class="layer-badge">🔵</span>
                         <h3>Executive Summary</h3>
                         <span class="layer-desc">10 Essential KPIs – Germany 2025 (6h)</span>
+                        <span class="resolution-badge">6h Resolution</span>
                     </div>
                     
                     <div class="kpi-grid-executive">
