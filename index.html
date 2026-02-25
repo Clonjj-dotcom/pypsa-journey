@@ -2165,6 +2165,151 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Capa 2: Análisis Técnico DH -->
+                <div class="layer-section layer-2">
+                    <div class="layer-header">
+                        <span class="layer-badge">🟡</span>
+                        <h3>Technical DH Analysis</h3>
+                        <span class="layer-desc">18 Technical Indicators – Germany 2025 (12h)</span>
+                    </div>
+                    
+                    <!-- Sección A: Generación y Capacidades -->
+                    <div class="kpi-subsection">
+                        <h4>⚡ Generación y Capacidades</h4>
+                        <div class="kpi-grid-technical">
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">11</div>
+                                <div class="kpi-label">Solar Capacity</div>
+                                <div class="kpi-value">142.5</div>
+                                <div class="kpi-unit">GW | generators.p_nom_opt</div>
+                            </div>
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">12</div>
+                                <div class="kpi-label">Wind Capacity</div>
+                                <div class="kpi-value">98.3</div>
+                                <div class="kpi-unit">GW | generators.p_nom_opt</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">13</div>
+                                <div class="kpi-label">Heat Pump Capacity</div>
+                                <div class="kpi-value">44.8</div>
+                                <div class="kpi-unit">GW | links.p_nom_opt</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">14</div>
+                                <div class="kpi-label">CHP Capacity</div>
+                                <div class="kpi-value">28.5</div>
+                                <div class="kpi-unit">GW | generators.p_nom_opt</div>
+                            </div>
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">15</div>
+                                <div class="kpi-label">Solar CF</div>
+                                <div class="kpi-value">14.0%</div>
+                                <div class="kpi-unit">% | mean(generators_t.p) / p_nom</div>
+                            </div>
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">16</div>
+                                <div class="kpi-label">Wind CF</div>
+                                <div class="kpi-value">28.5%</div>
+                                <div class="kpi-unit">% | mean(generators_t.p) / p_nom</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección B: Operación DH -->
+                    <div class="kpi-subsection">
+                        <h4>🔥 Operación District Heating</h4>
+                        <div class="kpi-grid-technical">
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">17</div>
+                                <div class="kpi-label">Total Heat Demand</div>
+                                <div class="kpi-value">862</div>
+                                <div class="kpi-unit">TWh/year | loads_t.p</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">18</div>
+                                <div class="kpi-label">DH Production</div>
+                                <div class="kpi-value">122.4</div>
+                                <div class="kpi-unit">TWh/year | links_t.p0</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">19</div>
+                                <div class="kpi-label">DH Losses</div>
+                                <div class="kpi-value">8.5%</div>
+                                <div class="kpi-unit">% | links.efficiency</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">20</div>
+                                <div class="kpi-label">Avg Heat Pump COP</div>
+                                <div class="kpi-value">3.1</div>
+                                <div class="kpi-unit">COP | links.efficiency</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección C: Sistema Eléctrico -->
+                    <div class="kpi-subsection">
+                        <h4>⚡ Sistema Eléctrico</h4>
+                        <div class="kpi-grid-technical">
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">21</div>
+                                <div class="kpi-label">Renewable Curtailment</div>
+                                <div class="kpi-value">4.2%</div>
+                                <div class="kpi-unit">% | Available - Used</div>
+                            </div>
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">22</div>
+                                <div class="kpi-label">Peak Net Load</div>
+                                <div class="kpi-value">101.2</div>
+                                <div class="kpi-unit">GW | Demand - VRE</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">23</div>
+                                <div class="kpi-label">Thermal Flex Used</div>
+                                <div class="kpi-value">65%</div>
+                                <div class="kpi-unit">% | stores_t.e / e_nom</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card">
+                                <div class="kpi-number">24</div>
+                                <div class="kpi-label">Heat Stress Hours</div>
+                                <div class="kpi-value">168</div>
+                                <div class="kpi-unit">hours | supply < demand</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección D: Comparaciones 2025 vs 2050 -->
+                    <div class="kpi-subsection">
+                        <h4>📊 Comparaciones 2025 vs 2050</h4>
+                        <div class="kpi-grid-technical">
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">25</div>
+                                <div class="kpi-label">CO₂ Reduction 2050</div>
+                                <div class="kpi-value">-87%</div>
+                                <div class="kpi-unit">vs 2025 | carriers.co2</div>
+                            </div>
+                            <div class="kpi-card tech-card heat-card highlight-dh">
+                                <div class="kpi-number">26</div>
+                                <div class="kpi-label">DH Penetration 2050</div>
+                                <div class="kpi-value">52%</div>
+                                <div class="kpi-unit">% | vs 14.2% 2025</div>
+                            </div>
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">27</div>
+                                <div class="kpi-label">Electrification 2050</div>
+                                <div class="kpi-value">68%</div>
+                                <div class="kpi-unit">% | vs 35% 2025</div>
+                            </div>
+                            <div class="kpi-card tech-card">
+                                <div class="kpi-number">28</div>
+                                <div class="kpi-label">System Cost 2050</div>
+                                <div class="kpi-value">€124B</div>
+                                <div class="kpi-unit">/year | network.objective</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
