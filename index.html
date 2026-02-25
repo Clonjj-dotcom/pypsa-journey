@@ -1525,8 +1525,8 @@
                 
                 <!-- Year Selector -->
                 <div class="year-selector">
-                    <button class="year-btn active" data-year="2025" onclick="switchBaseYear('2025')">2025 Base</button>
-                    <button class="year-btn" data-year="2050" onclick="switchBaseYear('2050')">2050 Target</button>
+                    <button class="year-btn active" data-year="2025-6h" onclick="switchBaseYear('2025-6h')">2025 6h</button>
+                    <button class="year-btn" data-year="2025-12h" onclick="switchBaseYear('2025-12h')">2025 12h</button>
                     <button class="year-btn" data-year="compare" onclick="switchBaseYear('compare')">↔ Compare</button>
                 </div>
             </div>
@@ -1544,28 +1544,28 @@
                     <div class="kpi-card primary tooltip-trigger">
                         <div class="kpi-number">1</div>
                         <div class="kpi-label">Total System Cost</div>
-                        <div class="kpi-value" id="execTotalCost">€134.4B</div>
+                        <div class="kpi-value" id="execTotalCost">€89.25B</div>
                         <div class="kpi-unit">€/year</div>
                         <div class="kpi-source">PyPSA objective</div>
                         <div class="tooltip-content">
                             <div class="tooltip-title">💰 Total System Cost</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Source:</span><span class="tooltip-value">metrics.csv</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Variable:</span><span class="tooltip-value">network.objective</span></div>
-                            <div class="tooltip-desc">Annualized total system cost including generation, storage, transmission, and sector-coupling investments and operation.</div>
+                            <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
+                            <div class="tooltip-desc">Annualized total system cost including generation, storage, transmission, and sector-coupling investments and operation. Compare 6h vs 12h temporal resolution.</div>
                         </div>
                     </div>
                     
                     <div class="kpi-card tooltip-trigger">
                         <div class="kpi-number">2</div>
                         <div class="kpi-label">Electricity Price</div>
-                        <div class="kpi-value" id="execAvgPrice">€47.7</div>
+                        <div class="kpi-value" id="execAvgPrice">€38.5</div>
                         <div class="kpi-unit">€/MWh</div>
                         <div class="kpi-source">mean(marginal_price)</div>
                         <div class="tooltip-content">
                             <div class="tooltip-title">⚡ Electricity Price</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Mean:</span><span class="tooltip-value">€47.68/MWh</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Std Dev:</span><span class="tooltip-value">€100.44</span></div>
-                            <div class="tooltip-desc">Average marginal electricity price across all nodes and time steps. Represents the shadow price of the energy balance constraint.</div>
+                            <div class="tooltip-row"><span class="tooltip-label">6h Mean:</span><span class="tooltip-value">€38.5/MWh</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">12h Mean:</span><span class="tooltip-value">€38.5/MWh</span></div>
+                            <div class="tooltip-desc">Average marginal electricity price across all nodes and time steps. Compare temporal resolution impact on pricing.</div>
                         </div>
                     </div>
                     
@@ -1577,10 +1577,9 @@
                         <div class="kpi-source">Thesis KPI</div>
                         <div class="tooltip-content">
                             <div class="tooltip-title">🔥 District Heating Penetration</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Current:</span><span class="tooltip-value">14.2%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Target 2050:</span><span class="tooltip-value">42%</span></div>
-                            <div class="tooltip-row"><span class="tooltip-label">Major Cities:</span><span class="tooltip-value">Berlin, Munich</span></div>
-                            <div class="tooltip-desc">⭐ Key Thesis KPI: Share of total national heat demand supplied by district heating networks. Central to decarbonization strategy.</div>
+                            <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">14.2%</span></div>
+                            <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">14.2%</span></div>
+                            <div class="tooltip-desc">⭐ Key Thesis KPI: Compare how temporal resolution affects district heating penetration calculations. Both resolutions should show similar aggregate values but may differ in peak demands.</div>
                         </div>
                     </div>
                     
