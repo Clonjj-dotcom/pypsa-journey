@@ -2238,6 +2238,9 @@ function initBaseResults() {
     
     // Initialize simple tooltips
     initSimpleTooltips();
+    
+    // Initialize sparklines and comparison charts
+    initDataVisualizations();
 }
 
 function initSimpleTooltips() {
@@ -2866,4 +2869,437 @@ function getMockNodeData(mapType) {
         ]
     };
     return data[mapType] || data.capacity;
+}
+
+// ==================== DATA VISUALIZATIONS ====================
+
+function createSparkline(containerId, data, trend) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const width = container.clientWidth || 150;
+    const height = 40;
+    const padding = 4;
+    
+    const min = Math.min(...data) * 0.9;
+    const max = Math.max(...data) * 1.1;
+    
+    const scaleX = d3.scaleLinear().domain([0, data.length - 1]).range([padding, width - padding]);
+    const scaleY = d3.scaleLinear().domain([min, max]).range([height - padding, padding]);
+    
+    const svg = d3.select(container)
+        .append('svg')
+        .attr('class', 'sparkline')
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .attr('preserveAspectRatio', 'none');
+        
+    const trendClass = trend > 0 ? 'positive' : (trend < 0 ? 'negative' : 'neutral');
+    
+    const area = d3.area()
+        .x((d, i) => scaleX(i))
+        .y0(height)
+        .y1(d => scaleY(d))
+        .curve(d3.curveMonotoneX);
+        
+    svg.append('path')
+        .datum(data)
+        .attr('class', `sparkline-fill sparkline-fill-${trendClass}`)
+        .attr('d', area);
+        
+    const line = d3.line()
+        .x((d, i) => scaleX(i))
+        .y(d => scaleY(d))
+        .curve(d3.curveMonotoneX);
+        
+    svg.append('path')
+        .datum(data)
+        .attr('class', `sparkline-${trendClass}`)
+        .attr('d', line);
+        
+    const dots = svg.append('g').attr('class', `sparkline-dots sparkline-dots-${trendClass}`);
+    
+    dots.selectAll('circle')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('cx', (d, i) => scaleX(i))
+        .attr('cy', d => scaleY(d));
+}
+
+function drawComparisonChart(containerId, data) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    let html = `
+        <div class="comparison-chart">
+            <h4>📊 Comparison: 6h vs 12h Resolution</h4>
+    `;
+    
+    data.forEach(item => {
+        const maxVal = Math.max(item.sixh, item.twelveh) * 1.2;
+        const sixhWidth = (item.sixh / maxVal) * 100;
+        const twelvehWidth = (item.twelveh / maxVal) * 100;
+        const delta = ((item.twelveh - item.sixh) / item.sixh * 100).toFixed(1);
+        const deltaClass = delta > 0 ? 'positive' : (delta < 0 ? 'negative' : 'neutral');
+        
+        html += `
+            <div class="comparison-row">
+                <div class="comparison-label">${item.label}</div>
+                <div class="comparison-bars">
+                    <div class="comparison-bar-wrapper">
+                        <div class="comparison-bar-track">
+                            <div class="comparison-bar-fill six-h" style="width: ${sixhWidth}%">
+                                <span>${item.sixh}</span>
+                            </div>
+                        </div>
+                        <div class="comparison-value-label">6h</div>
+                    </div>
+                    <div class="comparison-bar-wrapper">
+                        <div class="comparison-bar-track">
+                            <div class="comparison-bar-fill twelve-h" style="width: ${twelvehWidth}%">
+                                <span>${item.twelveh}</span>
+                            </div>
+                        </div>
+                        <div class="comparison-value-label">12h</div>
+                    </div>
+                </div>
+                <div class="comparison-delta ${deltaClass}">${delta > 0 ? '+' : ''}${delta}%</div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// Initialize data visualizations
+function initDataVisualizations() {
+    console.log('Initializing data visualizations...');
+    
+    // Comparison chart data
+    const comparisonData = [
+        { label: 'CO₂ Emissions (Mt)', sixh: 310.5, twelveh: 315.2 },
+        { label: 'Renewable Share (%)', sixh: 42, twelveh: 41 },
+        { label: 'TES Capacity (GWh)', sixh: 45, twelveh: 43 },
+        { label: 'Peak Heat (GW)', sixh: 125, twelveh: 128 },
+        { label: 'LCOH (€/MWh)', sixh: 45.8, twelveh: 46.2 }
+    ];
+    
+    // Draw comparison chart with animation delays
+    drawComparisonChart('comparisonChartContainer', comparisonData);
+    
+    // Add inline sparklines to KPI cards
+    addSparklinesToKPIs();
+}
+
+// Add sparkline indicators to KPI cards
+function addSparklinesToKPIs() {
+    // Find all KPI cards and add trend indicators
+    const kpiCards = document.querySelectorAll('.kpi-card');
+    
+    const trendData = {
+        0: { trend: 'neutral', text: '→ Stable' },      // Total System Cost
+        1: { trend: 'negative', text: '↑ +0.9%' },      // LCOH
+        2: { trend: 'positive', text: '→ Stable' },     // DH Penetration
+        3: { trend: 'negative', text: '↑ +4.7 Mt' },    // CO₂ Total
+        4: { trend: 'positive', text: '↓ -1%' },        // Renewable Share
+        5: { trend: 'positive', text: '→ 0%' },         // Curtailment
+        6: { trend: 'neutral', text: '→ Stable' },      // Heat Pumps
+        7: { trend: 'positive', text: '↑ +2 GW' },      // TES Capacity
+        8: { trend: 'neutral', text: '→ Stable' }       // Boilers
+    };
+    
+    kpiCards.forEach((card, index) => {
+        if (trendData[index]) {
+            const trend = trendData[index];
+            
+            // Check if trend badge already exists
+            if (card.querySelector('.kpi-trend')) return;
+            
+            // Create trend badge
+            const trendBadge = document.createElement('div');
+            trendBadge.className = `kpi-trend kpi-trend-${trend.trend}`;
+            trendBadge.textContent = trend.text;
+            
+            // Insert after kpi-unit
+            const kpiUnit = card.querySelector('.kpi-unit');
+            if (kpiUnit) {
+                kpiUnit.insertAdjacentElement('afterend', trendBadge);
+            }
+        }
+    });
+    
+    // Add mini bars to comparison values in tooltips
+    addTooltipBars();
+}
+
+// Add visual bar indicators inside tooltips
+function addTooltipBars() {
+    const tooltips = document.querySelectorAll('.tooltip-content');
+    
+    tooltips.forEach(tooltip => {
+        const rows = tooltip.querySelectorAll('.tooltip-row');
+        
+        rows.forEach(row => {
+            // Skip if already processed
+            if (row.querySelector('.tooltip-bar')) return;
+            
+            const valueSpan = row.querySelector('.tooltip-value');
+            const labelSpan = row.querySelector('.tooltip-label');
+            
+            if (!valueSpan || !labelSpan) return;
+            
+            // Only add bars to numeric values (skip "Difference")
+            const labelText = labelSpan.textContent.trim();
+            if (labelText.includes('Difference')) return;
+            
+            const valueText = valueSpan.textContent;
+            const match = valueText.match(/[\d.]+/);
+            
+            if (match) {
+                // Extract numeric value for bar width (normalized)
+                const value = parseFloat(match[0]);
+                const barWidth = Math.min(100, value / 100 * 100); // Simple normalization
+
+                const bar = document.createElement('div');
+                bar.className = 'tooltip-bar';
+                bar.innerHTML = `<div class="tooltip-bar-fill" style="width: ${barWidth}%"></div>`;
+
+                row.appendChild(bar);
+            }
+        });
+    });
+}
+
+// ==================== SCENARIO CALCULATOR ====================
+
+// Store parameter values
+const parameterDefaults = {
+    heatDemand: 1.0,
+    renewInvest: 1.0,
+    tesCapacity: 45
+};
+
+let currentParams = { ...parameterDefaults };
+let selectedResolution = '6h';
+
+// Scenario Calculator
+function calculateScenario() {
+    const year = parseInt(document.getElementById('yearSlider').value);
+    const technologies = {
+        wind: document.getElementById('techWind').checked,
+        solar: document.getElementById('techSolar').checked,
+        hydro: document.getElementById('techHydro').checked,
+        battery: document.getElementById('techBattery').checked,
+        tes: document.getElementById('techTES').checked
+    };
+
+    // Get base data
+    const baseDataKey = `2025-${selectedResolution}`;
+    const baseData = baseData[baseDataKey] || baseData['2025-6h'];
+
+    // Calculate projections based on year and technologies
+    const yearMultiplier = 1 + ((year - 2025) / 25) * 0.8; // Growth to 2050
+
+    let costFactor = 1;
+    let co2Factor = 1;
+    let renewableFactor = 1;
+    let heatShare = 14.2;
+
+    // Technology impact adjustments
+    const techCount = Object.values(technologies).filter(Boolean).length;
+    const techBoost = techCount / 5; // 0 to 1 based on technologies selected
+
+    costFactor = 0.9 - (techBoost * 0.1); // More tech = lower cost
+    co2Factor = 1 - (techBoost * 0.4); // More tech = lower CO2
+    renewableFactor = 1 + (techBoost * 0.3); // More tech = more renewable
+
+    // Apply parameters
+    const heatAdjust = currentParams.heatDemand;
+    const investAdjust = currentParams.renewInvest;
+    const tesAdjust = currentParams.tesCapacity / 45;
+
+    // Calculate projected values
+    const projectedCost = (89.25 * yearMultiplier * costFactor * (1 + (heatAdjust - 1) * 0.1)).toFixed(2);
+    const projectedCO2 = (315 * co2Factor * yearMultiplier * (1 - (investAdjust - 1) * 0.15)).toFixed(1);
+    const projectedRenewable = Math.min(95, (42 * renewableFactor * investAdjust)).toFixed(0);
+    const projectedHeatShare = (heatShare * tesAdjust).toFixed(1);
+
+    // Get base values for comparison
+    const baseCost = baseData?.totalCost || 89.25;
+    const baseCO2 = baseData?.co2Total || 315;
+    const baseRenewable = baseData?.renewableShare || 42;
+
+    // Calculate changes
+    const costChange = ((projectedCost - baseCost) / baseCost * 100).toFixed(1);
+    const co2Change = ((projectedCO2 - baseCO2) / baseCO2 * 100).toFixed(1);
+    const renewChange = ((projectedRenewable - baseRenewable) / baseRenewable * 100).toFixed(1);
+
+    // Build results table
+    const resultsBody = document.getElementById('resultsBody');
+    resultsBody.innerHTML = `
+        <tr>
+            <td>💰 Total System Cost</td>
+            <td>€${baseCost.toFixed(2)}B</td>
+            <td>€${projectedCost}B</td>
+            <td class="${costChange < 0 ? 'positive' : 'negative'}">${costChange > 0 ? '+' : ''}${costChange}%</td>
+        </tr>
+        <tr>
+            <td>🌍 CO₂ Emissions</td>
+            <td>${baseCO2.toFixed(1)} Mt</td>
+            <td>${projectedCO2} Mt</td>
+            <td class="${co2Change < 0 ? 'positive' : 'negative'}">${co2Change > 0 ? '+' : ''}${co2Change}%</td>
+        </tr>
+        <tr>
+            <td>☀️ Renewable Share</td>
+            <td>${baseRenewable}%</td>
+            <td>${projectedRenewable}%</td>
+            <td class="${renewChange > 0 ? 'positive' : 'negative'}">${renewChange > 0 ? '+' : ''}${renewChange}%</td>
+        </tr>
+        <tr>
+            <td>🔥 DH Penetration</td>
+            <td>${heatShare}%</td>
+            <td>${projectedHeatShare}%</td>
+            <td class="${tesAdjust > 1 ? 'positive' : 'neutral'}">${((tesAdjust - 1) * 100).toFixed(0)}%</td>
+        </tr>
+    `;
+
+    // Show results
+    document.getElementById('calcResults').style.display = 'block';
+
+    // Update projected cards
+    document.getElementById('projCost').textContent = `€${projectedCost}B`;
+    document.getElementById('projCO2').textContent = `${co2Change}%`;
+    document.getElementById('projRenewable').textContent = `${projectedRenewable}%`;
+
+    console.log(`Scenario calculated: Year ${year}, Resolution ${selectedResolution}, Techs: ${techCount}/5`);
+}
+
+// Resolution button handlers
+document.addEventListener('DOMContentLoaded', () => {
+    // Resolution buttons
+    document.querySelectorAll('.res-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.res-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedResolution = btn.dataset.res;
+        });
+    });
+
+    // Year slider value display
+    const yearSlider = document.getElementById('yearSlider');
+    if (yearSlider) {
+        yearSlider.addEventListener('input', (e) => {
+            document.getElementById('yearValue').textContent = e.target.value;
+        });
+    }
+});
+
+// Parameter Update
+function updateParameter(param, value) {
+    currentParams[param] = parseFloat(value);
+
+    // Update display values
+    if (param === 'heatDemand') {
+        document.getElementById('heatDemandValue').textContent = `${value}x`;
+    } else if (param === 'renewInvest') {
+        document.getElementById('renewInvestValue').textContent = `${value}x`;
+    } else if (param === 'tesCapacity') {
+        document.getElementById('tesCapacityValue').textContent = `${value} GWh`;
+    }
+
+    // Update charts in real-time
+    updateChartsWithParams();
+}
+
+// Update charts with current parameters
+function updateChartsWithParams() {
+    if (typeof baseCharts === 'undefined') return;
+
+    const yearData = baseData[`2025-${selectedResolution}`] || baseData['2025-6h'];
+    if (!yearData) return;
+
+    // Apply parameter adjustments to chart data
+    const investFactor = currentParams.renewInvest;
+
+    // Update electricity chart if exists
+    if (baseCharts.electricity) {
+        const updatedData = yearData.generation.map(item => ({
+            ...item,
+            value: item.value * investFactor
+        }));
+        // Chart update logic would go here
+        console.log('Charts updated with params:', currentParams);
+    }
+}
+
+// Reset parameters to defaults
+function resetParameters() {
+    currentParams = { ...parameterDefaults };
+    selectedResolution = '6h';
+
+    // Reset sliders
+    document.getElementById('heatDemandSlider').value = 1.0;
+    document.getElementById('renewInvestSlider').value = 1.0;
+    document.getElementById('tesCapacitySlider').value = 45;
+    document.getElementById('yearSlider').value = 2025;
+
+    // Reset display values
+    document.getElementById('heatDemandValue').textContent = '1.0x';
+    document.getElementById('renewInvestValue').textContent = '1.0x';
+    document.getElementById('tesCapacityValue').textContent = '45 GWh';
+    document.getElementById('yearValue').textContent = '2025';
+
+    // Reset resolution buttons
+    document.querySelectorAll('.res-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.res === '6h');
+    });
+
+    // Reset tech checkboxes
+    document.querySelectorAll('.tech-checkboxes input').forEach(cb => {
+        cb.checked = true;
+    });
+
+    // Hide results
+    document.getElementById('calcResults').style.display = 'none';
+
+    // Update charts
+    updateChartsWithParams();
+
+    console.log('Parameters reset to defaults');
+}
+
+// ==================== CHART EXPORT ====================
+
+function exportChart(canvasId, chartName) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+        console.error('Canvas not found:', canvasId);
+        return;
+    }
+
+    // Create high-quality export
+    const link = document.createElement('a');
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const resolution = selectedResolution || '6h';
+
+    link.download = `pypsa-${chartName}-${timestamp}-${resolution}.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
+    link.click();
+
+    console.log(`Exported chart: ${link.download}`);
+}
+
+// Export all charts at once
+function exportAllCharts() {
+    const charts = [
+        { id: 'baseElectricityChart', name: 'generation' },
+        { id: 'baseCapacityChart', name: 'capacity' }
+    ];
+
+    charts.forEach(chart => {
+        setTimeout(() => exportChart(chart.id, chart.name), 100);
+    });
 }

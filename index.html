@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/tech-styles.css">
     <link rel="stylesheet" href="css/flexibility-styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script defer src="js/map-lazy.js"></script>
     <script src="js/app.js"></script>
 </head>
@@ -2432,10 +2433,55 @@
                         
                         <li><strong>TES Capacity:</strong> 12h underestimates storage need by 4.4%. <strong>Implication:</strong> Poor temporal resolution leads to undersized thermal storage.</li>
                         
-                        <li><strong>Renewable Integration:>/strong> 6h shows slightly better renewable integration (42% vs 41%). <strong>Implication:</strong> Higher resolution captures more curtailment/storage optimization.</li>
+                        <li><strong>Renewable Integration:</strong> 6h shows slightly better renewable integration (42% vs 41%). <strong>Implication:</strong> Higher resolution captures more curtailment/storage optimization.</li>
                     </ul>
                     
                     <p class="thesis-note">⭐ <strong>Recommendation for Thesis:</strong> Use 6h resolution for accurate district heating and storage modeling, especially for heat demand temporal analysis.</p>
+                </div>
+                
+                <!-- NEW: Comparison Chart Visualization -->
+                <div id="comparisonChartContainer"></div>
+                
+                <!-- NEW: Insights Dashboard -->
+                <div class="insights-dashboard">
+                    <h3>📊 Key Insights Dashboard</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card-v2 critical">
+                            <div class="insight-header">
+                                <span class="insight-title-v2">CO₂ Emissions Impact</span>
+                                <span class="insight-badge critical">Critical</span>
+                            </div>
+                            <div class="insight-value-v2">+4.7 Mt</div>
+                            <div class="insight-description">12h resolution underestimates temporal variations, missing peak emission events. This represents 1.5% higher emissions.</div>
+                        </div>
+                        
+                        <div class="insight-card-v2 warning">
+                            <div class="insight-header">
+                                <span class="insight-title-v2">Peak Heat Demand</span>
+                                <span class="insight-badge warning">Warning</span>
+                            </div>
+                            <div class="insight-value-v2">+3 GW</div>
+                            <div class="insight-description">12h shows 2.4% higher peak heat demand (+3 GW). Crucial for DH network sizing - 6h captures more accurate profiles.</div>
+                        </div>
+                        
+                        <div class="insight-card-v2 warning">
+                            <div class="insight-header">
+                                <span class="insight-title-v2">TES Capacity</span>
+                                <span class="insight-badge warning">Warning</span>
+                            </div>
+                            <div class="insight-value-v2">-4.4%</div>
+                            <div class="insight-description">12h underestimates thermal storage need by 4.4%. Poor temporal resolution leads to undersized TES.</div>
+                        </div>
+                        
+                        <div class="insight-card-v2 positive">
+                            <div class="insight-header">
+                                <span class="insight-title-v2">Renewable Integration</span>
+                                <span class="insight-badge positive">Positive</span>
+                            </div>
+                            <div class="insight-value-v2">+1%</div>
+                            <div class="insight-description">6h shows better renewable integration (42% vs 41%). Higher resolution captures more curtailment/storage optimization.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2467,94 +2513,89 @@
                         <div class="map-note">📍 Source: nodal_capacities.csv</div>
                         <div class="map-priority">⭐ High</div>
                     </div>
-                            
-                            <div class="map-card high-priority" id="mapGeneration">
-                                <div class="map-title">M2: Generation by Node</div>
-                                <div class="map-status">🗺️ Visualización Geográfica</div>
-                                <div class="map-data-preview">
-                                    <div class="preview-row"><span>Total Gen:</span> <strong>2,847 TWh</strong></div>
-                                    <div class="preview-row"><span>Offshore:</span> <strong>North Sea</strong></div>
-                                    <div class="preview-row"><span>Solar:</span> <strong>Bavaria, NRW</strong></div>
-                                    <div class="preview-row"><span>Industry:</span> <strong>Ruhr, Saxony</strong></div>
-                                </div>
-                                <div class="map-note">📍 Source: nodal_energy.csv</div>
-                                <div class="map-priority">⭐ High</div>
-                            </div>
-                            
-                            <div class="map-card high-priority" id="mapPrices">
-                                <div class="map-title">M3: Marginal Prices</div>
-                                <div class="map-status">🗺️ Visualización Geográfica</div>
-                                <div class="map-data-preview">
-                                    <div class="preview-row"><span>National Avg:</span> <strong>€47.7/MWh</strong></div>
-                                    <div class="preview-row"><span>North:> €44.2 (wind)</strong></div>
-                                    <div class="preview-row"><span>South:</span> <strong>€51.3 (import)</strong></div>
-                                    <div class="preview-row"><span>Congestion:</span> <strong>+15%</strong></div>
-                                </div>
-                                <div class="map-note">📍 Source: nodal_prices.csv</div>
-                                <div class="map-priority">⭐ High</div>
-                            </div>
-                            
-                            <div class="map-card high-priority" id="mapHeat">
-                                <div class="map-title">M4: District Heating Coverage</div>
-                                <div class="map-status">🗺️ Visualización Geográfica</div>
-                                <div class="map-data-preview">
-                                    <div class="preview-row"><span>Coverage:</span> <strong>14.2%</strong></div>
-                                    <div class="preview-row"><span>Urban DH:</span> <strong>Berlin, Munich</strong></div>
-                                    <div class="preview-row"><span>Industrial:</span> <strong>Ruhr, Hamburg</strong></div>
-                                    <div class="preview-row"><span>CHP Sites:</span> <strong>23 nodes</strong></div>
-                                </div>
-                                <div class="map-note">📍 Source: nodal_heat.csv</div>
-                                <div class="map-priority">⭐ High</div>
-                            </div>
+                    <div class="map-card high-priority" id="mapGeneration">
+                        <div class="map-title">M2: Generation by Node</div>
+                        <div class="map-status">🗺️ Visualización Geográfica</div>
+                        <div class="map-data-preview">
+                            <div class="preview-row"><span>Total Gen:</span> <strong>2,847 TWh</strong></div>
+                            <div class="preview-row"><span>Offshore:</span> <strong>North Sea</strong></div>
+                            <div class="preview-row"><span>Solar:</span> <strong>Bavaria, NRW</strong></div>
+                            <div class="preview-row"><span>Industry:</span> <strong>Ruhr, Saxony</strong></div>
                         </div>
+                        <div class="map-note">📍 Source: nodal_energy.csv</div>
+                        <div class="map-priority">⭐ High</div>
                     </div>
+                    <div class="map-card high-priority" id="mapPrices">
+                        <div class="map-title">M3: Marginal Prices</div>
+                        <div class="map-status">🗺️ Visualización Geográfica</div>
+                        <div class="map-data-preview">
+                            <div class="preview-row"><span>National Avg:</span> <strong>€47.7/MWh</strong></div>
+                            <div class="preview-row"><span>North:</span> <strong>€44.2 (wind)</strong></div>
+                            <div class="preview-row"><span>South:</span> <strong>€51.3 (import)</strong></div>
+                            <div class="preview-row"><span>Congestion:</span> <strong>+15%</strong></div>
+                        </div>
+                        <div class="map-note">📍 Source: nodal_prices.csv</div>
+                        <div class="map-priority">⭐ High</div>
+                    </div>
+                    <div class="map-card high-priority" id="mapHeat">
+                        <div class="map-title">M4: District Heating Coverage</div>
+                        <div class="map-status">🗺️ Visualización Geográfica</div>
+                        <div class="map-data-preview">
+                            <div class="preview-row"><span>Coverage:</span> <strong>14.2%</strong></div>
+                            <div class="preview-row"><span>Urban DH:</span> <strong>Berlin, Munich</strong></div>
+                            <div class="preview-row"><span>Industrial:</span> <strong>Ruhr, Hamburg</strong></div>
+                            <div class="preview-row"><span>CHP Sites:</span> <strong>23 nodes</strong></div>
+                        </div>
+                        <div class="map-note">📍 Source: nodal_heat.csv</div>
+                        <div class="map-priority">⭐ High</div>
+                    </div>
+                </div>
+            </div>
 
-                    <!-- Technical Tables -->
-                    <div class="technical-tables">
-                        <h4>📈 Detailed Indicators</h4>
-                        
-                        <!-- Generation & Capacity -->
-                        <div class="tech-table-section">
-                            <h5>2.1 Generation & Capacities</h5>
-                            <table class="tech-table" id="tableCapacities">
-                                <thead>
-                                    <tr><th>Technology</th><th>Capacity (GW)</th><th>Generation (TWh)</th><th>CF (%)</th></tr>
-                                </thead>
-                                <tbody><!-- Filled by JS --></tbody>
-                            </table>
+            <!-- Technical Tables -->
+            <div class="technical-tables">
+                <h4>📈 Detailed Indicators</h4>
+
+                <!-- Generation & Capacity -->
+                <div class="tech-table-section">
+                    <h5>2.1 Generation & Capacities</h5>
+                    <table class="tech-table" id="tableCapacities">
+                        <thead>
+                            <tr><th>Technology</th><th>Capacity (GW)</th><th>Generation (TWh)</th><th>CF (%)</th></tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+
+                <!-- DH Operation -->
+                <div class="tech-table-section">
+                    <h5>2.2 District Heating Operation</h5>
+                    <table class="tech-table" id="tableDHOperation">
+                        <thead>
+                            <tr><th>Component</th><th>Capacity (MW)</th><th>Production (MWh)</th><th>Share (%)</th></tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+
+                <!-- System Operation -->
+                <div class="tech-table-section">
+                    <h5>2.3 System Performance</h5>
+                    <div class="metrics-row" id="systemMetrics">
+                        <div class="metric-box">
+                            <span class="metric-label">Curtailment</span>
+                            <span class="metric-value" id="metricCurtailment">--</span>
+                            <span class="metric-unit">MWh</span>
                         </div>
-                        
-                        <!-- DH Operation -->
-                        <div class="tech-table-section">
-                            <h5>2.2 District Heating Operation</h5>
-                            <table class="tech-table" id="tableDHOperation">
-                                <thead>
-                                    <tr><th>Component</th><th>Capacity (MW)</th><th>Production (MWh)</th><th>Share (%)</th></tr>
-                                </thead>
-                                <tbody><!-- Filled by JS --></tbody>
-                            </table>
+                        <div class="metric-box">
+                            <span class="metric-label">Line Utilization</span>
+                            <span class="metric-value" id="metricLineUtil">--</span>
+                            <span class="metric-unit">%</span>
                         </div>
-                        
-                        <!-- System Operation -->
-                        <div class="tech-table-section">
-                            <h5>2.3 System Performance</h5>
-                            <div class="metrics-row" id="systemMetrics">
-                                <div class="metric-box">
-                                    <span class="metric-label">Curtailment</span>
-                                    <span class="metric-value" id="metricCurtailment">--</span>
-                                    <span class="metric-unit">MWh</span>
-                                </div>
-                                <div class="metric-box">
-                                    <span class="metric-label">Line Utilization</span>
-                                    <span class="metric-value" id="metricLineUtil">--</span>
-                                    <span class="metric-unit">%</span>
-                                </div>
-                                <div class="metric-box">
-                                    <span class="metric-label">Storage Cycles</span>
-                                    <span class="metric-value" id="metricStorageCycles">--</span>
-                                    <span class="metric-unit">cycles/year</span>
-                                </div>
-                            </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Storage Cycles</span>
+                            <span class="metric-value" id="metricStorageCycles">--</span>
+                            <span class="metric-unit">cycles/year</span>
                         </div>
                     </div>
                 </div>
@@ -2563,13 +2604,23 @@
             <!-- Charts -->
             <div class="charts-row">
                 <div class="chart-panel wide">
-                    <h4>Electricity Generation by Source (TWh)</h4>
+                    <div class="chart-header">
+                        <h4>Electricity Generation by Source (TWh)</h4>
+                        <button class="export-btn" onclick="exportChart('baseElectricityChart', 'generation')">
+                            <span>📤</span> Export PNG
+                        </button>
+                    </div>
                     <div class="chart-container">
                         <canvas id="baseElectricityChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-panel">
-                    <h4>Installed Capacity (GW)</h4>
+                    <div class="chart-header">
+                        <h4>Installed Capacity (GW)</h4>
+                        <button class="export-btn" onclick="exportChart('baseCapacityChart', 'capacity')">
+                            <span>📤</span> Export PNG
+                        </button>
+                    </div>
                     <div class="chart-container">
                         <canvas id="baseCapacityChart"></canvas>
                     </div>
@@ -2595,67 +2646,178 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
 
-            <!-- 🟢 CAPA 3: SUPPORTING DATA (On Demand) -->
-            <div class="layer-section layer-3">
-                <div class="layer-header expandable" onclick="toggleLayer('layer3')">
-                    <span class="layer-badge">🟢</span>
-                    <h3>Data & Downloads</h3>
-                    <span class="layer-desc">Supporting Data Available on Demand • CSV Downloads</span>
-                    <span class="expand-icon">▼</span>
+    <!-- 🟢 CAPA 3: SUPPORTING DATA (On Demand) -->
+    <div class="layer-section layer-3">
+        <div class="layer-header expandable" onclick="toggleLayer('layer3')">
+            <span class="layer-badge">🟢</span>
+            <h3>Data & Downloads</h3>
+            <span class="layer-desc">Supporting Data Available on Demand • CSV Downloads</span>
+            <span class="expand-icon">▼</span>
+        </div>
+
+        <div id="layer3" class="layer-content collapsed">
+            <div class="download-grid">
+                <div class="download-card">
+                    <h5>3.1 Time Series Data</h5>
+                    <p>8760h complete profiles for selected carriers</p>
+                    <button class="btn btn-secondary" onclick="downloadCSV('timeseries')">📥 Download CSV</button>
                 </div>
-                
-                <div id="layer3" class="layer-content collapsed">
-                    <div class="download-grid">
-                        <div class="download-card">
-                            <h5>3.1 Time Series Data</h5>
-                            <p>8760h complete profiles for selected carriers</p>
-                            <button class="btn btn-secondary" onclick="downloadCSV('timeseries')">📥 Download CSV</button>
-                        </div>
-                        <div class="download-card">
-                            <h5>3.2 Node-Level Data</h5>
-                            <p>Production, consumption, prices by each of 37 nodes</p>
-                            <button class="btn btn-secondary" onclick="downloadCSV('nodal')">📥 Download CSV</button>
-                        </div>
-                        <div class="download-card">
-                            <h5>3.3 Cost Breakdown</h5>
-                            <p>CAPEX/OPEX detailed by technology</p>
-                            <button class="btn btn-secondary" onclick="downloadCSV('costs')">📥 Download CSV</button>
-                        </div>
-                        <div class="download-card">
-                            <h5>3.4 Industry & Transport</h5>
-                            <p>Industrial demand, EV charging, V2G profiles</p>
-                            <button class="btn btn-secondary" onclick="downloadCSV('sector')">📥 Download CSV</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Data Source -->
-                    <div class="data-source-panel">
-                        <h4>📊 Data Source</h4>
-                        <p>
-                            <strong>PyPSA-Eur v0.12.0</strong> simulation for Germany 2025 with 37-node network aggregation.
-                            <br>Location: <code>/Users/claus/Documents/THWS/Alumno_asistente/results/DE/germany-2025-realistic/</code>
-                        </p>
-                        <div class="file-list">
-                            <span>metrics.csv</span>
-                            <span>capacities.csv</span>
-                            <span>energy.csv</span>
-                            <span>costs.csv</span>
-                            <span>prices.csv</span>
-                            <span>network.nc</span>
-                        </div>
-                    </div>
+                <div class="download-card">
+                    <h5>3.2 Node-Level Data</h5>
+                    <p>Production, consumption, prices by each of 37 nodes</p>
+                    <button class="btn btn-secondary" onclick="downloadCSV('nodal')">📥 Download CSV</button>
+                </div>
+                <div class="download-card">
+                    <h5>3.3 Cost Breakdown</h5>
+                    <p>CAPEX/OPEX detailed by technology</p>
+                    <button class="btn btn-secondary" onclick="downloadCSV('costs')">📥 Download CSV</button>
+                </div>
+                <div class="download-card">
+                    <h5>3.4 Industry & Transport</h5>
+                    <p>Industrial demand, EV charging, V2G profiles</p>
+                    <button class="btn btn-secondary" onclick="downloadCSV('sector')">📥 Download CSV</button>
+                </div>
+            </div>
+
+            <!-- Data Source -->
+            <div class="data-source-panel">
+                <h4>📊 Data Source</h4>
+                <p>
+                    <strong>PyPSA-Eur v0.12.0</strong> simulation for Germany 2025 with 37-node network aggregation.
+                    <br>Location: <code>/Users/claus/Documents/THWS/Alumno_asistente/results/DE/DE-electricity-only</code>
+                </p>
+                <div class="file-list">
+                    <span>metrics.csv</span>
+                    <span>capacities.csv</span>
+                    <span>energy.csv</span>
+                    <span>costs.csv</span>
+                    <span>prices.csv</span>
+                    <span>network.nc</span>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- TAB 3: CUSTOM/YOUR RESULTS -->
     <section id="tab-custom" class="tab-content">
         <div class="content-panel">
             <h2 class="screen-title">📈 Compare: Your Config vs Base</h2>
             <p class="screen-desc">Projected results for your custom configuration</p>
-            
+
+            <!-- 📊 Scenario Calculator -->
+            <div class="scenario-calculator">
+                <h3>🧮 Scenario Calculator</h3>
+                <div class="calculator-grid">
+                    <!-- Year Slider -->
+                    <div class="calc-control">
+                        <label for="yearSlider">Target Year</label>
+                        <div class="slider-container">
+                            <input type="range" id="yearSlider" min="2025" max="2050" value="2025" step="5" class="scenario-slider">
+                            <div class="slider-labels">
+                                <span>2025</span>
+                                <span class="slider-value" id="yearValue">2025</span>
+                                <span>2050</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resolution Selector -->
+                    <div class="calc-control">
+                        <label>Time Resolution</label>
+                        <div class="resolution-buttons">
+                            <button class="res-btn active" data-res="6h">6-hour</button>
+                            <button class="res-btn" data-res="12h">12-hour</button>
+                        </div>
+                    </div>
+
+                    <!-- Technology Checkboxes -->
+                    <div class="calc-control tech-selector">
+                        <label>Technologies</label>
+                        <div class="tech-checkboxes">
+                            <label class="tech-check"><input type="checkbox" id="techWind" checked> <span class="checkmark"></span> Wind</label>
+                            <label class="tech-check"><input type="checkbox" id="techSolar" checked> <span class="checkmark"></span> Solar</label>
+                            <label class="tech-check"><input type="checkbox" id="techHydro" checked> <span class="checkmark"></span> Hydro</label>
+                            <label class="tech-check"><input type="checkbox" id="techBattery" checked> <span class="checkmark"></span> Battery</label>
+                            <label class="tech-check"><input type="checkbox" id="techTES" checked> <span class="checkmark"></span> TES</label>
+                        </div>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <div class="calc-control">
+                        <button class="calc-btn" onclick="calculateScenario()">
+                            <span class="btn-icon">📊</span>
+                            Calculate Projection
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="calc-results" id="calcResults" style="display: none;">
+                    <h4>Projected Results</h4>
+                    <table class="results-table">
+                        <thead>
+                            <tr><th>Metric</th><th>Base (2025)</th><th>Projected</th><th>Change</th></tr>
+                        </thead>
+                        <tbody id="resultsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 🎚️ Parameter Sliders -->
+            <div class="parameter-sliders">
+                <h3>🎚️ Parameter Adjustments</h3>
+                <p class="sliders-desc">Adjust parameters to see real-time impact on charts</p>
+
+                <div class="sliders-grid">
+                    <!-- Heat Demand Multiplier -->
+                    <div class="slider-card">
+                        <div class="slider-header">
+                            <span class="slider-title">🔥 Heat Demand</span>
+                            <span class="slider-current" id="heatDemandValue">1.0x</span>
+                        </div>
+                        <input type="range" id="heatDemandSlider" min="0.5" max="2.0" value="1.0" step="0.1" class="param-slider"
+                               oninput="updateParameter('heatDemand', this.value)">
+                        <div class="slider-info">
+                            <span>Lower demand</span>
+                            <span>Higher demand</span>
+                        </div>
+                    </div>
+
+                    <!-- Renewable Investment Factor -->
+                    <div class="slider-card">
+                        <div class="slider-header">
+                            <span class="slider-title">☀️ Renewable Investment</span>
+                            <span class="slider-current" id="renewInvestValue">1.0x</span>
+                        </div>
+                        <input type="range" id="renewInvestSlider" min="0.5" max="1.5" value="1.0" step="0.1" class="param-slider"
+                               oninput="updateParameter('renewInvest', this.value)">
+                        <div class="slider-info">
+                            <span>Conservative</span>
+                            <span>Aggressive</span>
+                        </div>
+                    </div>
+
+                    <!-- TES Capacity -->
+                    <div class="slider-card">
+                        <div class="slider-header">
+                            <span class="slider-title">🔋 TES Capacity</span>
+                            <span class="slider-current" id="tesCapacityValue">45 GWh</span>
+                        </div>
+                        <input type="range" id="tesCapacitySlider" min="0" max="200" value="45" step="5" class="param-slider"
+                               oninput="updateParameter('tesCapacity', this.value)">
+                        <div class="slider-info">
+                            <span>0 GWh</span>
+                            <span>200 GWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="reset-btn" onclick="resetParameters()">↻ Reset to Defaults</button>
+            </div>
+
             <div class="projected-grid">
                 <div class="projected-card">
                     <div class="projected-label">Est. System Cost</div>
