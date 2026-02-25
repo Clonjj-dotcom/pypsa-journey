@@ -1548,74 +1548,147 @@
                     </div>
                     
                     <div class="kpi-grid-executive">
+                        <!-- KPI 1: Total System Cost -->
                         <div class="kpi-card primary">
                             <div class="kpi-number">1</div>
                             <div class="kpi-label">Total System Cost</div>
                             <div class="kpi-value">€89.25B</div>
                             <div class="kpi-unit">€/year</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">💰 Total System Cost</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
+                                <div class="tooltip-desc">Annualized total system cost including generation, storage, transmission, and sector-coupling investments and operation.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 2: Electricity Price -->
                         <div class="kpi-card">
                             <div class="kpi-number">2</div>
                             <div class="kpi-label">Electricity Price</div>
                             <div class="kpi-value">€38.5</div>
                             <div class="kpi-unit">€/MWh</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">⚡ Electricity Price</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Mean:</span><span class="tooltip-value">€38.5/MWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Mean:</span><span class="tooltip-value">€38.5/MWh</span></div>
+                                <div class="tooltip-desc">Average marginal electricity price across all nodes and time steps.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 3: DH Penetration -->
                         <div class="kpi-card highlight-dh">
                             <div class="kpi-number">3</div>
                             <div class="kpi-label">DH Penetration ⭐</div>
                             <div class="kpi-value">14.2%</div>
                             <div class="kpi-unit">of total heat</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔥 District Heating Penetration</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">14.2%</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">14.2%</span></div>
+                                <div class="tooltip-desc">⭐ Key Thesis KPI: Compare how temporal resolution affects district heating penetration calculations.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 4: CO₂ Emissions -->
                         <div class="kpi-card">
                             <div class="kpi-number">4</div>
                             <div class="kpi-label">CO₂ Emissions</div>
                             <div class="kpi-value">310.5</div>
                             <div class="kpi-unit">Mt CO₂</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🌱 CO₂ Emissions</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">310.5 Mt</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">315.2 Mt</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">Difference:</span><span class="tooltip-value worse">+4.7 Mt (+1.5%)</span></div>
+                                <div class="tooltip-desc">12h underestimates resolution leads to higher emissions. Lower temporal resolution may miss peak emission events.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 5: Renewable Share -->
                         <div class="kpi-card">
                             <div class="kpi-number">5</div>
                             <div class="kpi-label">Renewable Share</div>
                             <div class="kpi-value">42%</div>
                             <div class="kpi-unit">% generation</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🌞 Renewable Share</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value better">42%</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">41%</span></div>
+                                <div class="tooltip-desc">Higher resolution captures more curtailment/storage optimization opportunities.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 6: Peak Capacity -->
                         <div class="kpi-card">
                             <div class="kpi-number">6</div>
                             <div class="kpi-label">Peak Capacity</div>
                             <div class="kpi-value">274.7</div>
                             <div class="kpi-unit">GW</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">⚡ Peak Capacity</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">274.7 GW</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">274.7 GW</span></div>
+                                <div class="tooltip-desc">Maximum installed generation capacity required to meet demand.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 7: Total Generation -->
                         <div class="kpi-card">
                             <div class="kpi-number">7</div>
                             <div class="kpi-label">Total Generation</div>
                             <div class="kpi-value">2,847</div>
                             <div class="kpi-unit">TWh/year</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔌 Total Generation</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">580 TWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">585 TWh</span></div>
+                                <div class="tooltip-desc">Annual electricity generation across all sources.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 8: Peak Heat Demand -->
                         <div class="kpi-card heat-card">
                             <div class="kpi-number">8</div>
                             <div class="kpi-label">Peak Heat Demand</div>
                             <div class="kpi-value">1,420</div>
                             <div class="kpi-unit">MW</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔥 Peak Heat Demand</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value better">125 GW</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value worse">128 GW</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">Difference:</span><span class="tooltip-value worse">+2.4%</span></div>
+                                <div class="tooltip-desc">12h shows higher peak — crucial for DH network sizing. 6h captures more accurate profiles.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 9: TES Capacity -->
                         <div class="kpi-card heat-card">
                             <div class="kpi-number">9</div>
                             <div class="kpi-label">TES Capacity</div>
                             <div class="kpi-value">45</div>
                             <div class="kpi-unit">GWh</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔋 Thermal Energy Storage</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value better">45 GWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value worse">43 GWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">Difference:</span><span class="tooltip-value worse">-4.4%</span></div>
+                                <div class="tooltip-desc">12h underestimates storage need. Poor temporal resolution leads to undersized thermal storage.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 10: Electrification -->
                         <div class="kpi-card">
                             <div class="kpi-number">10</div>
                             <div class="kpi-label">Electrification</div>
                             <div class="kpi-value">35%</div>
                             <div class="kpi-unit">% from electricity</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">⚡ Electrification Rate</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">35%</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">34%</span></div>
+                                <div class="tooltip-desc">Share of total energy demand met by electricity (vs fossil fuels).</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -1678,56 +1751,113 @@
                             <div class="kpi-label">DH Penetration ⭐</div>
                             <div class="kpi-value">14.2%</div>
                             <div class="kpi-unit">of total heat</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔥 District Heating Penetration</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">14.2%</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">14.2%</span></div>
+                                <div class="tooltip-desc">⭐ Key Thesis KPI: Compare how temporal resolution affects district heating penetration calculations.</div>
+                            </div>
                         </div>
                         
-                        <!-- Different values for 12h -->
+                        <!-- KPI 4: CO₂ Emissions -->
                         <div class="kpi-card">
                             <div class="kpi-number">4</div>
                             <div class="kpi-label">CO₂ Emissions</div>
                             <div class="kpi-value highlight-diff">315.2</div>
                             <div class="kpi-unit">Mt CO₂ (+1.5%)</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🌱 CO₂ Emissions</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">310.5 Mt</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">315.2 Mt</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">Difference:</span><span class="tooltip-value worse">+4.7 Mt (+1.5%)</span></div>
+                                <div class="tooltip-desc">12h underestimates resolution leads to higher emissions. Lower temporal resolution may miss peak emission events.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 5: Renewable Share -->
                         <div class="kpi-card">
                             <div class="kpi-number">5</div>
                             <div class="kpi-label">Renewable Share</div>
                             <div class="kpi-value highlight-diff">41%</div>
                             <div class="kpi-unit">% generation (-1%)</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🌞 Renewable Share</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value better">42%</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">41%</span></div>
+                                <div class="tooltip-desc">Higher resolution captures more curtailment/storage optimization opportunities.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 6: Peak Capacity -->
                         <div class="kpi-card">
                             <div class="kpi-number">6</div>
                             <div class="kpi-label">Peak Capacity</div>
                             <div class="kpi-value">274.7</div>
                             <div class="kpi-unit">GW</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">⚡ Peak Capacity</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">274.7 GW</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">274.7 GW</span></div>
+                                <div class="tooltip-desc">Maximum installed generation capacity required to meet demand.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 7: Total Generation -->
                         <div class="kpi-card">
                             <div class="kpi-number">7</div>
                             <div class="kpi-label">Total Generation</div>
                             <div class="kpi-value highlight-diff">2,847</div>
                             <div class="kpi-unit">TWh/year (+0.9%)</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔌 Total Generation</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">580 TWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">585 TWh</span></div>
+                                <div class="tooltip-desc">Annual electricity generation across all sources.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 8: Peak Heat Demand -->
                         <div class="kpi-card heat-card">
                             <div class="kpi-number">8</div>
                             <div class="kpi-label">Peak Heat Demand</div>
                             <div class="kpi-value highlight-diff">1,420</div>
                             <div class="kpi-unit">MW (+2.4%)</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔥 Peak Heat Demand</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value better">125 GW</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value worse">128 GW</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">Difference:</span><span class="tooltip-value worse">+2.4%</span></div>
+                                <div class="tooltip-desc">12h shows higher peak — crucial for DH network sizing. 6h captures more accurate profiles.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 9: TES Capacity -->
                         <div class="kpi-card heat-card">
                             <div class="kpi-number">9</div>
                             <div class="kpi-label">TES Capacity</div>
                             <div class="kpi-value highlight-diff">43</div>
                             <div class="kpi-unit">GWh (-4.4%)</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">🔋 Thermal Energy Storage</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value better">45 GWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value worse">43 GWh</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">Difference:</span><span class="tooltip-value worse">-4.4%</span></div>
+                                <div class="tooltip-desc">12h underestimates storage need. Poor temporal resolution leads to undersized thermal storage.</div>
+                            </div>
                         </div>
                         
+                        <!-- KPI 10: Electrification -->
                         <div class="kpi-card">
                             <div class="kpi-number">10</div>
                             <div class="kpi-label">Electrification</div>
                             <div class="kpi-value">34%</div>
                             <div class="kpi-unit">% from electricity</div>
+                            <div class="tooltip-content">
+                                <div class="tooltip-title">⚡ Electrification Rate</div>
+                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">35%</span></div>
+                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">34%</span></div>
+                                <div class="tooltip-desc">Share of total energy demand met by electricity (vs fossil fuels).</div>
+                            </div>
                         </div>
                     </div>
                     
