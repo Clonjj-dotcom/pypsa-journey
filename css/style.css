@@ -1294,3 +1294,62 @@ body {
     font-size: 14px;
     color: var(--text-muted);
 }
+
+/* ========================================
+   SPACING FIX - Planning Horizon onwards
+   ======================================== */
+
+/* Add padding to temporal sections */
+.temporal-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.temporal-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* Year input section extra spacing */
+.year-input-container {
+    margin: 24px 0;
+    padding: 20px;
+}
+
+/* Planning Horizon specific spacing */
+.horizon-section {
+    margin: 32px 0;
+    padding: 24px;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.horizon-section h3 {
+    margin-bottom: 16px;
+}
+
+.horizon-section p {
+    margin-bottom: 20px;
+}
+
+/* Presets spacing */
+.horizon-presets {
+    margin: 20px 0;
+}
+
+/* Spacing between sections in generator screens */
+.gen-screen .temporal-section + .temporal-section {
+    margin-top: 40px;
+}
+
+/* Bottom padding for screen content */
+.gen-screen {
+    padding-bottom: 120px;
+}
+
+/* Navigation needs more space from content */
+.navigation {
+    margin-top: 40px;
+}
