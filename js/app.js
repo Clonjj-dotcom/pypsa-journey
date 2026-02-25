@@ -1008,7 +1008,7 @@ function toggleTech(techId) {
 // Sector toggling
 function toggleSector(sectorCode) {
     const index = journeyState.sectors.indexOf(sectorCode);
-    const card = document.querySelector(`.sector-card[data-sector=\"${sectorCode}\"]");
+    const card = document.querySelector(`.sector-card[data-sector="${sectorCode}"]`);
     
     if (index === -1) {
         journeyState.sectors.push(sectorCode);
