@@ -101,8 +101,15 @@ function switchTab(tab) {
     if (tab === 'results') {
         initBaseResults();
     } else if (tab === 'custom') {
-        updateCustomResults();
+        // updateCustomResults(); // This function was removed
     }
+}
+
+// NEW: Initialize Base Results tab
+function initBaseResults() {
+    console.log('Initializing Base Results tab');
+    // Default to 6h sub-tab
+    switchSubTab('6h');
 }
 
 // ==================== GENERATOR NAVIGATION ====================
