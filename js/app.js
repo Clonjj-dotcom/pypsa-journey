@@ -64,12 +64,22 @@ let journeyState = {
 
 let baseData = {};
 
-// Initialize
+// Unified Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded. Initializing app...');
     initApp();
+    
+    // Other initializations that were in the second listener
+    const yearSlider = document.getElementById('yearSlider');
+    if (yearSlider) {
+        yearSlider.addEventListener('input', (e) => {
+            document.getElementById('yearValue').textContent = e.target.value;
+        });
+    }
 });
 
 function initApp() {
+    console.log('initApp called.');
     // Start with generator tab
     switchTab('generator');
     initGenerator();
@@ -3281,25 +3291,8 @@ function calculateScenario() {
     console.log(`Scenario calculated: Year ${year}, Resolution ${selectedResolution}, Techs: ${techCount}/5`);
 }
 
-// Resolution button handlers
-document.addEventListener('DOMContentLoaded', () => {
-    // Resolution buttons
-    document.querySelectorAll('.res-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.res-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedResolution = btn.dataset.res;
-        });
-    });
-
-    // Year slider value display
-    const yearSlider = document.getElementById('yearSlider');
-    if (yearSlider) {
-        yearSlider.addEventListener('input', (e) => {
-            document.getElementById('yearValue').textContent = e.target.value;
-        });
-    }
-});
+// This was the duplicate listener, now removed.
+// The code inside was merged into the first listener.
 
 // Parameter Update
 function updateParameter(param, value) {
