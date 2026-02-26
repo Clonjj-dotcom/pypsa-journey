@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script defer src="js/map-lazy.js"></script>
+    <script src="data/simulation_results.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body>
@@ -1517,7 +1518,7 @@
         </div>
     </section>
 
-    <!-- TAB 2: BASE RESULTS - 3 LAYER STRUCTURE (Dr. Eureka Analysis) -->
+    <!-- TAB 2: BASE RESULTS - SIMPLIFIED -->
     <section id="tab-results" class="tab-content">
         <!-- Sub-tabs for simulations -->
         <div class="sub-tabs">
@@ -1532,50 +1533,30 @@
             </button>
         </div>
 
-        <!-- 6H SIMULATION TAB -->
-        <div id="subtab-6h" class="subtab-content active">
-            <div class="content-panel">
-                <div class="results-header">
-                    <h2 class="screen-title">📊 Germany 2025 - 6h Resolution</h2>
-                    <p class="screen-desc">1460 timesteps • 37 nodes • 6-hour temporal resolution</p>
+        <!-- Content Area -->
+        <div class="content-panel">
+            <div id="subtab-6h" class="subtab-content active">
+                <h2 class="screen-title">📊 Germany 2025 - 6h Resolution</h2>
+                <p class="screen-desc">1460 timesteps • 37 nodes • 6-hour temporal resolution</p>
+                <div class="chart-section" style="max-width: 600px; margin: 20px auto;">
+                    <canvas id="generationMixChart6h"></canvas>
                 </div>
+            </div>
 
-                <!-- Export Actions -->
-                <div class="export-actions">
-                    <button class="export-btn" onclick="downloadResultsPDF()">
-                        <span>📄</span> Export PDF Report
-                    </button>
-                    <button class="export-btn" onclick="downloadResultsCSV()">
-                        <span>📊</span> Export Data (CSV)
-                    </button>
-                    <button class="export-btn" onclick="copyResultsLink()">
-                        <span>🔗</span> Share Results
-                    </button>
+            <div id="subtab-12h" class="subtab-content">
+                <h2 class="screen-title">📊 Germany 2025 - 12h Resolution</h2>
+                <p class="screen-desc">730 timesteps • 37 nodes • 12-hour temporal resolution</p>
+                <div class="chart-section" style="max-width: 600px; margin: 20px auto;">
+                    <canvas id="generationMixChart12h"></canvas>
                 </div>
+            </div>
 
-                <!-- Capa 1: Executive Summary -->
-                <div class="layer-section layer-1">
-                    <div class="layer-header">
-                        <span class="layer-badge">🔵</span>
-                        <h3>Executive Summary</h3>
-                        <span class="layer-desc">10 Essential KPIs – Germany 2025 (6h)</span>
-                        <span class="resolution-badge">6h Resolution</span>
-                    </div>
-                    
-                    <div class="kpi-grid-executive">
-                        <!-- KPI 1: Costo Total del Sistema -->
-                        <div class="kpi-card primary">
-                            <div class="kpi-number">1</div>
-                            <div class="kpi-label">Total System Cost</div>
-                            <div class="kpi-value">€89.25B</div>
-                            <div class="kpi-unit">€/year | network.objective</div>
-                            <div class="tooltip-content">
-                                <div class="tooltip-title">💰 Costo Total del Sistema</div>
-                                <div class="tooltip-row"><span class="tooltip-label">6h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
-                                <div class="tooltip-row"><span class="tooltip-label">12h Resolution:</span><span class="tooltip-value">€89.25B</span></div>
-                                <div class="tooltip-desc">Annualized total system cost including generation, storage, transmission, and sector-coupling investments and operation. (network.objective)</div>
-                            </div>
-                        </div>
+            <div id="subtab-compare" class="subtab-content">
+                <h2 class="screen-title">⚖️ Comparing 6h vs 12h Resolution</h2>
+                <div id="comparisonContainer"></div>
+            </div>
+        </div>
+    </section>
 
                         <!-- KPI 2: Costo Calefacción/MWh (LCOH) -->
                         <div class="kpi-card heat-card">

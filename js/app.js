@@ -2298,15 +2298,23 @@ function initSimpleTooltips() {
 
 // Sub-tab switching for Base Results
 function switchSubTab(subtab) {
-    // Update button states
     document.querySelectorAll('.sub-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.subtab === subtab);
     });
     
-    // Show/hide content
     document.querySelectorAll('.subtab-content').forEach(content => {
-        content.classList.remove('active');
+        content.classList.toggle('active', content.id === `subtab-${subtab}`);
     });
+    
+    // Initialize charts for the selected tab
+    if (subtab === '6h') {
+        drawGenerationMixChart('generationMixChart6h', '6h');
+    } else if (subtab === '12h') {
+        drawGenerationMixChart('generationMixChart12h', '12h');
+    } else if (subtab === 'compare') {
+        drawComparisonChart('comparisonContainer');
+    }
+}
     document.getElementById(`subtab-${subtab}`).classList.add('active');
 }
 
@@ -3001,84 +3009,71 @@ function initDataVisualizations() {
     addSparklinesToKPIs();
 }
 
-// NEW: Generation Mix Pie Chart
-function drawGenerationMixChart() {
-    const canvas = document.getElementById('generationMixChart');
+// NEW: Generation Mix Pie Chart (Dynamic)
+function drawGenerationMixChart(canvasId, resolution) {
+    const canvas = document.getElementById(canvasId);
     if (!canvas) return;
     
-    const ctx = canvas.getContext('2d');
-    
-    // Generation mix data from PyPSA simulation (6h resolution) - ALL CATEGORIES
-    // Total: ~580 GW (excluding unrealistic values >500GW which are energy limits, not capacity)
-    const generationData = {
-        labels: [
-            'Solid Biomass (63.8%)',
-            'Gas (47.4%)', 
-            'Oil Primary (26.1%)',
-            'Solar Utility (15.5%)',
-            'Onshore Wind (11.0%)',
-            'Solar Rooftop (6.1%)',
-            'Coal (2.0%)',
-            'Offshore Wind (1.7%)',
-            'Run-of-River (0.8%)'
-        ],
-        datasets: [{
-            data: [63.8, 47.4, 26.1, 15.5, 11.0, 6.1, 2.0, 1.7, 0.8], // PERCENTAGES
-            backgroundColor: [
-                '#22c55e', // Biomass - green
-                '#6b7280', // Gas - gray
-                '#ef4444', // Oil - red
-                '#f59e0b', // Solar - amber
-                '#3b82f6', // Wind - blue
-                '#fbbf24', // Rooftop - yellow
-                '#1f2937', // Coal - dark
-                '#06b6d4', // Offshore - cyan
-                '#8b5cf6'  // RoR - purple
-            ],
-            borderColor: 'rgba(15, 23, 42, 0.9)',
-            borderWidth: 2
-        }]
-    };
-    
-    // Destroy existing chart if any
-    if (window.generationMixPieChart) {
-        window.generationMixPieChart.destroy();
+    // Check if pypsaSimulationData is available
+    if (typeof pypsaSimulationData === 'undefined' || !pypsaSimulationData[resolution]) {
+        console.error(`Data for ${resolution} not found!`);
+        return;
     }
     
-    window.generationMixPieChart = new Chart(ctx, {
+    const generationData = pypsaSimulationData[resolution].generation_mw;
+    const ctx = canvas.getContext('2d');
+    
+    // Filter and sort data (only show > 0.1 GW)
+    const sorted = Object.entries(generationData)
+        .filter(([, mw]) => mw > 100) // Min 100 MW
+        .sort((a, b) => b[1] - a[1]);
+    
+    // Calculate total for percentages
+    const totalMW = sorted.reduce((sum, [, mw]) => sum + mw, 0);
+    
+    const labels = sorted.map(([name, mw]) => `${name} (${(mw/totalMW*100).toFixed(1)}%)`);
+    const values = sorted.map(([, mw]) => mw);
+    
+    const backgroundColors = [
+        '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#6b7280', 
+        '#fbbf24', '#1f2937', '#06b6d4', '#8b5cf6', '#ec4899'
+    ];
+    
+    // Destroy existing chart if any
+    const chartId = `${canvasId}Chart`;
+    if (window[chartId]) {
+        window[chartId].destroy();
+    }
+    
+    window[chartId] = new Chart(ctx, {
         type: 'doughnut',
-        data: generationData,
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: backgroundColors,
+                borderColor: 'rgba(15, 23, 42, 0.9)',
+                borderWidth: 2
+            }]
+        },
         options: {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
                 legend: {
                     position: 'right',
-                    labels: {
-                        color: '#94a3b8',
-                        font: { size: 12 },
-                        padding: 15
-                    }
+                    labels: { color: '#94a3b8', font: { size: 12 }, padding: 15 }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    titleColor: '#f1f5f9',
-                    bodyColor: '#94a3b8',
-                    borderColor: 'rgba(99, 102, 241, 0.3)',
-                    borderWidth: 1,
                     callbacks: {
                         label: function(context) {
-                            const percentage = context.parsed;
-                            return `${percentage}% of generation mix`;
+                            const value = context.parsed;
+                            return `${(value/1000).toFixed(1)} GW`;
                         }
                     }
                 }
             },
-            cutout: '50%',
-            animation: {
-                animateRotate: true,
-                duration: 1000
-            }
+            cutout: '50%'
         }
     });
 }
