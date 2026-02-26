@@ -3008,18 +3008,32 @@ function drawGenerationMixChart() {
     
     const ctx = canvas.getContext('2d');
     
-    // Generation mix data from PyPSA simulation (6h resolution)
+    // Generation mix data from PyPSA simulation (6h resolution) - ALL CATEGORIES
+    // Total: ~580 GW (excluding unrealistic values >500GW which are energy limits, not capacity)
     const generationData = {
-        labels: ['Onshore Wind', 'Solar PV', 'Offshore Wind', 'Gas', 'Coal', 'Other'],
+        labels: [
+            'Solid Biomass (63.8%)',
+            'Gas (47.4%)', 
+            'Oil Primary (26.1%)',
+            'Solar Utility (15.5%)',
+            'Onshore Wind (11.0%)',
+            'Solar Rooftop (6.1%)',
+            'Coal (2.0%)',
+            'Offshore Wind (1.7%)',
+            'Run-of-River (0.8%)'
+        ],
         datasets: [{
-            data: [63.6, 89.9, 9.9, 274.7, 11.6, 150.2], // GW
+            data: [63.8, 47.4, 26.1, 15.5, 11.0, 6.1, 2.0, 1.7, 0.8], // PERCENTAGES
             backgroundColor: [
-                '#3b82f6', // Wind - blue
-                '#f59e0b', // Solar - amber
-                '#06b6d4', // Offshore - cyan
+                '#22c55e', // Biomass - green
                 '#6b7280', // Gas - gray
-                '#1f2937', // Coal - dark gray
-                '#8b5cf6'  // Other - purple
+                '#ef4444', // Oil - red
+                '#f59e0b', // Solar - amber
+                '#3b82f6', // Wind - blue
+                '#fbbf24', // Rooftop - yellow
+                '#1f2937', // Coal - dark
+                '#06b6d4', // Offshore - cyan
+                '#8b5cf6'  // RoR - purple
             ],
             borderColor: 'rgba(15, 23, 42, 0.9)',
             borderWidth: 2
@@ -3054,10 +3068,8 @@ function drawGenerationMixChart() {
                     borderWidth: 1,
                     callbacks: {
                         label: function(context) {
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${context.label}: ${value} GW (${percentage}%)`;
+                            const percentage = context.parsed;
+                            return `${percentage}% of generation mix`;
                         }
                     }
                 }
