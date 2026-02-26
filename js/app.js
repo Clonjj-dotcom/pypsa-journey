@@ -2318,14 +2318,14 @@ function switchSubTab(subtab) {
     // Initialize charts for the selected tab
     try {
         if (subtab === '6h') {
-            console.log('Drawing 6h generation mix chart...');
-            drawGenerationMixChart('generationMixChart6h', '6h');
+            console.log('Drawing 6h generation mix chart... (DISABLED)');
+            // drawGenerationMixChart('generationMixChart6h', '6h');
         } else if (subtab === '12h') {
-            console.log('Drawing 12h generation mix chart...');
-            drawGenerationMixChart('generationMixChart12h', '12h');
+            console.log('Drawing 12h generation mix chart... (DISABLED)');
+            // drawGenerationMixChart('generationMixChart12h', '12h');
         } else if (subtab === 'compare') {
-            console.log('Drawing comparison chart...');
-            drawComparisonChart('comparisonContainer');
+            console.log('Drawing comparison chart... (DISABLED)');
+            // drawComparisonChart('comparisonContainer');
         }
     } catch (e) {
         console.error('Error drawing chart:', e);
