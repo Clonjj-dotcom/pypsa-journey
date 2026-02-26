@@ -2298,6 +2298,8 @@ function initSimpleTooltips() {
 
 // Sub-tab switching for Base Results
 function switchSubTab(subtab) {
+    console.log(`Switching to sub-tab: ${subtab}`);
+    
     document.querySelectorAll('.sub-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.subtab === subtab);
     });
@@ -2307,12 +2309,19 @@ function switchSubTab(subtab) {
     });
     
     // Initialize charts for the selected tab
-    if (subtab === '6h') {
-        drawGenerationMixChart('generationMixChart6h', '6h');
-    } else if (subtab === '12h') {
-        drawGenerationMixChart('generationMixChart12h', '12h');
-    } else if (subtab === 'compare') {
-        drawComparisonChart('comparisonContainer');
+    try {
+        if (subtab === '6h') {
+            console.log('Drawing 6h generation mix chart...');
+            drawGenerationMixChart('generationMixChart6h', '6h');
+        } else if (subtab === '12h') {
+            console.log('Drawing 12h generation mix chart...');
+            drawGenerationMixChart('generationMixChart12h', '12h');
+        } else if (subtab === 'compare') {
+            console.log('Drawing comparison chart...');
+            drawComparisonChart('comparisonContainer');
+        }
+    } catch (e) {
+        console.error('Error drawing chart:', e);
     }
 }
     document.getElementById(`subtab-${subtab}`).classList.add('active');
@@ -3011,8 +3020,12 @@ function initDataVisualizations() {
 
 // NEW: Generation Mix Pie Chart (Dynamic)
 function drawGenerationMixChart(canvasId, resolution) {
+    console.log(`drawGenerationMixChart called for: ${canvasId}, ${resolution}`);
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+    if (!canvas) {
+        console.error(`Canvas with id ${canvasId} not found!`);
+        return;
+    }
     
     // Check if pypsaSimulationData is available
     if (typeof pypsaSimulationData === 'undefined' || !pypsaSimulationData[resolution]) {
