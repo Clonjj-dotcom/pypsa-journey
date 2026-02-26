@@ -4,28 +4,32 @@
 // REAL DATA from PyPSA simulations (germany-2025-true-baseline-v2)
 const baseDataReal = {
     '2025-6h': {
-        totalCost: 89.25,
-        avgPrice: 38.5,
-        dhPenetration: 14.2,
-        co2Emissions: 310.5,
-        renewableShare: 42,
+        totalCost: 87.21,
+        avgPrice: 45.2,
+        dhPenetration: 18.5,
+        co2Emissions: 299.7,
+        renewableShare: 11.4,
         peakDemand: 125000,
-        totalGeneration: 580000,
+        totalGeneration: 1381383,
         peakHeat: 85000,
-        tesCapacity: 45,
-        electrification: 35
+        tesCapacity: 1258.5,
+        electrification: 35,
+        storageGWh: 1258.5,
+        resolution: '6h'
     },
     '2025-12h': {
-        totalCost: 89.25,
-        avgPrice: 38.5,
-        dhPenetration: 14.2,
-        co2Emissions: 315.2,
-        renewableShare: 41,
+        totalCost: 88.95,
+        avgPrice: 48.1,
+        dhPenetration: 17.2,
+        co2Emissions: 299.7,
+        renewableShare: 14.1,
         peakDemand: 128000,
-        totalGeneration: 585000,
+        totalGeneration: 1393939,
         peakHeat: 87000,
-        tesCapacity: 43,
-        electrification: 34
+        tesCapacity: 1120.4,
+        electrification: 34,
+        storageGWh: 1120.4,
+        resolution: '12h'
     }
 };
 
@@ -2978,20 +2982,93 @@ function drawComparisonChart(containerId, data) {
 function initDataVisualizations() {
     console.log('Initializing data visualizations...');
     
-    // Comparison chart data
+    // Comparison chart data - REAL PyPSA simulation results (from comparison.js)
     const comparisonData = [
-        { label: 'CO₂ Emissions (Mt)', sixh: 310.5, twelveh: 315.2 },
-        { label: 'Renewable Share (%)', sixh: 42, twelveh: 41 },
-        { label: 'TES Capacity (GWh)', sixh: 45, twelveh: 43 },
-        { label: 'Peak Heat (GW)', sixh: 125, twelveh: 128 },
-        { label: 'LCOH (€/MWh)', sixh: 45.8, twelveh: 46.2 }
+        { label: 'Renewable Capacity (GW)', sixh: 203.9, twelveh: 254.5, unit: 'GW', higherIsBetter: true },
+        { label: 'Fossil Capacity (GW)', sixh: 1177.4, twelveh: 1139.5, unit: 'GW', higherIsBetter: false },
+        { label: 'Heat Storage (GWh)', sixh: 1258.5, twelveh: 1120.4, unit: 'GWh', higherIsBetter: true },
+        { label: 'Renewable Share (%)', sixh: 11.4, twelveh: 14.1, unit: '%', higherIsBetter: true },
+        { label: 'Est. Cost (Billion €)', sixh: 87.21, twelveh: 88.95, unit: '€B', higherIsBetter: false }
     ];
     
     // Draw comparison chart with animation delays
     drawComparisonChart('comparisonChartContainer', comparisonData);
     
+    // Draw generation mix pie chart
+    drawGenerationMixChart();
+    
     // Add inline sparklines to KPI cards
     addSparklinesToKPIs();
+}
+
+// NEW: Generation Mix Pie Chart
+function drawGenerationMixChart() {
+    const canvas = document.getElementById('generationMixChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Generation mix data from PyPSA simulation (6h resolution)
+    const generationData = {
+        labels: ['Onshore Wind', 'Solar PV', 'Offshore Wind', 'Gas', 'Coal', 'Other'],
+        datasets: [{
+            data: [63.6, 89.9, 9.9, 274.7, 11.6, 150.2], // GW
+            backgroundColor: [
+                '#3b82f6', // Wind - blue
+                '#f59e0b', // Solar - amber
+                '#06b6d4', // Offshore - cyan
+                '#6b7280', // Gas - gray
+                '#1f2937', // Coal - dark gray
+                '#8b5cf6'  // Other - purple
+            ],
+            borderColor: 'rgba(15, 23, 42, 0.9)',
+            borderWidth: 2
+        }]
+    };
+    
+    // Destroy existing chart if any
+    if (window.generationMixPieChart) {
+        window.generationMixPieChart.destroy();
+    }
+    
+    window.generationMixPieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: generationData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: '#94a3b8',
+                        font: { size: 12 },
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#94a3b8',
+                    borderColor: 'rgba(99, 102, 241, 0.3)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: ${value} GW (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '50%',
+            animation: {
+                animateRotate: true,
+                duration: 1000
+            }
+        }
+    });
 }
 
 // Add sparkline indicators to KPI cards

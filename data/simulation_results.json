@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "scenario": "germany-2025-true-baseline-v2",
+    "year": 2025,
+    "country": "Germany"
+  },
+  "6h": {
+    "generation_mw": {
+      "onwind": 63608.0,
+      "solar": 89943.0,
+      "offwind-ac": 9926.0,
+      "ror": 4759.2,
+      "gas": 274652.5,
+      "oil primary": 151153.3,
+      "urban central heat vent": 581.2,
+      "urban central solar thermal": 2.7,
+      "unsustainable biogas": 87436945.1,
+      "unsustainable solid biomass": 162847217.4,
+      "unsustainable bioliquids": 40670598.5,
+      "solid biomass": 370000.0,
+      "coal": 11601.6,
+      "solar rooftop": 35633.1,
+      "rural heat vent": 174.9,
+      "urban decentral heat vent": 171.6,
+      "urban decentral solar thermal": 0.0
+    },
+    "storage_mwh": {
+      "co2 stored": 766.7,
+      "gas": 190023144.5,
+      "H2 Store": 961.4,
+      "EV battery": 131218.9,
+      "oil": 875.0,
+      "urban central water tanks": 5538.4,
+      "urban central water pits": 1252861.6,
+      "ammonia store": 65578.8,
+      "methanol": 10722.1,
+      "non-sequestered HVC": 153893706.7,
+      "coal": 8306.3,
+      "home battery": 26.4,
+      "rural water tanks": 37.0,
+      "urban decentral water tanks": 36.1
+    },
+    "total_gen_gw": 291967.0,
+    "total_storage_gwh": 345393.8,
+    "lines_total_mva": 369318.8,
+    "links_total_mw": 68469803.7,
+    "snapshots": 1460
+  },
+  "12h": {
+    "generation_mw": {
+      "onwind": 63608.0,
+      "solar": 89943.0,
+      "offwind-ac": 9926.0,
+      "ror": 4759.2,
+      "gas": 274652.5,
+      "oil primary": 113258.2,
+      "urban central heat vent": 381.1,
+      "urban central solar thermal": 0.1,
+      "unsustainable biogas": 87436945.1,
+      "unsustainable solid biomass": 162847217.4,
+      "unsustainable bioliquids": 40670598.5,
+      "solid biomass": 370000.0,
+      "coal": 11601.6,
+      "solar rooftop": 86286.6,
+      "rural heat vent": 4.5,
+      "rural solar thermal": 0.0,
+      "urban decentral heat vent": 3.4,
+      "urban decentral solar thermal": 0.0
+    },
+    "storage_mwh": {
+      "co2 stored": 13.9,
+      "gas": 189992351.7,
+      "H2 Store": 13.9,
+      "EV battery": 131218.9,
+      "oil": 24.4,
+      "urban central water tanks": 85.9,
+      "urban central water pits": 1120330.1,
+      "ammonia store": 68370.7,
+      "methanol": 7527.5,
+      "non-sequestered HVC": 153893706.7,
+      "coal": 530.9,
+      "home battery": 0.2,
+      "rural water tanks": 0.4,
+      "urban decentral water tanks": 0.4
+    },
+    "total_gen_gw": 291979.2,
+    "total_storage_gwh": 345214.2,
+    "lines_total_mva": 368196.4,
+    "links_total_mw": 55551381.6,
+    "snapshots": 730
+  }
+}
